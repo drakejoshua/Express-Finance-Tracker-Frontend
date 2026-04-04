@@ -1,6 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
 import Landing from "./features/landing/pages/Landing";
-import TwoColumnLayout from "./features/auth/Layouts/TwoColumnLayout";
+import AuthLayout from "./features/auth/Layouts/AuthLayout";
 import Login from "./features/auth/pages/Login";
 import Signup from "./features/auth/pages/Signup";
 import Google from "./features/auth/pages/Google";
@@ -12,7 +12,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/auth",
-    element: <TwoColumnLayout />,
+    element: <AuthLayout />,
     children: [
       {
         path: "login",
