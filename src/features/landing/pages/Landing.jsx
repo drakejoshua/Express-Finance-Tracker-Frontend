@@ -1,9 +1,12 @@
-import React from 'react'
+import { useTheme } from '../../../shared/providers/ThemeProvider.jsx'
 
 export default function Landing() {
-  return (
-    <div>
-      This is the landing page
-    </div>
-  )
+    const { toggleTheme } = useTheme()
+
+    return (
+        <div>
+            <button className='text-xl' onClick={ () => toggleTheme() }> toggle theme </button>
+            This is the landing page
+        </div>
+    )
 }
