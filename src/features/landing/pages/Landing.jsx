@@ -1,3 +1,4 @@
+import { useDialogProvider } from '../../../shared/providers/DialogProvider.jsx'
 import { useTheme } from '../../../shared/providers/ThemeProvider.jsx'
 
 export default function Landing() {
