@@ -16,8 +16,8 @@ export function useToastProvider() {
 // across the application
 export function ToastProvider({ children }) {
     // state to manage active toasts
-    const [ activeToasts, setActiveToasts ] = useState([{ id: 1, type: "success", message: "This is a test toast" }])
-    // const [ activeToasts, setActiveToasts ] = useState([])
+    // const [ activeToasts, setActiveToasts ] = useState([{ id: 1, type: "success", message: "This is a test toast" }])
+    const [ activeToasts, setActiveToasts ] = useState([])
 
     // toast: id, type, message
 
