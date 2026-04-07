@@ -1,3 +1,12 @@
+// DialogProvider.jsx
+// This file defines a DialogProvider component that manages the state 
+// of active dialogs in the application and provides functions to open 
+// and close dialogs. It also includes a DialogComponent for rendering 
+// individual dialogs with a title, description, and content. The DialogProvider 
+// uses React's Context API to share dialog state and functions across the 
+// application, allowing any component to open or close dialogs as needed.
+
+
 // import necessary dependencies
 import { Dialog } from "radix-ui"
 import { createContext, useContext, useState } from "react";
@@ -41,12 +50,22 @@ export function DialogProvider({ children }) {
                 // map over the activeDialogs state to render a Dialog.Root for each active dialog,
                 // passing the dialog's title, description, and content as props to the DialogComponent
                 activeDialogs.map( dialog => (
-                    <Dialog.Root defaultOpen={true} onOpenChange={ () => closeDialog( dialog.id ) } key={ dialog.id }>
+                    <Dialog.Root 
+                        defaultOpen={true} 
+                        onOpenChange={ () => closeDialog( dialog.id ) } key={ dialog.id }
+                    >
                         <Dialog.Portal>
                             <Dialog.Overlay className="fixed inset-0 bg-black/75" />
                             <Dialog.Content 
                                 className="
-                                    w-[90vw] max-w-112.5 bg-white fixed left-1/2 top-1/2 max-h-[85vh] -translate-x-1/2 -translate-y-1/2
+                                    w-[90vw] 
+                                    max-w-112.5 
+                                    bg-white 
+                                    fixed 
+                                    left-1/2 
+                                    top-1/2 
+                                    max-h-[85vh] 
+                                    -translate-x-1/2 -translate-y-1/2
                                     rounded-lg p-6 
                                 "
                             >
@@ -95,13 +114,23 @@ export function DialogComponent({ title, description, content, ...props }) {
                 <Dialog.Overlay className="fixed inset-0 bg-black/75" />
                 <Dialog.Content 
                     className="
-                        w-[90vw] max-w-112.5 bg-white fixed left-1/2 top-1/2 max-h-[85vh] -translate-x-1/2 -translate-y-1/2
+                        w-[90vw] 
+                        max-w-112.5 
+                        bg-white 
+                        fixed 
+                        left-1/2 
+                        top-1/2 
+                        max-h-[85vh] 
+                        -translate-x-1/2 -translate-y-1/2
                         rounded-lg p-6 
                     "
                 >
                     <Dialog.Title
                         className="
-                            text-xl font-semibold mt-4 mb-1 text-center
+                            text-xl 
+                            font-semibold 
+                            mt-4 mb-1 
+                            text-center
                         "
                     > 
                         { title } 
@@ -109,7 +138,9 @@ export function DialogComponent({ title, description, content, ...props }) {
 
                     <Dialog.Description
                         className="
-                            text-gray-700 text-center mb-4
+                            text-gray-700 
+                            text-center 
+                            mb-4
                         "
                     > 
                         { description } 
@@ -119,7 +150,11 @@ export function DialogComponent({ title, description, content, ...props }) {
 
                     <Dialog.Close
                         className="
-                            absolute top-4 right-4 text-gray-900 text-2xl
+                            absolute 
+                            top-4 
+                            right-4 
+                            text-gray-900 
+                            text-2xl
                         "
                     > 
                         <FaXmark/> 

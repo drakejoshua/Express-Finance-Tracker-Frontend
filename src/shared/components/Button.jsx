@@ -1,3 +1,7 @@
+// Button.jsx
+// This component is a reusable button component for primary actions,
+// such as submitting a form. It provides consistent styling for
+// buttons that are the main call-to-action in the authentication flow.
 import React from "react";
 
 const Button = React.forwardRef(({ children, className, ...props }, ref) => {

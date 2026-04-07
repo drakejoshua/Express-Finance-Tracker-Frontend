@@ -32,6 +32,7 @@ export default function Login() {
                 to access your dashboard and manage your finances effectively.
             </p>
 
+            {/* Login Form */}
             <AuthForm
                 className="
                     mt-6
@@ -78,7 +79,7 @@ export default function Login() {
                 Sign in with Google
             </AltButton>
 
-            {/* redirect to login link */}
+            {/* redirect to signup link */}
             <Link
                 to="/auth/signup"
                 className='

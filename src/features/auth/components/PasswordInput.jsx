@@ -1,3 +1,8 @@
+// PasswordInput.jsx
+// This component is a reusable password input field for authentication forms,
+// such as login and signup. It provides built-in validation messages for
+// empty and invalid password inputs, ensuring a consistent user experience
+// across the authentication flow.
 import React, { useState } from 'react'
 import { FaEye, FaEyeSlash } from 'react-icons/fa6'
 

@@ -1,3 +1,8 @@
+// EmailField.jsx
+// This component is a reusable email input field for authentication forms,
+// such as login and signup. It provides built-in validation messages for
+// empty and invalid email inputs, ensuring a consistent user experience
+// across the authentication flow.
 import { Form } from 'radix-ui'
 
 export default function EmailField({ 

@@ -1,4 +1,9 @@
 // ThemeProvider.jsx
+// This file defines a ThemeProvider component that manages the theme state
+// of the application (light or dark) and provides a toggleTheme function to
+// switch between themes. The ThemeProvider uses React's Context API to share
+// the theme state and toggle function across the application, allowing any
+// component to access the current theme and toggle it as needed.
 
 // import necessary dependencies
 import { createContext, useState, useEffect, useContext } from 'react';

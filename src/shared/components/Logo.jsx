@@ -1,3 +1,7 @@
+// Logo.jsx
+// This component is responsible for rendering the application's logo. 
+// It switches between a light and dark version of the logo based on the current theme,
+// ensuring that the logo remains visible and consistent with the overall design of the application.
 import React from "react";
 import LogoWhite from '../../assets/Brand/GreenFinanceLogoWhite.svg'
 import LogoBlack from '../../assets/Brand/GreenFinanceLogoBlack.svg'

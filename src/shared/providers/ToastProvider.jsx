@@ -1,3 +1,13 @@
+// ToastProvider.jsx
+// This file defines a ToastProvider component that manages the 
+// state of active toasts in the application and provides functions 
+// to show and hide toasts. It also includes a ToastComponent for 
+// rendering individual toasts with a type (success, error, info) and 
+// message. The ToastProvider uses React's Context API to share toast 
+// state and functions across the application, allowing any component 
+// to show or hide toasts as needed.
+
+
 import { Toast } from "radix-ui";
 import { createContext, useContext, useState } from "react";
 import { FaCircleCheck, FaCircleExclamation, FaTriangleExclamation, FaXmark } from "react-icons/fa6";
@@ -113,7 +123,15 @@ export function ToastProvider({ children }) {
                     })
                 }
 
-                <Toast.Viewport className="fixed top-4 right-4 w-4/5 max-w-72.5"/>
+                <Toast.Viewport 
+                    className="
+                        fixed 
+                        top-4 
+                        right-4 
+                        w-4/5 
+                        max-w-72.5
+                    "
+                />
             </Toast.Provider>
         </ToastContext.Provider>
     )

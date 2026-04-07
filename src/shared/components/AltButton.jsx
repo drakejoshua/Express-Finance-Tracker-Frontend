@@ -1,3 +1,7 @@
+// AltButton.jsx
+// This component is a reusable button component for alternative actions,
+// such as signing in with Google. It provides consistent styling for
+// buttons that are not the primary call-to-action in the authentication flow.
 import React from "react";
 
 const AltButton = React.forwardRef( function( { className, children, ...props }, ref ) {
