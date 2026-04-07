@@ -43,10 +43,43 @@ export default function AuthLayout() {
 
         <div 
             className="
-                bg-[url('/public/AuthBg.jpg')] bg-cover relative hidden lg:block
+                bg-[url('/public/liquid-cheese.svg')] bg-cover relative hidden lg:block
                 overflow-hidden
             "
         >
+            <span
+                className="
+                    absolute
+                    top-4
+                    left-8
+                    text-white
+                    text-5xl
+                    font-bold
+                    leading-[1.2]
+                    block
+                    w-126
+                "
+            >
+                Easily track your cryptocurrency investments
+            </span>
+            
+            <span
+                className="
+                    absolute
+                    bottom-[20%]
+                    right-8
+                    text-white
+                    text-5xl
+                    font-bold
+                    leading-[1.2]
+                    block
+                    w-120
+                    text-right
+                "
+            >
+                Create price alerts and stay informed with real-time updates.
+            </span>
+
             <img 
                 src={BitcoinGraph} 
                 alt="Bitcoin Graph" 
