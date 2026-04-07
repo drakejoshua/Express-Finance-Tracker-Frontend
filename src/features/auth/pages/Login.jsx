@@ -1,18 +1,17 @@
-import { 
-    Form,
-    unstable_PasswordToggleField as PasswordToggleField
-} from 'radix-ui'
-import LogoWhite from '../../../assets/Brand/GreenFinanceLogoWhite.svg'
-import LogoBlack from '../../../assets/Brand/GreenFinanceLogoBlack.svg'
-import { FaEye, FaEyeSlash, FaGoogle, FaMoon, FaRegSun } from 'react-icons/fa6'
+import { Form } from 'radix-ui'
+import { FaGoogle } from 'react-icons/fa6'
 import { useState } from 'react'
 import PasswordInput from '../components/PasswordInput'
-import { useTheme } from '../../../shared/providers/ThemeProvider'
+import EmailField from '../components/EmailField'
+import PasswordField from '../components/PasswordField'
+import Button from '../../../shared/components/Button'
+import AltButton from '../../../shared/components/AltButton'
+import ThemeButton from '../../../shared/components/ThemeButton'
+import Logo from '../../../shared/components/Logo'
 
 export default function Login() {
     const [ email, setEmail ] = useState("")
     const [ password, setPassword ] = useState("")
-    const { theme, toggleTheme } = useTheme()
 
     return (
         <div
@@ -27,8 +26,7 @@ export default function Login() {
                 *:text-gray-800 dark:*:text-white
             '
         >
-            <img 
-                src={ ( theme == "dark" ) ? LogoBlack : LogoWhite } 
+            <Logo 
                 className='
                     w-44 lg:w-40
                     h-auto
@@ -63,146 +61,55 @@ export default function Login() {
                     gap-2.5
                 '
             >
-                <Form.Field 
-                    name='email'
-                    className='
-                        flex
-                        flex-col
-                        gap-1.5
-                    '
-                >
-                    <Form.Label
-                        className='
-                            font-medium
-                        '
-                    >
-                        Email
-                    </Form.Label>
+                <EmailField
+                    name={"email"}
+                    label={"Email"}
+                    value={ email }
+                    placeholder={"Enter your email"}
+                    onChange={ (e) => setEmail( e.target.value ) }
+                    emptyValidationMessage={"Please enter your email address."}
+                    invalidValidationMessage={"Please enter a valid email address."}
+                />
 
-                    <Form.Control asChild>
-                        <input 
-                            type='email' 
-                            placeholder='Enter your email'
-                            className='
-                                w-full
-                                p-2
-                                px-3
-                                rounded
-                                border-2
-                                focus:outline-none
-                                border-gray-600 dark:border-gray-50
-                                dark:bg-gray-200
-                                dark:placeholder:text-gray-500
-                                dark:text-gray-900
-                            '
-                            value={ email }
-                            onChange={ (e) => setEmail( e.target.value ) }
-                            required
-                        />
-                    </Form.Control>
-
-                    <Form.Message match='valueMissing'>
-                        Please enter your email address.
-                    </Form.Message>
-
-                    <Form.Message match='typeMismatch'>
-                        Please enter a valid email address.
-                    </Form.Message>
-                </Form.Field>
-
-                <Form.Field 
-                    name='password'
-                    className='
-                        flex
-                        flex-col
-                        gap-1.5
-                    '
-                >
-                    <Form.Label
-                        className='
-                            font-medium
-                        '
-                    >
-                        Password
-                    </Form.Label>
-
-                    <Form.Control asChild>
-                        <PasswordInput
-                            value={ password }
-                            onChange={ (e) => setPassword( e.target.value ) }
-                            className="
-                                border-2    
-                                border-gray-600 dark:border-gray-50
-                                dark:bg-gray-200
-                                dark:[&>input::placeholder]:text-gray-500
-                                dark:[&>input]:text-gray-800
-                            "
-                        />
-                    </Form.Control>
-
-                    <Form.Message match="valueMissing">
-                        Please enter your password
-                    </Form.Message>
-                    
-                    <Form.Message match="tooShort">
-                        Your password should be longer than 6 characters
-                    </Form.Message>
-                </Form.Field>
+                <PasswordField
+                    name={"password"}
+                    label={"Password"}
+                    value={ password }
+                    placeholder={"Enter your password"}
+                    onChange={ (e) => setPassword( e.target.value ) }
+                    emptyValidationMessage={"Please enter your password."}
+                    invalidValidationMessage={"Your password should be longer than 6 characters."}
+                />
 
                 <Form.Submit asChild>
-                    <button
-                        className='
-                            w-full
-                            p-2
-                            font-medium
-                            bg-green-600
-                            text-white 
-                            rounded
-                            hover:bg-green-700 dark:hover:bg-gray-600
+                    <Button
+                        className="
                             mt-4
-                        '
+                        "
                     >
                         Sign In
-                    </button>
+                    </Button>
                 </Form.Submit>
             </Form.Root>
 
             {/* sign in with google button */}
-            <button
-                className='
-                    w-full
-                    p-2
-                    border
-                    rounded
+            <AltButton
+                className="
                     mt-4
-                    flex
-                    gap-2
-                    font-medium
-                    items-center
-                    justify-center
-                    bg-gray-800  dark:bg-gray-100
-                    hover:bg-gray-700  dark:hover:bg-gray-200
-                    [&]:text-white [&]:dark:text-gray-800
-                '
+                "
             >
                 <FaGoogle/>
                 Sign in with Google
-            </button>
+            </AltButton>
 
             {/* theme toggle button */}
-            <button
-                className='
+            <ThemeButton
+                className="
                     absolute
                     top-8
                     right-6
-                    text-gray-600
-                    text-2xl
-                '
-                onClick={ () => toggleTheme() }
-            >
-                { theme == 'dark' && <FaRegSun/> }
-                { theme == 'light' && <FaMoon/>}
-            </button>
+                "
+            />
         </div>
     )
 }
