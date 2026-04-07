@@ -8,24 +8,14 @@ import Button from '../../../shared/components/Button'
 import AltButton from '../../../shared/components/AltButton'
 import ThemeButton from '../../../shared/components/ThemeButton'
 import Logo from '../../../shared/components/Logo'
+import { Link } from 'react-router-dom'
 
 export default function Login() {
     const [ email, setEmail ] = useState("")
     const [ password, setPassword ] = useState("")
 
     return (
-        <div
-            className='
-                h-full
-                p-6 lg:p-8
-                pt-20 lg:pt-14
-                w-full
-                max-w-100 md:max-w-120 xl:max-w-max
-                mx-auto
-                relative
-                *:text-gray-800 dark:*:text-white
-            '
-        >
+        <>
             <Logo 
                 className='
                     w-44 lg:w-40
@@ -102,14 +92,20 @@ export default function Login() {
                 Sign in with Google
             </AltButton>
 
-            {/* theme toggle button */}
-            <ThemeButton
-                className="
-                    absolute
-                    top-8
-                    right-6
-                "
-            />
-        </div>
+            {/* redirect to login link */}
+            <Link
+                to="/auth/signup"
+                className='
+                    block
+                    mt-6 mb-8
+                    text-center
+                    mx-auto
+                    w-fit
+                    underline
+                '
+            >
+                Don't have an account? Sign up 
+            </Link>
+        </>
     )
 }

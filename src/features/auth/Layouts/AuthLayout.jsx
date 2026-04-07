@@ -3,11 +3,35 @@ import BitcoinGraph from "../../../assets/Design/Bitcoin-Graph.svg"
 import EthereumCard from "../../../assets/Design/Ethereum Price Card.svg"
 import RippleCard from "../../../assets/Design/Ripple Price Card.svg"
 import 'animate.css';
+import ThemeButton from "../../../shared/components/ThemeButton";
 
 export default function AuthLayout() {
   return (
     <div className="auth-layout h-full xl:grid grid-cols-[1fr_2fr] grid-flow-col">
-        <Outlet />
+        <div
+            className='
+                h-full
+                p-6 lg:p-8
+                pt-20 lg:pt-14
+                w-full
+                max-w-100 md:max-w-120 xl:max-w-max
+                mx-auto
+                relative
+                overflow-auto
+                *:text-gray-800 dark:*:text-white
+            '
+        >
+            <Outlet />
+
+            {/* theme toggle button */}
+            <ThemeButton
+                className="
+                    absolute
+                    top-8
+                    right-6
+                "
+            />
+        </div>
 
         <div 
             className="
