@@ -3,7 +3,7 @@ import router from "./routes.jsx";
 
 function App() {
     return (
-        <div className="h-screen overflow-auto dark:bg-gray-900 bg-white">
+        <div className="h-screen overflow-auto dark:bg-gray-800 bg-white">
             <RouterProvider router={router} />
         </div>
     )
