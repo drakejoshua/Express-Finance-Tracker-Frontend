@@ -1,12 +1,14 @@
-import Logo from '../../../shared/components/Logo.jsx'
 import { Form } from 'radix-ui'
 import EmailField from '../components/EmailField.jsx'
 import { useState } from 'react'
 import PasswordField from '../components/PasswordField'
 import Button from '../../../shared/components/Button'
 import AltButton from '../../../shared/components/AltButton'
-import { FaCirclePlus, FaGoogle } from 'react-icons/fa6'
+import { FaGoogle } from 'react-icons/fa6'
 import { Link } from 'react-router-dom'
+import AuthHeading from '../components/AuthHeading.jsx'
+import TextField from '../components/TextField.jsx'
+import AuthForm from '../components/AuthForm.jsx'
 
 export default function Signup() {
     const [ email, setEmail ] = useState("")
@@ -15,23 +17,13 @@ export default function Signup() {
 
     return (
         <>
-            <Logo
+            <AuthHeading
                 className="
-                    w-44 lg:w-40
-                    h-auto
-                "
-            />
-
-            <h1
-                className='
-                    text-3xl
-                    font-medium
                     mt-12 lg:mt-14
-                    capitalize
-                '
+                "
             >
                 Create an account
-            </h1>
+            </AuthHeading>
 
             <p
                 className='
@@ -42,13 +34,10 @@ export default function Signup() {
                 you manage your finances with precision and tracking
             </p>
 
-            <Form.Root
-                className='
+            <AuthForm
+                className="
                     mt-6
-                    flex
-                    flex-col
-                    gap-2.5
-                '
+                "
             >
                 <div
                     className='
@@ -58,7 +47,7 @@ export default function Signup() {
                     '
                 >
                     {/* firstname input */}
-                    <Form.Field
+                    {/* <Form.Field
                         className='
                             flex
                             flex-col
@@ -88,8 +77,7 @@ export default function Signup() {
                                     dark:placeholder:text-gray-500
                                     dark:text-gray-900
                                 '
-                                minLength="3"
-                                required
+                                
                             />
                         </Form.Control>
 
@@ -100,10 +88,17 @@ export default function Signup() {
                         <Form.Message match="tooShort">
                             Please enter a valid firstname
                         </Form.Message>
-                    </Form.Field>
+                    </Form.Field> */}
+                    <TextField
+                        label="Firstname"
+                        minLength="3"
+                        required
+                        emptyValidationMessage='Your firstname is required for signup'
+                        tooShortValidationMessage='Please enter a valid firstname'
+                    />
                     
                     {/* lastname input */}
-                    <Form.Field
+                    {/* <Form.Field
                         className='
                             flex
                             flex-col
@@ -135,7 +130,10 @@ export default function Signup() {
                                 '
                             />
                         </Form.Control>
-                    </Form.Field>
+                    </Form.Field> */}
+                    <TextField
+                        label="Lastname"
+                    />
                 </div>
 
                 <EmailField
@@ -211,7 +209,7 @@ export default function Signup() {
                         Create new account
                     </Button>
                 </Form.Submit>
-            </Form.Root>
+            </AuthForm>
 
             {/* Sign up for google */}
             <AltButton

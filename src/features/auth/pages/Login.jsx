@@ -1,14 +1,13 @@
 import { Form } from 'radix-ui'
 import { FaGoogle } from 'react-icons/fa6'
 import { useState } from 'react'
-import PasswordInput from '../components/PasswordInput'
 import EmailField from '../components/EmailField'
 import PasswordField from '../components/PasswordField'
 import Button from '../../../shared/components/Button'
 import AltButton from '../../../shared/components/AltButton'
-import ThemeButton from '../../../shared/components/ThemeButton'
-import Logo from '../../../shared/components/Logo'
 import { Link } from 'react-router-dom'
+import AuthHeading from '../components/AuthHeading'
+import AuthForm from '../components/AuthForm'
 
 export default function Login() {
     const [ email, setEmail ] = useState("")
@@ -16,23 +15,13 @@ export default function Login() {
 
     return (
         <>
-            <Logo 
-                className='
-                    w-44 lg:w-40
-                    h-auto
-                '
-            />
-            
-            <h1
-                className='
-                    text-3xl
-                    font-medium
+            <AuthHeading
+                className="
                     mt-12 lg:mt-14
-                    capitalize
-                '
+                "
             >
                 Sign in to your account
-            </h1>
+            </AuthHeading>
 
             <p
                 className='
@@ -43,13 +32,10 @@ export default function Login() {
                 to access your dashboard and manage your finances effectively.
             </p>
 
-            <Form.Root
-                className='
+            <AuthForm
+                className="
                     mt-6
-                    flex
-                    flex-col
-                    gap-2.5
-                '
+                "
             >
                 <EmailField
                     name={"email"}
@@ -80,7 +66,7 @@ export default function Login() {
                         Sign In
                     </Button>
                 </Form.Submit>
-            </Form.Root>
+            </AuthForm>
 
             {/* sign in with google button */}
             <AltButton

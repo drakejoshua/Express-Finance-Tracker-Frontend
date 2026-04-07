@@ -4,6 +4,7 @@ import EthereumCard from "../../../assets/Design/Ethereum Price Card.svg"
 import RippleCard from "../../../assets/Design/Ripple Price Card.svg"
 import 'animate.css';
 import ThemeButton from "../../../shared/components/ThemeButton";
+import Logo from "../../../shared/components/Logo";
 
 export default function AuthLayout() {
   return (
@@ -21,6 +22,13 @@ export default function AuthLayout() {
                 *:text-gray-800 dark:*:text-white
             '
         >
+            <Logo
+                className="
+                    w-44 lg:w-40
+                    h-auto
+                "
+            />
+
             <Outlet />
 
             {/* theme toggle button */}
