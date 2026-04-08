@@ -1,7 +1,4 @@
 import { Outlet } from "react-router-dom";
-import BitcoinGraph from "../../../assets/Design/Bitcoin-Graph.svg"
-import EthereumCard from "../../../assets/Design/Ethereum Price Card.svg"
-import RippleCard from "../../../assets/Design/Ripple Price Card.svg"
 import 'animate.css';
 import ThemeButton from "../../../shared/components/ThemeButton";
 import Logo from "../../../shared/components/Logo";
@@ -52,83 +49,7 @@ export default function AuthLayout() {
                     bg-[url('/public/liquid-cheese.svg')] bg-cover relative hidden lg:block
                     overflow-hidden
                 "
-            >
-                {/* Image Description */}
-                <span
-                    className="
-                        absolute
-                        top-4
-                        left-8
-                        text-gray-100
-                        text-5xl
-                        font-bold
-                        leading-[1.2]
-                        block
-                        w-126
-                    "
-                >
-                    Easily track your cryptocurrency investments
-                </span>
-                
-                {/* Image Description */}
-                <span
-                    className="
-                        absolute
-                        bottom-[20%]
-                        right-8
-                        text-gray-100
-                        text-5xl
-                        font-bold
-                        leading-[1.2]
-                        block
-                        w-120
-                        text-right
-                    "
-                >
-                    Create price alerts and stay informed with real-time updates.
-                </span>
-
-                {/* Bitcoin Graph Card */}
-                <img 
-                    src={BitcoinGraph} 
-                    alt="Bitcoin Graph" 
-                    className="
-                        absolute
-                        left-20
-                        bottom-14
-                        scale-125
-                        rounded-lg
-                        bitcoin-graph
-                        animate__animated animate__pulse animate__infinite animate__slow animate__delay-1s
-                    " 
-                />
-
-                {/* Ethereum Card */}
-                <img 
-                    src={EthereumCard} 
-                    alt="Ethereum Card" 
-                    className="
-                        ethereum-card
-                        absolute
-                        right-10
-                        top-10
-                        rounded-lg
-                    " 
-                />
-
-                {/* Ripple Card */}
-                <img 
-                    src={RippleCard} 
-                    alt="Ripple Card" 
-                    className="
-                        ripple-card
-                        absolute
-                        right-16
-                        top-32
-                        rounded-lg
-                    " 
-                />
-            </div>
+            ></div>
         </div>
     )
 }
