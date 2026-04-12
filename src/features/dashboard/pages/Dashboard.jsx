@@ -5,10 +5,13 @@ import { FaArrowDown, FaCaretDown, FaCaretUp, FaPen, FaTrash, FaTriangleExclamat
 import RouteError from '../../../shared/components/RouteError'
 import ItemSkeleton from '../components/ItemSkeleton'
 import AlertSkeleton from '../components/AlertSkeleton'
+import { useTheme } from '../../../shared/providers/ThemeProvider.jsx'
 
 export default function Dashboard() {
+    const { theme } = useTheme()
+
     return (
-        <div>
+        <div className={`${ theme == "dark" ? "route-dark" : "" }`}>
             {/* dashboard error content */}
             { false && <RouteError
                 title="Error loading dashboard"

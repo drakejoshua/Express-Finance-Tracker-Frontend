@@ -15,11 +15,11 @@
 @layer utilities {
     .skeleton {
         animation: skeleton-loading 1.5s infinite;
-        background: linear-gradient(90deg, #f0f0f0, #e0e0e0, #f0f0f0);
+        background: linear-gradient(90deg, #cacaca, #e0e0e0, #cacaca);
         background-size: 400% 100%;
     }
-    .dark .skeleton {
-        background: linear-gradient(90deg, #2a2a2a, #1a1a1a, #2a2a2a);
+    .route-dark .skeleton {
+        background: linear-gradient(90deg, #363636, #1a1a1a, #363636);
         background-size: 400% 100%;
     }
 

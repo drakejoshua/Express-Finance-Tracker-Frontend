@@ -367,7 +367,7 @@ export default function AppLayout() {
                         border-gray-100 dark:border-gray-700
                         absolute lg:static
                         bg-white dark:bg-gray-800
-                        z-10
+                        h-full
                     `}
                 >
                     <div

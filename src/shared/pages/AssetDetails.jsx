@@ -14,6 +14,9 @@ import {
 import bitcoinImage from "../../assets/Design/bitcoin.png"
 import Button from "../components/Button"
 import { useNavigate } from "react-router-dom"
+import AltButton from "../components/AltButton"
+import AlertItem from "../components/AlertItem"
+import RouteError from "../components/RouteError"
 
 export default function AssetDetails() {
     const navigateTo = useNavigate()
@@ -127,17 +130,38 @@ export default function AssetDetails() {
                                     *:focus:outline-none
                                 "
                             >
-                                <button>
+                                <Button
+                                    className="
+                                        p-4
+                                        flex
+                                        items-center
+                                        justify-center
+                                    "
+                                >
                                     <FaBell/>
-                                </button>
+                                </Button>
 
-                                <button>
+                               <Button
+                                    className="
+                                        p-4
+                                        flex
+                                        items-center
+                                        justify-center
+                                    "
+                                >
                                     <FaStar/>
-                                </button>
+                                </Button>
                                 
-                                <button>
+                                <Button
+                                    className="
+                                        p-4
+                                        flex
+                                        items-center
+                                        justify-center
+                                    "
+                                >
                                     <FaPlus/>
-                                </button>
+                                </Button>
                             </div>
                         </div>
 
@@ -272,19 +296,42 @@ export default function AssetDetails() {
                                             *:rounded-full
                                         "
                                     >
-                                        <button>
+                                        <Button
+                                            className="
+                                                w-min
+                                                flex
+
+                                            "
+                                        >
                                             <FaPen />
-                                            <span>
+                                            <span
+                                                className="
+                                                    w-min
+                                                    whitespace-nowrap
+                                                "
+                                            >
                                                 edit portfolio
                                             </span>
-                                        </button>
+                                        </Button>
                                         
-                                        <button>
+                                        <AltButton
+                                            className="
+                                                w-min
+                                                flex
+                                                gap-2
+                                                items-center
+                                            "
+                                        >
                                             <FaTrash />
-                                            <span>
+                                            <span
+                                                className="
+                                                    w-min
+                                                    whitespace-nowrap
+                                                "
+                                            >
                                                 remove asset
                                             </span>
-                                        </button>
+                                        </AltButton>
                                     </div>
                                 </div>
                                 
@@ -313,139 +360,23 @@ export default function AssetDetails() {
                                         "
                                     >
                                         {/* alert */}
-                                        <div
-                                            className="
-                                                flex
-                                                gap-2
-                                                items-center
-                                            "
-                                        >
-                                            <img 
-                                                src={ bitcoinImage } 
-                                                alt="image of bitcoin" 
-                                                className="
-                                                    w-10
-                                                    h-10
-                                                "
-                                            />
-
-                                            <div>
-                                                <span
-                                                    className="
-                                                        text-lg
-                                                    "
-                                                >
-                                                    Bitcoin Alert
-                                                </span>
-
-                                                <span
-                                                    className="
-                                                        -mt-1  
-                                                        flex
-                                                        gap-1
-                                                        items-center
-                                                    "
-                                                >
-                                                    <FaArrowDown
-                                                        className="
-                                                            text-red-500
-                                                        "
-                                                    />
-
-                                                    <span>
-                                                        $79000
-                                                    </span>
-                                                </span>
-                                            </div>
-
-                                            <div
-                                                className="
-                                                    ml-auto
-                                                    flex
-                                                    gap-2
-                                                    items-center
-                                                    *:text-white
-                                                    *:bg-green-700 *:hover:bg-green-900
-                                                    *:p-2
-                                                    *:rounded-full
-                                                "
-                                            >
-                                                <button>
-                                                    <FaPen/>
-                                                </button>
-                                                
-                                                <button>
-                                                    <FaTrash/>
-                                                </button>
-                                            </div>
-                                        </div>
+                                        <AlertItem 
+                                            imageSrc={ bitcoinImage }
+                                            title="Bitcoin Alert"
+                                            condition="below"
+                                            targetPrice="$79,000"
+                                            handleEdit={ () => {} }
+                                            handleDelete={ () => {} }
+                                        />
                                         
-                                        <div
-                                            className="
-                                                flex
-                                                gap-2
-                                                items-center
-                                            "
-                                        >
-                                            <img 
-                                                src={ bitcoinImage } 
-                                                alt="image of bitcoin" 
-                                                className="
-                                                    w-10
-                                                    h-10
-                                                "
-                                            />
-
-                                            <div>
-                                                <span
-                                                    className="
-                                                        text-lg
-                                                    "
-                                                >
-                                                    Bitcoin Alert
-                                                </span>
-
-                                                <span
-                                                    className="
-                                                        -mt-1  
-                                                        flex
-                                                        gap-1
-                                                        items-center
-                                                    "
-                                                >
-                                                    <FaArrowDown
-                                                        className="
-                                                            text-red-500
-                                                        "
-                                                    />
-
-                                                    <span>
-                                                        $79000
-                                                    </span>
-                                                </span>
-                                            </div>
-
-                                            <div
-                                                className="
-                                                    ml-auto
-                                                    flex
-                                                    gap-2
-                                                    items-center
-                                                    *:text-white
-                                                    *:bg-green-700 *:hover:bg-green-900
-                                                    *:p-2
-                                                    *:rounded-full
-                                                "
-                                            >
-                                                <button>
-                                                    <FaPen/>
-                                                </button>
-                                                
-                                                <button>
-                                                    <FaTrash/>
-                                                </button>
-                                            </div>
-                                        </div>
+                                        <AlertItem 
+                                            imageSrc={ bitcoinImage }
+                                            title="Bitcoin Alert"
+                                            condition="above"
+                                            targetPrice="$79,000"
+                                            handleEdit={ () => {} }
+                                            handleDelete={ () => {} }
+                                        />
                                     </div>
                                 </div>
                             </div>
@@ -817,62 +748,11 @@ export default function AssetDetails() {
                     </div>}
 
                     {/* dialog error state */}
-                    { false && <div
-                        className="
-                            flex
-                            flex-col
-                            items-center
-                            text-center
-                            p-6 py-20
-                        "
-                    >
-                        <FaTriangleExclamation 
-                            className="
-                                text-red-500
-                                text-4xl
-                            "
-                        />
-
-                        <Dialog.Title
-                            className="
-                                text-2xl
-                                mt-4
-                            "
-                        >
-                            Error loading crypto details
-                        </Dialog.Title>
-
-                        <Dialog.Description
-                            className="
-                                mt-2
-                            "
-                        >
-                            There was an error loading the details for this cryptocurrency. Please try again later.
-                        </Dialog.Description>
-
-                        <Button
-                            className="
-                                mt-6
-                                capitalize
-                                px-5 py-2
-                                rounded-full
-                                flex
-                                gap-2
-                                items-center
-                                group
-                                w-min
-                            "
-                        >
-                            <FaArrowRotateLeft 
-                                className="
-                                    group-hover:-rotate-360
-                                    transition-transform
-                                    duration-600
-                                "
-                            />
-                            Retry
-                        </Button>
-                    </div>}
+                    { false && <RouteError 
+                        title="Error loading asset details"
+                        message="There was an error loading the details for this cryptocurrency. Please try again later."
+                        handleRetry={() => {}}
+                    />}
 
                     <Dialog.Close
                         className="
