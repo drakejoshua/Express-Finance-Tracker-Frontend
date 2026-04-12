@@ -1,13 +1,269 @@
 import React from 'react'
 import { Outlet } from 'react-router-dom'
 import bitcoinImage from '../../../assets/Design/bitcoin.png'
-import { FaArrowDown, FaCaretDown, FaCaretUp, FaPen, FaTrash } from 'react-icons/fa6'
+import { FaArrowDown, FaCaretDown, FaCaretUp, FaPen, FaTrash, FaTriangleExclamation } from 'react-icons/fa6'
+import RouteError from '../../../shared/components/RouteError'
+import ItemSkeleton from '../components/ItemSkeleton'
+import AlertSkeleton from '../components/AlertSkeleton'
 
 export default function Dashboard() {
     return (
         <div>
-            {/* dashboard content */}
-            <div>
+            {/* dashboard error content */}
+            { false && <RouteError
+                title="Error loading dashboard"
+                message="There was an error loading the dashboard. Please try again later."
+                handleRetry={ () => window.location.reload() }
+            />}
+
+            {/* dashboard loading content */}
+            { true && <div>
+                {/* greeting */}
+                <h1
+                    className='
+                        mt-5
+                        text-3xl
+                        font-medium
+                        dark:text-white
+                    '
+                >
+                    Welcome, Joshua
+                </h1>
+
+                {/* portfolio overview */}
+                <div
+                    className='
+                        mt-10
+                        bg-gray-100 dark:bg-gray-700 
+                        rounded-lg
+                        p-5 py-8 lg:p-8
+                    '
+                >
+                    <h2
+                        className='
+                            lg:text-lg
+                            font-medium
+                            text-gray-700 dark:text-gray-100
+                        '
+                    >
+                        Portfolio Overview
+                    </h2>
+
+                    {/* portfolio balance */}
+                    <div
+                        className='
+                            mt-4
+                            flex
+                            items-center
+                            gap-3
+                        '
+                    >
+                        {/* balance skeleton */}
+                        <span
+                            className="
+                                skeleton
+                                h-10
+                                w-48
+                                rounded-md
+                            "
+                        ></span>
+                    </div>
+
+                    {/* portfolio chart skeleton */}
+                    <div
+                        className='
+                            mt-10
+                            h-84
+                            w-full
+                            rounded-lg
+                            skeleton
+                        '
+                    ></div>
+
+                    {/* portfolio stats */}
+                    <div
+                        className='
+                            mt-10
+                            grid
+                            grid-cols-1 md:grid-cols-2
+                            gap-8 lg:gap-20
+                        '
+                    >
+                        <div>
+                            <h3
+                                className='
+                                    text-lg
+                                    font-medium
+                                    capitalize
+                                    dark:text-white
+                                '
+                            >
+                                top gainers
+                            </h3>
+
+                            {/* top 3 gainers */}
+                            <div
+                                className='
+                                    mt-3
+                                    flex
+                                    flex-col
+                                '
+                            >
+                                <ItemSkeleton />
+
+                                <ItemSkeleton />
+
+                                <ItemSkeleton />
+                            </div>
+                        </div>
+                        
+                        {/* top 3 losers */}
+                        <div>
+                            <h3
+                                className='
+                                    text-lg
+                                    font-medium
+                                    capitalize
+                                    dark:text-white
+                                '
+                            >
+                                top losers
+                            </h3>
+
+                            <div
+                                className='
+                                    mt-3
+                                    flex
+                                    flex-col
+                                '
+                            >
+                                <ItemSkeleton />
+                                
+                                <ItemSkeleton />
+
+                                <ItemSkeleton />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* watchlist overview */}
+                <h2
+                    className='
+                        text-3xl
+                        mt-10
+                        dark:text-white
+                    '
+                >
+                    Recent Watchlist & Alerts
+                </h2>
+                
+                {/* watchlist stats */}
+                <div
+                    className='
+                        mt-10
+                        grid
+                        grid-cols-1 md:grid-cols-2 lg:grid-cols-3
+                        gap-8 lg:gap-10
+                    '
+                >
+                    {/* top 3 gainers */}
+                    <div>
+                        <h3
+                            className='
+                                text-lg
+                                font-medium
+                                capitalize
+                                dark:text-white
+                            '
+                        >
+                            top gainers
+                        </h3>
+
+                        <div
+                            className='
+                                mt-3
+                                flex
+                                flex-col
+                            '
+                        >
+                            <ItemSkeleton />
+                                
+                            <ItemSkeleton />
+
+                            <ItemSkeleton />
+                        </div>
+                    </div>
+                    
+                    {/* top 3 losers */}
+                    <div>
+                        <h3
+                            className='
+                                text-lg
+                                font-medium
+                                capitalize
+                                dark:text-white
+                            '
+                        >
+                            top losers
+                        </h3>
+
+                        <div
+                            className='
+                                mt-3
+                                flex
+                                flex-col
+                            '
+                        >
+                            {/* item */}
+                            <ItemSkeleton />
+
+                            <ItemSkeleton />
+
+                            <ItemSkeleton />
+                        </div>
+                    </div>
+
+                    {/* alerts */}
+                    <div
+                        className='
+                            bg-gray-100 dark:bg-gray-700
+                            p-4 lg:p-5
+                            rounded-lg
+                        '
+                    >
+                        <h3
+                            className='
+                                text-lg
+                                font-medium
+                                dark:text-white
+                            '
+                        >
+                            Alerts
+                        </h3>
+
+                        <div
+                            className='
+                                mt-2
+                            '
+                        >
+                            {/* alert */}
+                            <AlertSkeleton />
+                            
+                            <AlertSkeleton />
+                            
+                            <AlertSkeleton />
+                            
+                            <AlertSkeleton />
+                            
+                            <AlertSkeleton />
+                        </div>
+                    </div>
+                </div>
+            </div>}
+
+            {/* dashboard loaded content */}
+            { false && <div>
                 {/* greeting */}
                 <h1
                     className='
@@ -1431,7 +1687,7 @@ export default function Dashboard() {
                         </div>
                     </div>
                 </div>
-            </div>
+            </div>} 
 
             <Outlet />
         </div>

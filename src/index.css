@@ -18,6 +18,10 @@
         background: linear-gradient(90deg, #f0f0f0, #e0e0e0, #f0f0f0);
         background-size: 400% 100%;
     }
+    .dark .skeleton {
+        background: linear-gradient(90deg, #2a2a2a, #1a1a1a, #2a2a2a);
+        background-size: 400% 100%;
+    }
 
 }
 @keyframes skeleton-loading {
