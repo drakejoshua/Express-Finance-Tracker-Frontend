@@ -1,26 +1,33 @@
-import React from 'react'
 import { FaArrowDown, FaArrowUp, FaPen, FaTrash } from 'react-icons/fa6'
-import Button from './Button'
+import Button from '../../../shared/components/Button.jsx'
+
 
 export default function AlertItem({ imageSrc, title, condition, targetPrice, handleEdit, handleDelete }) {
     return (
         <div
             className="
                 flex
-                gap-2
+                gap-3
                 items-center
+                p-2 px-3
+                rounded-lg
+                hover:bg-gray-200 dark:hover:bg-gray-800
             "
         >
             <img 
                 src={ imageSrc } 
-                alt="image of bitcoin" 
+                alt="coin alert image" 
                 className="
                     w-10
                     h-10
                 "
             />
 
-            <div>
+            <div
+                className='
+                    dark:text-white
+                '
+            >
                 <span>
                     { title }
                 </span>
@@ -35,13 +42,13 @@ export default function AlertItem({ imageSrc, title, condition, targetPrice, han
                 >
                     { condition == "below" && <FaArrowDown
                         className="
-                            text-red-500
+                            text-red-500 dark:text-red-300
                         "
                     />}
                     
                     { condition == "above" && <FaArrowUp
                         className="
-                            text-green-700
+                            text-green-700 dark:text-green-300
                         "
                     />}
 

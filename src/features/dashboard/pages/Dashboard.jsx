@@ -6,6 +6,9 @@ import RouteError from '../../../shared/components/RouteError'
 import ItemSkeleton from '../components/ItemSkeleton'
 import AlertSkeleton from '../components/AlertSkeleton'
 import { useTheme } from '../../../shared/providers/ThemeProvider.jsx'
+import PortfolioItem from '../components/PortfolioItem.jsx'
+import WatchlistItem from '../components/WatchlistItem.jsx'
+import AlertItem from '../components/AlertItem.jsx'
 
 export default function Dashboard() {
     const { theme } = useTheme()
@@ -20,7 +23,7 @@ export default function Dashboard() {
             />}
 
             {/* dashboard loading content */}
-            { true && <div>
+            { false && <div>
                 {/* greeting */}
                 <h1
                     className='
@@ -266,7 +269,7 @@ export default function Dashboard() {
             </div>}
 
             {/* dashboard loaded content */}
-            { false && <div>
+            { true && <div>
                 {/* greeting */}
                 <h1
                     className='
@@ -354,6 +357,7 @@ export default function Dashboard() {
                             gap-8 lg:gap-20
                         '
                     >
+                        {/* top 3 gainers */}
                         <div>
                             <h3
                                 className='
@@ -375,234 +379,30 @@ export default function Dashboard() {
                                 '
                             >
                                 {/* red item */}
-                                <div
-                                    className='
-                                        flex
-                                        gap-3
-                                        items-center
-                                        px-3 py-2
-                                        rounded-lg
-                                        hover:bg-gray-200 hover:dark:bg-gray-800
-                                    '
-                                >
-                                    <img 
-                                        src={ bitcoinImage } 
-                                        alt="bitcoin image" 
-                                        className='
-                                            w-10
-                                            h-10
-                                            object-cover
-                                        '
-                                    />
-
-                                    <div
-                                        className='
-                                            flex
-                                            flex-col
-                                        '
-                                    >
-                                        <span
-                                            className='
-                                                font-medium
-                                                dark:text-white
-                                            '
-                                        >
-                                            bitcoin
-                                        </span>
-
-                                        <span
-                                            className='
-                                                flex
-                                                gap-1
-                                                items-center
-                                                dark:text-white
-                                            '
-                                        >
-                                            <span>
-                                                $28,000
-                                            </span>
-                                            
-                                            <span
-                                                className='
-                                                    flex
-                                                    items-center
-                                                    text-sm
-                                                    text-red-500 dark:text-red-300
-                                                    font-medium
-                                                '
-                                            >
-                                                <FaCaretDown />
-
-                                                <span>
-                                                    -5.2%
-                                                </span>
-                                            </span>
-                                        </span>
-                                    </div>
-
-                                    <span
-                                        className='
-                                            ml-auto
-                                            text-red-500 dark:text-red-300
-                                            font-medium
-                                        '
-                                    >
-                                        -$1,500
-                                    </span>
-                                </div>
+                                <PortfolioItem
+                                    image={ bitcoinImage }
+                                    name="bitcoin"
+                                    price="$28,000"
+                                    percentChange={ -5.2 }
+                                    balanceChange="1,500"
+                                />
 
                                 {/* green item */}
-                                <div
-                                    className='
-                                        flex
-                                        gap-3
-                                        items-center
-                                        px-3 py-2
-                                        rounded-lg
-                                        hover:bg-gray-200 hover:dark:bg-gray-800
-                                    '
-                                >
-                                    <img 
-                                        src={ bitcoinImage } 
-                                        alt="bitcoin image" 
-                                        className='
-                                            w-10
-                                            h-10
-                                            object-cover
-                                        '
-                                    />
+                                <PortfolioItem
+                                    image={ bitcoinImage }
+                                    name="bitcoin"
+                                    price="$28,000"
+                                    percentChange={ 5.2 }
+                                    balanceChange="1,500"
+                                />
 
-                                    <div
-                                        className='
-                                            flex
-                                            flex-col
-                                        '
-                                    >
-                                        <span
-                                            className='
-                                                font-medium
-                                                dark:text-white
-                                            '
-                                        >
-                                            bitcoin
-                                        </span>
-
-                                        <span
-                                            className='
-                                                flex
-                                                gap-1
-                                                items-center
-                                                dark:text-white
-                                            '
-                                        >
-                                            <span>
-                                                $28,000
-                                            </span>
-                                            
-                                            <span
-                                                className='
-                                                    flex
-                                                    items-center
-                                                    text-sm
-                                                    text-green-700 dark:text-green-300
-                                                    font-medium
-                                                '
-                                            >
-                                                <FaCaretUp />
-
-                                                <span>
-                                                    -5.2%
-                                                </span>
-                                            </span>
-                                        </span>
-                                    </div>
-
-                                    <span
-                                        className='
-                                            ml-auto
-                                            text-green-700 dark:text-green-300
-                                            font-medium
-                                        '
-                                    >
-                                        +$1,500
-                                    </span>
-                                </div>
-
-                                <div
-                                    className='
-                                        flex
-                                        gap-3
-                                        items-center
-                                        px-3 py-2
-                                        rounded-lg
-                                        hover:bg-gray-200 hover:dark:bg-gray-800
-                                    '
-                                >
-                                    <img 
-                                        src={ bitcoinImage } 
-                                        alt="bitcoin image" 
-                                        className='
-                                            w-10
-                                            h-10
-                                            object-cover
-                                        '
-                                    />
-
-                                    <div
-                                        className='
-                                            flex
-                                            flex-col
-                                        '
-                                    >
-                                        <span
-                                            className='
-                                                font-medium
-                                                dark:text-white
-                                            '
-                                        >
-                                            bitcoin
-                                        </span>
-
-                                        <span
-                                            className='
-                                                flex
-                                                gap-1
-                                                items-center
-                                                dark:text-white
-                                            '
-                                        >
-                                            <span>
-                                                $28,000
-                                            </span>
-                                            
-                                            <span
-                                                className='
-                                                    flex
-                                                    items-center
-                                                    text-sm
-                                                    text-red-500 dark:text-red-300
-                                                    font-medium
-                                                '
-                                            >
-                                                <FaCaretDown />
-
-                                                <span>
-                                                    -5.2%
-                                                </span>
-                                            </span>
-                                        </span>
-                                    </div>
-
-                                    <span
-                                        className='
-                                            ml-auto
-                                            text-red-500 dark:text-red-300
-                                            font-medium
-                                        '
-                                    >
-                                        -$1,500
-                                    </span>
-                                </div>
+                                <PortfolioItem
+                                    image={ bitcoinImage }
+                                    name="bitcoin"
+                                    price="$28,000"
+                                    percentChange={ -5.2 }
+                                    balanceChange="1,500"
+                                />
                             </div>
                         </div>
                         
@@ -627,233 +427,30 @@ export default function Dashboard() {
                                 '
                             >
                                 {/* green item */}
-                                <div
-                                    className='
-                                        flex
-                                        gap-3
-                                        items-center
-                                        px-3 py-2
-                                        rounded-lg
-                                        hover:bg-gray-200 hover:dark:bg-gray-800
-                                    '
-                                >
-                                    <img 
-                                        src={ bitcoinImage } 
-                                        alt="bitcoin image" 
-                                        className='
-                                            w-10
-                                            h-10
-                                            object-cover
-                                        '
-                                    />
+                                <PortfolioItem
+                                    image={ bitcoinImage }
+                                    name="bitcoin"
+                                    price="$28,000"
+                                    percentChange={ 5.2 }
+                                    balanceChange="1,500"
+                                />
 
-                                    <div
-                                        className='
-                                            flex
-                                            flex-col
-                                        '
-                                    >
-                                        <span
-                                            className='
-                                                font-medium
-                                                dark:text-white
-                                            '
-                                        >
-                                            bitcoin
-                                        </span>
+                               <PortfolioItem
+                                    image={ bitcoinImage }
+                                    name="bitcoin"
+                                    price="$28,000"
+                                    percentChange={ -5.2 }
+                                    balanceChange="1,500"
+                                />
 
-                                        <span
-                                            className='
-                                                flex
-                                                gap-1
-                                                items-center
-                                                dark:text-white
-                                            '
-                                        >
-                                            <span>
-                                                $28,000
-                                            </span>
-                                            
-                                            <span
-                                                className='
-                                                    flex
-                                                    items-center
-                                                    text-sm
-                                                    text-green-700 dark:text-green-300
-                                                    font-medium
-                                                '
-                                            >
-                                                <FaCaretUp />
-
-                                                <span>
-                                                    -5.2%
-                                                </span>
-                                            </span>
-                                        </span>
-                                    </div>
-
-                                    <span
-                                        className='
-                                            ml-auto
-                                            text-green-700 dark:text-green-300
-                                            font-medium
-                                        '
-                                    >
-                                        +$1,500
-                                    </span>
-                                </div>
-
-                                <div
-                                    className='
-                                        flex
-                                        gap-3
-                                        items-center
-                                        px-3 py-2
-                                        rounded-lg
-                                        hover:bg-gray-200 hover:dark:bg-gray-800
-                                    '
-                                >
-                                    <img 
-                                        src={ bitcoinImage } 
-                                        alt="bitcoin image" 
-                                        className='
-                                            w-10
-                                            h-10
-                                            object-cover
-                                        '
-                                    />
-
-                                    <div
-                                        className='
-                                            flex
-                                            flex-col
-                                        '
-                                    >
-                                        <span
-                                            className='
-                                                font-medium
-                                                dark:text-white
-                                            '
-                                        >
-                                            bitcoin
-                                        </span>
-
-                                        <span
-                                            className='
-                                                flex
-                                                gap-1
-                                                items-center
-                                                dark:text-white
-                                            '
-                                        >
-                                            <span>
-                                                $28,000
-                                            </span>
-                                            
-                                            <span
-                                                className='
-                                                    flex
-                                                    items-center
-                                                    text-sm
-                                                    text-red-500 dark:text-red-300
-                                                    font-medium
-                                                '
-                                            >
-                                                <FaCaretDown />
-
-                                                <span>
-                                                    -5.2%
-                                                </span>
-                                            </span>
-                                        </span>
-                                    </div>
-
-                                    <span
-                                        className='
-                                            ml-auto
-                                            text-red-500 dark:text-red-300
-                                            font-medium
-                                        '
-                                    >
-                                        -$1,500
-                                    </span>
-                                </div>
-
-                                <div
-                                    className='
-                                        flex
-                                        gap-3
-                                        items-center
-                                        px-3 py-2
-                                        rounded-lg
-                                        hover:bg-gray-200 hover:dark:bg-gray-800
-                                    '
-                                >
-                                    <img 
-                                        src={ bitcoinImage } 
-                                        alt="bitcoin image" 
-                                        className='
-                                            w-10
-                                            h-10
-                                            object-cover
-                                        '
-                                    />
-
-                                    <div
-                                        className='
-                                            flex
-                                            flex-col
-                                        '
-                                    >
-                                        <span
-                                            className='
-                                                font-medium
-                                                dark:text-white
-                                            '
-                                        >
-                                            bitcoin
-                                        </span>
-
-                                        <span
-                                            className='
-                                                flex
-                                                gap-1
-                                                items-center
-                                                dark:text-white
-                                            '
-                                        >
-                                            <span>
-                                                $28,000
-                                            </span>
-                                            
-                                            <span
-                                                className='
-                                                    flex
-                                                    items-center
-                                                    text-sm
-                                                    text-green-700 dark:text-green-300
-                                                    font-medium
-                                                '
-                                            >
-                                                <FaCaretUp />
-
-                                                <span>
-                                                    -5.2%
-                                                </span>
-                                            </span>
-                                        </span>
-                                    </div>
-
-                                    <span
-                                        className='
-                                            ml-auto
-                                            text-green-700 dark:text-green-300
-                                            font-medium
-                                        '
-                                    >
-                                        +$1,500
-                                    </span>
-                                </div>
+                                {/* green item */}
+                                <PortfolioItem
+                                    image={ bitcoinImage }
+                                    name="bitcoin"
+                                    price="$28,000"
+                                    percentChange={ 5.2 }
+                                    balanceChange="1,500"
+                                />
                             </div>
                         </div>
                     </div>
@@ -899,200 +496,28 @@ export default function Dashboard() {
                                 flex-col
                             '
                         >
-                            <div
-                                className='
-                                    flex
-                                    gap-3
-                                    items-center
-                                    px-4 py-2
-                                    rounded-lg
-                                    hover:bg-gray-200 dark:hover:bg-gray-700
-                                '
-                            >
-                                <img 
-                                    src={ bitcoinImage } 
-                                    alt="bitcoin image" 
-                                    className='
-                                        w-10
-                                        h-10
-                                        object-cover
-                                    '
-                                />
-
-                                <div
-                                    className='
-                                        flex
-                                        flex-col
-                                        dark:text-white
-                                    '
-                                >
-                                    <span
-                                        className='
-                                            font-medium
-                                        '
-                                    >
-                                        bitcoin
-                                    </span>
-
-                                    <span
-                                        className='
-                                            flex
-                                            gap-1
-                                            items-center
-                                        '
-                                    >
-                                        <span>
-                                            $28,000
-                                        </span>
-                                    </span>
-                                </div>
-
-                                <span
-                                    className='
-                                        flex
-                                        items-center
-                                        text-red-500 dark:text-red-300
-                                        font-medium
-                                        ml-auto
-                                    '
-                                >
-                                    <FaCaretDown />
-
-                                    <span>
-                                        -5.2%
-                                    </span>
-                                </span>
-                            </div>
+                            {/* red item */}
+                            <WatchlistItem
+                                image={ bitcoinImage }
+                                name="bitcoin"
+                                price="$28,000"
+                                percentChange={ -5.2 }
+                            />
                             
-                            <div
-                                className='
-                                    flex
-                                    gap-3
-                                    items-center
-                                    px-4 py-2
-                                    rounded-lg
-                                    hover:bg-gray-200 dark:hover:bg-gray-700
-                                '
-                            >
-                                <img 
-                                    src={ bitcoinImage } 
-                                    alt="bitcoin image" 
-                                    className='
-                                        w-10
-                                        h-10
-                                        object-cover
-                                    '
-                                />
-
-                                <div
-                                    className='
-                                        flex
-                                        flex-col
-                                        dark:text-white
-                                    '
-                                >
-                                    <span
-                                        className='
-                                            font-medium
-                                        '
-                                    >
-                                        bitcoin
-                                    </span>
-
-                                    <span
-                                        className='
-                                            flex
-                                            gap-1
-                                            items-center
-                                        '
-                                    >
-                                        <span>
-                                            $28,000
-                                        </span>
-                                    </span>
-                                </div>
-
-                                <span
-                                    className='
-                                        flex
-                                        items-center
-                                        text-green-700 dark:text-green-300
-                                        font-medium
-                                        ml-auto
-                                    '
-                                >
-                                    <FaCaretUp />
-
-                                    <span>
-                                        -5.2%
-                                    </span>
-                                </span>
-                            </div>
+                            {/* green item */}
+                            <WatchlistItem
+                                image={ bitcoinImage }
+                                name="bitcoin"
+                                price="$28,000"
+                                percentChange={ 5.2 }
+                            />
                             
-                            <div
-                                className='
-                                    flex
-                                    gap-3
-                                    items-center
-                                    px-4 py-2
-                                    rounded-lg
-                                    hover:bg-gray-200 dark:hover:bg-gray-700
-                                '
-                            >
-                                <img 
-                                    src={ bitcoinImage } 
-                                    alt="bitcoin image" 
-                                    className='
-                                        w-10
-                                        h-10
-                                        object-cover
-                                    '
-                                />
-
-                                <div
-                                    className='
-                                        flex
-                                        flex-col
-                                        dark:text-white
-                                    '
-                                >
-                                    <span
-                                        className='
-                                            font-medium
-                                        '
-                                    >
-                                        bitcoin
-                                    </span>
-
-                                    <span
-                                        className='
-                                            flex
-                                            gap-1
-                                            items-center
-                                        '
-                                    >
-                                        <span>
-                                            $28,000
-                                        </span>
-                                    </span>
-                                </div>
-
-                                <span
-                                    className='
-                                        flex
-                                        items-center
-                                        text-red-500 dark:text-red-300
-                                        font-medium
-                                        ml-auto
-                                    '
-                                >
-                                    <FaCaretDown />
-
-                                    <span>
-                                        -5.2%
-                                    </span>
-                                </span>
-                            </div>
+                            <WatchlistItem
+                                image={ bitcoinImage }
+                                name="bitcoin"
+                                price="$28,000"
+                                percentChange={ -5.2 }
+                            />
                         </div>
                     </div>
                     
@@ -1116,201 +541,28 @@ export default function Dashboard() {
                                 flex-col
                             '
                         >
-                            {/* item */}
-                            <div
-                                className='
-                                    flex
-                                    gap-3
-                                    items-center
-                                    px-4 py-2
-                                    rounded-lg
-                                    hover:bg-gray-200 dark:hover:bg-gray-700
-                                '
-                            >
-                                <img 
-                                    src={ bitcoinImage } 
-                                    alt="bitcoin image" 
-                                    className='
-                                        w-10
-                                        h-10
-                                        object-cover
-                                    '
-                                />
-
-                                <div
-                                    className='
-                                        flex
-                                        flex-col
-                                        dark:text-white
-                                    '
-                                >
-                                    <span
-                                        className='
-                                            font-medium
-                                        '
-                                    >
-                                        bitcoin
-                                    </span>
-
-                                    <span
-                                        className='
-                                            flex
-                                            gap-1
-                                            items-center
-                                        '
-                                    >
-                                        <span>
-                                            $28,000
-                                        </span>
-                                    </span>
-                                </div>
-
-                                <span
-                                    className='
-                                        flex
-                                        items-center
-                                        text-red-500 dark:text-red-300
-                                        font-medium
-                                        ml-auto
-                                    '
-                                >
-                                    <FaCaretDown />
-
-                                    <span>
-                                        -5.2%
-                                    </span>
-                                </span>
-                            </div>
+                            {/* red item */}
+                            <WatchlistItem
+                                image={ bitcoinImage }
+                                name="bitcoin"
+                                price="$28,000"
+                                percentChange={ -5.2 }
+                            />
                             
-                            <div
-                                className='
-                                    flex
-                                    gap-3
-                                    items-center
-                                    px-4 py-2
-                                    rounded-lg
-                                    hover:bg-gray-200 dark:hover:bg-gray-700
-                                '
-                            >
-                                <img 
-                                    src={ bitcoinImage } 
-                                    alt="bitcoin image" 
-                                    className='
-                                        w-10
-                                        h-10
-                                        object-cover
-                                    '
-                                />
-
-                                <div
-                                    className='
-                                        flex
-                                        flex-col
-                                        dark:text-white
-                                    '
-                                >
-                                    <span
-                                        className='
-                                            font-medium
-                                        '
-                                    >
-                                        bitcoin
-                                    </span>
-
-                                    <span
-                                        className='
-                                            flex
-                                            gap-1
-                                            items-center
-                                        '
-                                    >
-                                        <span>
-                                            $28,000
-                                        </span>
-                                    </span>
-                                </div>
-
-                                <span
-                                    className='
-                                        flex
-                                        items-center
-                                        text-green-700 dark:text-green-300
-                                        font-medium
-                                        ml-auto
-                                    '
-                                >
-                                    <FaCaretUp />
-
-                                    <span>
-                                        -5.2%
-                                    </span>
-                                </span>
-                            </div>
+                            {/* green item */}
+                            <WatchlistItem
+                                image={ bitcoinImage }
+                                name="bitcoin"
+                                price="$28,000"
+                                percentChange={ 5.2 }
+                            />
                             
-                            <div
-                                className='
-                                    flex
-                                    gap-3
-                                    items-center
-                                    px-4 py-2
-                                    rounded-lg
-                                    hover:bg-gray-200 dark:hover:bg-gray-700
-                                '
-                            >
-                                <img 
-                                    src={ bitcoinImage } 
-                                    alt="bitcoin image" 
-                                    className='
-                                        w-10
-                                        h-10
-                                        object-cover
-                                    '
-                                />
-
-                                <div
-                                    className='
-                                        flex
-                                        flex-col
-                                        dark:text-white
-                                    '
-                                >
-                                    <span
-                                        className='
-                                            font-medium
-                                        '
-                                    >
-                                        bitcoin
-                                    </span>
-
-                                    <span
-                                        className='
-                                            flex
-                                            gap-1
-                                            items-center
-                                        '
-                                    >
-                                        <span>
-                                            $28,000
-                                        </span>
-                                    </span>
-                                </div>
-
-                                <span
-                                    className='
-                                        flex
-                                        items-center
-                                        text-red-500 dark:text-red-300
-                                        font-medium
-                                        ml-auto
-                                    '
-                                >
-                                    <FaCaretDown />
-
-                                    <span>
-                                        -5.2%
-                                    </span>
-                                </span>
-                            </div>
+                            <WatchlistItem
+                                image={ bitcoinImage }
+                                name="bitcoin"
+                                price="$28,000"
+                                percentChange={ -5.2 }
+                            />
                         </div>
                     </div>
 
@@ -1338,355 +590,50 @@ export default function Dashboard() {
                             '
                         >
                             {/* alert */}
-                            <div
-                                className="
-                                    flex
-                                    gap-3
-                                    items-center
-                                    p-2 px-3
-                                    rounded-lg
-                                    hover:bg-gray-200 dark:hover:bg-gray-800
-                                "
-                            >
-                                <img 
-                                    src={ bitcoinImage } 
-                                    alt="image of bitcoin" 
-                                    className="
-                                        w-10
-                                        h-10
-                                    "
-                                />
-
-                                <div
-                                    className='
-                                        dark:text-white
-                                    '
-                                >
-                                    <span>
-                                        Bitcoin Alert
-                                    </span>
-
-                                    <span
-                                        className="
-                                            -mt-1  
-                                            flex
-                                            gap-1
-                                            items-center
-                                        "
-                                    >
-                                        <FaArrowDown
-                                            className="
-                                                text-red-500 dark:text-red-300
-                                            "
-                                        />
-
-                                        <span>
-                                            $79000
-                                        </span>
-                                    </span>
-                                </div>
-
-                                <div
-                                    className="
-                                        ml-auto
-                                        flex
-                                        gap-2
-                                        items-center
-                                        *:text-white
-                                        *:bg-green-700 *:hover:bg-green-900
-                                        *:p-2
-                                        *:rounded-full
-                                    "
-                                >
-                                    <button>
-                                        <FaPen/>
-                                    </button>
-                                    
-                                    <button>
-                                        <FaTrash/>
-                                    </button>
-                                </div>
-                            </div>
+                            <AlertItem
+                                imageSrc={ bitcoinImage }
+                                title="Bitcoin Alert"
+                                condition="below"
+                                targetPrice="$79,000"
+                                handleEdit={ () => {} }
+                                handleDelete={ () => {} }
+                            />
                             
-                            <div
-                                className="
-                                    flex
-                                    gap-3
-                                    items-center
-                                    p-2 px-3
-                                    rounded-lg
-                                    hover:bg-gray-200 dark:hover:bg-gray-800
-                                "
-                            >
-                                <img 
-                                    src={ bitcoinImage } 
-                                    alt="image of bitcoin" 
-                                    className="
-                                        w-10
-                                        h-10
-                                    "
-                                />
-
-                                <div
-                                    className='
-                                        dark:text-white
-                                    '
-                                >
-                                    <span>
-                                        Bitcoin Alert
-                                    </span>
-
-                                    <span
-                                        className="
-                                            -mt-1  
-                                            flex
-                                            gap-1
-                                            items-center
-                                        "
-                                    >
-                                        <FaArrowDown
-                                            className="
-                                                text-red-500 dark:text-red-300
-                                            "
-                                        />
-
-                                        <span>
-                                            $79000
-                                        </span>
-                                    </span>
-                                </div>
-
-                                <div
-                                    className="
-                                        ml-auto
-                                        flex
-                                        gap-2
-                                        items-center
-                                        *:text-white
-                                        *:bg-green-700 *:hover:bg-green-900
-                                        *:p-2
-                                        *:rounded-full
-                                    "
-                                >
-                                    <button>
-                                        <FaPen/>
-                                    </button>
-                                    
-                                    <button>
-                                        <FaTrash/>
-                                    </button>
-                                </div>
-                            </div>
+                            <AlertItem
+                                imageSrc={ bitcoinImage }
+                                title="Bitcoin Alert"
+                                condition="above"
+                                targetPrice="$69,000"
+                                handleEdit={ () => {} }
+                                handleDelete={ () => {} }
+                            />
                             
-                            <div
-                                className="
-                                    flex
-                                    gap-3
-                                    items-center
-                                    p-2 px-3
-                                    rounded-lg
-                                    hover:bg-gray-200 dark:hover:bg-gray-800
-                                "
-                            >
-                                <img 
-                                    src={ bitcoinImage } 
-                                    alt="image of bitcoin" 
-                                    className="
-                                        w-10
-                                        h-10
-                                    "
-                                />
-
-                                <div
-                                    className='
-                                        dark:text-white
-                                    '
-                                >
-                                    <span>
-                                        Bitcoin Alert
-                                    </span>
-
-                                    <span
-                                        className="
-                                            -mt-1  
-                                            flex
-                                            gap-1
-                                            items-center
-                                        "
-                                    >
-                                        <FaArrowDown
-                                            className="
-                                                text-red-500 dark:text-red-300
-                                            "
-                                        />
-
-                                        <span>
-                                            $79000
-                                        </span>
-                                    </span>
-                                </div>
-
-                                <div
-                                    className="
-                                        ml-auto
-                                        flex
-                                        gap-2
-                                        items-center
-                                        *:text-white
-                                        *:bg-green-700 *:hover:bg-green-900
-                                        *:p-2
-                                        *:rounded-full
-                                    "
-                                >
-                                    <button>
-                                        <FaPen/>
-                                    </button>
-                                    
-                                    <button>
-                                        <FaTrash/>
-                                    </button>
-                                </div>
-                            </div>
+                            <AlertItem
+                                imageSrc={ bitcoinImage }
+                                title="Bitcoin Alert"
+                                condition="below"
+                                targetPrice="$79,000"
+                                handleEdit={ () => {} }
+                                handleDelete={ () => {} }
+                            />
                             
-                            <div
-                                className="
-                                    flex
-                                    gap-3
-                                    items-center
-                                    p-2 px-3
-                                    rounded-lg
-                                    hover:bg-gray-200 dark:hover:bg-gray-800
-                                "
-                            >
-                                <img 
-                                    src={ bitcoinImage } 
-                                    alt="image of bitcoin" 
-                                    className="
-                                        w-10
-                                        h-10
-                                    "
-                                />
-
-                                <div
-                                    className='
-                                        dark:text-white
-                                    '
-                                >
-                                    <span>
-                                        Bitcoin Alert
-                                    </span>
-
-                                    <span
-                                        className="
-                                            -mt-1  
-                                            flex
-                                            gap-1
-                                            items-center
-                                        "
-                                    >
-                                        <FaArrowDown
-                                            className="
-                                                text-red-500 dark:text-red-300
-                                            "
-                                        />
-
-                                        <span>
-                                            $79000
-                                        </span>
-                                    </span>
-                                </div>
-
-                                <div
-                                    className="
-                                        ml-auto
-                                        flex
-                                        gap-2
-                                        items-center
-                                        *:text-white
-                                        *:bg-green-700 *:hover:bg-green-900
-                                        *:p-2
-                                        *:rounded-full
-                                    "
-                                >
-                                    <button>
-                                        <FaPen/>
-                                    </button>
-                                    
-                                    <button>
-                                        <FaTrash/>
-                                    </button>
-                                </div>
-                            </div>
+                            <AlertItem
+                                imageSrc={ bitcoinImage }
+                                title="Bitcoin Alert"
+                                condition="below"
+                                targetPrice="$79,000"
+                                handleEdit={ () => {} }
+                                handleDelete={ () => {} }
+                            />
                             
-                            <div
-                                className="
-                                    flex
-                                    gap-3
-                                    items-center
-                                    p-2 px-3
-                                    rounded-lg
-                                    hover:bg-gray-200 dark:hover:bg-gray-800
-                                "
-                            >
-                                <img 
-                                    src={ bitcoinImage } 
-                                    alt="image of bitcoin" 
-                                    className="
-                                        w-10
-                                        h-10
-                                    "
-                                />
-
-                                <div
-                                    className='
-                                        dark:text-white
-                                    '
-                                >
-                                    <span>
-                                        Bitcoin Alert
-                                    </span>
-
-                                    <span
-                                        className="
-                                            -mt-1  
-                                            flex
-                                            gap-1
-                                            items-center
-                                        "
-                                    >
-                                        <FaArrowDown
-                                            className="
-                                                text-red-500 dark:text-red-300
-                                            "
-                                        />
-
-                                        <span>
-                                            $79000
-                                        </span>
-                                    </span>
-                                </div>
-
-                                <div
-                                    className="
-                                        ml-auto
-                                        flex
-                                        gap-2
-                                        items-center
-                                        *:text-white
-                                        *:bg-green-700 *:hover:bg-green-900
-                                        *:p-2
-                                        *:rounded-full
-                                    "
-                                >
-                                    <button>
-                                        <FaPen/>
-                                    </button>
-                                    
-                                    <button>
-                                        <FaTrash/>
-                                    </button>
-                                </div>
-                            </div>
+                            <AlertItem
+                                imageSrc={ bitcoinImage }
+                                title="Bitcoin Alert"
+                                condition="above"
+                                targetPrice="$129,000"
+                                handleEdit={ () => {} }
+                                handleDelete={ () => {} }
+                            />
                         </div>
                     </div>
                 </div>
