@@ -1,17 +1,22 @@
 import React, { useState } from 'react'
-import { Link, NavLink, Outlet, useLocation } from 'react-router-dom'
+import { Link, NavLink, Outlet } from 'react-router-dom'
 import Logo from "../../shared/components/Logo";
 import { FaBars, FaDoorOpen, FaGear, FaListCheck, FaMagnifyingGlass, FaStar, FaUser, FaWallet } from 'react-icons/fa6';
 import ThemeButton from '../components/ThemeButton';
 import { Avatar, DropdownMenu } from 'radix-ui';
 import bitcoinImage from "../../assets/Design/bitcoin.png"
 import SearchResultItem from '../components/SearchResultItem';
+import useDebounce from '../hooks/useDebounce';
+import AppSearchView from '../components/AppSearchView';
 
 export default function AppLayout() {
-    const location = useLocation();
     const isMobileOrTablet = window.innerWidth < 1024;
     const [isNavOpen, setIsNavOpen] = useState(false);
     const [ isDesktopPopoverOpen, setIsDesktopPopoverOpen ] = useState(false);
+    const [ searchTerm, setSearchTerm ] = useState("")
+    const debouncedSearchTerm = useDebounce( searchTerm, 500 )
+    
+    
     
     return (
         <div
@@ -150,7 +155,7 @@ export default function AppLayout() {
                 </Popover.Root>} */}
 
                 {/* search  */}
-                <div 
+                {/* <div 
                     className='
                         relative 
                         top-0 
@@ -181,11 +186,11 @@ export default function AppLayout() {
                                 focus:outline-none
                                 grow
                             '
-                            onFocus={() => setIsDesktopPopoverOpen(true)}
+                            value={ searchTerm }
+                            onChange={ ( e ) => setSearchTerm( e.target.value ) }
                         />
                     </div>
 
-                    {/* desktop search popover */}
                     { isDesktopPopoverOpen && <div
                         className='
                             absolute
@@ -198,7 +203,6 @@ export default function AppLayout() {
                             rounded-md
                         '
                     >
-                        {/* search result list */}
                         <div>
                             <SearchResultItem 
                                 imgSource={bitcoinImage}
@@ -213,7 +217,13 @@ export default function AppLayout() {
                             />
                         </div>
                     </div>}
-                </div>
+                </div> */}
+                <AppSearchView 
+                    className="
+                        w-1/2 
+                        ml-auto
+                    "
+                />
 
                 <ThemeButton 
                     className="

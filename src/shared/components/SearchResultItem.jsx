@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { useLocation } from 'react-router-dom'
 
-export default function SearchResultItem({ imgSource, name, id }) {
+export default function SearchResultItem({ imgSource, name, id, ...props }) {
     const location = useLocation()
 
     return (
@@ -17,6 +17,7 @@ export default function SearchResultItem({ imgSource, name, id }) {
             '
             to={`${location.pathname}/details/${id}`}
             relative='route'
+            {...props}
         >
             <img 
                 src={imgSource} 
