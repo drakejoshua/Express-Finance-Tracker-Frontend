@@ -7,8 +7,12 @@ export default function AlertItem({ imageSrc, title, condition, targetPrice, han
         <div
             className="
                 flex
-                gap-2
+                gap-3
                 items-center
+                hover:bg-gray-200
+                p-2 px-2.5
+                rounded-lg
+                cursor-pointer
             "
         >
             <img 

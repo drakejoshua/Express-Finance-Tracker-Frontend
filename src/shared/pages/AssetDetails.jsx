@@ -353,10 +353,7 @@ export default function AssetDetails() {
                                     {/* alerts list */}
                                     <div
                                         className="
-                                            mt-4
-                                            flex
-                                            flex-col
-                                            gap-2.5
+                                            mt-2
                                         "
                                     >
                                         {/* alert */}
