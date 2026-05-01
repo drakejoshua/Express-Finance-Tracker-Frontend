@@ -9,6 +9,11 @@ import { useTheme } from '../../../shared/providers/ThemeProvider.jsx'
 import PortfolioItem from '../components/PortfolioItem.jsx'
 import WatchlistItem from '../components/WatchlistItem.jsx'
 import AlertItem from '../components/AlertItem.jsx'
+import Chart from 'react-apexcharts/core'
+import 'apexcharts/area'
+import colors from 'tailwindcss/colors'
+import CoinChart from '../../../shared/components/CoinChart.jsx'
+
 
 export default function Dashboard() {
     const { theme } = useTheme()
@@ -340,18 +345,47 @@ export default function Dashboard() {
                     {/* portfolio chart */}
                     <div
                         className='
-                            mt-10
+                            mt-3
                             h-84
-                            bg-green-200
+                            w-full
                             rounded-lg
                         '
                     >
+                        <CoinChart 
+                            data={[
+                                {
+                                    name: "bitcoin",
+                                    data: [ 30, 45, 70, 55, 80, 45, 70, 55, 80, 45, 70, 55 ]
+                                },
+                                {
+                                    name: "ethereum",
+                                    data: [ 20, 55, 80, 65, 90, 40, 55, 80, 65, 90, 40, 55 ]
+                                },
+                                {
+                                    name: "tron",
+                                    data: [ 10, 75, 60, 85, 70, 10, 35, 50, 35, 80, 40, 25 ]
+                                },
+                                {
+                                    name: "doge",
+                                    data: [ 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75 ]
+                                },
+                                {
+                                    name: "solana",
+                                    data: [ 30, 75, 55, 95, 10, 30, 45, 70, 55, 90, 40, 85 ]
+                                },
+                                {
+                                    name: "ripple",
+                                    data: [ 65, 90, 40, 90, 40, 55, 30, 45, 70, 30, 35, 40 ]
+                                },
+                            ]}
+                            isInteractive={true}
+                        />
                     </div>
 
                     {/* portfolio stats */}
                     <div
                         className='
-                            mt-10
+                            mt-6
                             grid
                             grid-cols-1 md:grid-cols-2
                             gap-8 lg:gap-20
