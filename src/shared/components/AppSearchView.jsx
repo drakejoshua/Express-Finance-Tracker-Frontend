@@ -16,7 +16,7 @@ export default function AppSearchView({ className, ...props }) {
     
     function handleUserSearch( searchTerm ) {
         if ( searchTerm ) { 
-            setIsPopoverOpen( true ) 
+            setIsPopoverOpen( true )
         } else {
             setIsPopoverOpen( false )
         }
@@ -37,11 +37,7 @@ export default function AppSearchView({ className, ...props }) {
 
     return (
         <div 
-            className={`
-                relative 
-                top-0 
-                ${ className }
-            `}
+            className={ className }
             {...props}
         >
             <div

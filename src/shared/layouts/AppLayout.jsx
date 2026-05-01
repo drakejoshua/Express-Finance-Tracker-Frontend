@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Link, NavLink, Outlet } from 'react-router-dom'
 import Logo from "../../shared/components/Logo";
-import { FaBars, FaDoorOpen, FaGear, FaListCheck, FaMagnifyingGlass, FaStar, FaUser, FaWallet } from 'react-icons/fa6';
+import { FaBars, FaDoorOpen, FaGear, FaListCheck, FaMagnifyingGlass, FaStar, FaUser, FaWallet, FaX } from 'react-icons/fa6';
 import ThemeButton from '../components/ThemeButton';
 import { Avatar, DropdownMenu } from 'radix-ui';
 import bitcoinImage from "../../assets/Design/bitcoin.png"
@@ -15,6 +15,7 @@ export default function AppLayout() {
     const [ isDesktopPopoverOpen, setIsDesktopPopoverOpen ] = useState(false);
     const [ searchTerm, setSearchTerm ] = useState("")
     const debouncedSearchTerm = useDebounce( searchTerm, 500 )
+    const [ isMobileSearchOpen, setIsMobileSearchOpen ] = useState( false )
     
     
     
@@ -36,6 +37,8 @@ export default function AppLayout() {
                     gap-3 lg:gap-5.5
                     border-b-2
                     border-gray-100 dark:border-gray-700
+                    relative
+                    top-0
                 '
             >
                 {/* nav toggle */}
@@ -58,171 +61,32 @@ export default function AppLayout() {
                 />
 
                 {/* mobile search */}
-                {/* { isMobileOrTablet && <Popover.Root>
-                    <Popover.Trigger asChild>
+                { isMobileOrTablet && 
                         <button
                             className='
-                                ml-auto
                                 text-gray-800 dark:text-white
                                 text-xl
+                                ml-auto
                             '
+                            onClick={ () => setIsMobileSearchOpen( !isMobileSearchOpen ) }
                         >
-                            <FaMagnifyingGlass />
+                            { !isMobileSearchOpen && <FaMagnifyingGlass /> }
+                            { isMobileSearchOpen && <FaX />}
                         </button>
-                    </Popover.Trigger>
 
-                    <Popover.Portal>
-                        <Popover.Content
-                            sideOffset={20}
-                            align='end'
-                            alignOffset={-20}
-                            className='
-                                w-screen
-                                bg-white
-                                px-3
-                            '
-                        >
-                            <Popover.Root>
-                                <Popover.Trigger asChild>
-                                    <div
-                                        className='
-                                            flex
-                                            gap-4
-                                            items-center
-                                            px-5 py-2.5
-                                            bg-gray-200
-                                            rounded-lg
-                                        '
-                                    >
-                                        <FaMagnifyingGlass 
-                                            className='
-                                                text-gray-800
-                                            '
-                                        />
-
-                                        <input 
-                                            type="text" 
-                                            placeholder='Search...' 
-                                            className='
-                                                focus:outline-none
-                                                grow
-                                            '
-                                        />
-                                    </div>
-                                </Popover.Trigger>
-
-                                <Popover.Portal>
-                                    <Popover.Content
-                                        sideOffset={10}
-                                        align='start'
-                                        className='
-                                            py-3 px-4
-                                            rounded-lg
-                                            bg-gray-100
-                                            w-(--radix-popover-trigger-width)
-                                        '
-                                    >
-                                        <Link
-                                            className='
-                                                flex
-                                                gap-3
-                                                items-center
-                                                px-3 py-2
-                                                rounded-md
-                                                hover:bg-gray-300
-                                            '
-                                            to={`${location.pathname}/details/124`}
-                                            relative='route'
-                                        >
-                                            <img 
-                                                src={bitcoinImage} 
-                                                alt='bitcoin image'
-                                                className='
-                                                    w-8
-                                                    rounded-full
-                                                '
-                                            />
-
-                                            <span>
-                                                Bitcoin
-                                            </span>
-                                        </Link>
-                                    </Popover.Content>
-                                </Popover.Portal>
-                            </Popover.Root>
-                        </Popover.Content>
-                    </Popover.Portal>
-                </Popover.Root>} */}
+                }
 
                 {/* search  */}
-                {/* <div 
-                    className='
-                        relative 
-                        top-0 
-                        w-1/2 
-                        ml-auto
-                    '
-                >
-                    <div
-                        className='
-                            flex
-                            gap-4
-                            items-center
-                            px-5 py-2.5
-                            bg-gray-200
-                            rounded-lg
-                        '
-                    >
-                        <FaMagnifyingGlass 
-                            className='
-                                text-gray-800
-                            '
-                        />
-
-                        <input 
-                            type="text" 
-                            placeholder='Search...' 
-                            className='
-                                focus:outline-none
-                                grow
-                            '
-                            value={ searchTerm }
-                            onChange={ ( e ) => setSearchTerm( e.target.value ) }
-                        />
-                    </div>
-
-                    { isDesktopPopoverOpen && <div
-                        className='
-                            absolute
-                            top-full
-                            right-0
-                            mt-2
-                            w-full
-                            bg-gray-100
-                            p-3
-                            rounded-md
-                        '
-                    >
-                        <div>
-                            <SearchResultItem 
-                                imgSource={bitcoinImage}
-                                name="Bitcoin"
-                                id={124}
-                            />
-                            
-                            <SearchResultItem 
-                                imgSource={bitcoinImage}
-                                name="Bitcoin"
-                                id={124}
-                            />
-                        </div>
-                    </div>}
-                </div> */}
                 <AppSearchView 
-                    className="
-                        w-1/2 
-                        ml-auto
-                    "
+                    className={`
+                        w-9/10 lg:w-1/2 
+                        lg:ml-auto
+                        absolute lg:relative 
+                        ${ isMobileSearchOpen ? "block" : "hidden lg:block" }
+                        -bottom-8/10 lg:top-0
+                        left-1/2 -translate-x-1/2 lg:left-0 lg:translate-x-0
+                        z-1
+                    `}
                 />
 
                 <ThemeButton 
