@@ -338,13 +338,14 @@ export default function AppLayout() {
                 <main
                     className='
                         grow
-                        py-4
+                        py-4 pb-8
                         px-4 lg:px-10 
                         h-full
                         overflow-y-auto
+                        mt-5
                     '
                 >
-                <Outlet />
+                    <Outlet />
                 </main>
             </div>
         </div>

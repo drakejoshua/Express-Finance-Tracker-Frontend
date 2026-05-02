@@ -17,12 +17,7 @@ export default function Portfolio() {
     const { theme } = useTheme()
 
     return (
-        <div
-            className='
-                mt-5
-                pb-8
-            '
-        >
+        <div>
             {/* portfolio loading state */}
             {
                 false && <div
