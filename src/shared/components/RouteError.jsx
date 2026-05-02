@@ -14,7 +14,7 @@ export default function RouteError({ title, message, handleRetry }) {
         >
             <FaTriangleExclamation 
                 className="
-                    text-red-500
+                    text-red-500 dark:text-red-300
                     text-4xl
                 "
             />
@@ -23,6 +23,7 @@ export default function RouteError({ title, message, handleRetry }) {
                 className="
                     text-2xl
                     mt-4
+                    dark:text-white
                 "
             >
                 { title }
@@ -31,6 +32,7 @@ export default function RouteError({ title, message, handleRetry }) {
             <p
                 className="
                     mt-2
+                    dark:text-white
                 "
             >
                 { message }

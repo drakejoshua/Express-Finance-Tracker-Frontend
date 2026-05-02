@@ -13,6 +13,7 @@ import Chart from 'react-apexcharts/core'
 import 'apexcharts/area'
 import colors from 'tailwindcss/colors'
 import CoinChart from '../../../shared/components/CoinChart.jsx'
+import RouteHeading from '../../../shared/components/RouteHeading.jsx'
 
 
 export default function Dashboard() {
@@ -276,16 +277,9 @@ export default function Dashboard() {
             {/* dashboard loaded content */}
             { true && <div>
                 {/* greeting */}
-                <h1
-                    className='
-                        mt-5
-                        text-3xl
-                        font-medium
-                        dark:text-white
-                    '
-                >
+                <RouteHeading>
                     Welcome, Joshua
-                </h1>
+                </RouteHeading>
 
                 {/* portfolio overview */}
                 <div
