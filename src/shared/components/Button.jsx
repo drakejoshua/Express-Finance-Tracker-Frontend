@@ -8,7 +8,6 @@ const Button = React.forwardRef(({ children, className, ...props }, ref) => {
     return (
         <button
             className={`
-                w-full
                 p-2
                 font-medium
                 bg-green-600

@@ -11,6 +11,7 @@ import PercentChangeIndicator from '../../../shared/components/PercentChangeIndi
 import Button from '../../../shared/components/Button.jsx'
 import CoinChart from '../../../shared/components/CoinChart.jsx'
 import PortfolioCard from '../components/PortfolioCard.jsx'
+import LoadMoreButton from '../../../shared/components/LoadMoreButton.jsx'
 
 
 export default function Portfolio() {
@@ -135,31 +136,9 @@ export default function Portfolio() {
             </div>
 
             {/* load more button for pagination */}
-            { false && <Button
-                className="
-                    flex
-                    gap-2
-                    items-center
-                    w-min
-                    mt-8
-                    mx-auto
-                    px-5
-                    rounded-2xl
-                "
-            >
-                <FaArrowRotateLeft
-                    className='shrink-0'
-                />
-
-                <span
-                    className='
-                        whitespace-nowrap
-                        capitalize
-                    '
-                >
-                    load more
-                </span>
-            </Button>}
+            { false && <LoadMoreButton 
+                className={"mt-4"}
+            />}
 
             {/* outlet for the asset details route */}
             <Outlet />

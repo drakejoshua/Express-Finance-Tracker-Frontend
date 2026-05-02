@@ -8,7 +8,7 @@ import AlertSkeleton from '../components/AlertSkeleton'
 import { useTheme } from '../../../shared/providers/ThemeProvider.jsx'
 import PortfolioItem from '../components/PortfolioItem.jsx'
 import WatchlistItem from '../components/WatchlistItem.jsx'
-import AlertItem from '../components/AlertItem.jsx'
+import ThemedAlertItem from '../../../shared/components/ThemedAlertItem.jsx'
 import Chart from 'react-apexcharts/core'
 import 'apexcharts/area'
 import colors from 'tailwindcss/colors'
@@ -618,7 +618,7 @@ export default function Dashboard() {
                             '
                         >
                             {/* alert */}
-                            <AlertItem
+                            <ThemedAlertItem
                                 imageSrc={ bitcoinImage }
                                 title="Bitcoin Alert"
                                 condition="below"
@@ -627,7 +627,7 @@ export default function Dashboard() {
                                 handleDelete={ () => {} }
                             />
                             
-                            <AlertItem
+                            <ThemedAlertItem
                                 imageSrc={ bitcoinImage }
                                 title="Bitcoin Alert"
                                 condition="above"
@@ -636,7 +636,7 @@ export default function Dashboard() {
                                 handleDelete={ () => {} }
                             />
                             
-                            <AlertItem
+                            <ThemedAlertItem
                                 imageSrc={ bitcoinImage }
                                 title="Bitcoin Alert"
                                 condition="below"
@@ -645,7 +645,7 @@ export default function Dashboard() {
                                 handleDelete={ () => {} }
                             />
                             
-                            <AlertItem
+                            <ThemedAlertItem
                                 imageSrc={ bitcoinImage }
                                 title="Bitcoin Alert"
                                 condition="below"
@@ -654,7 +654,7 @@ export default function Dashboard() {
                                 handleDelete={ () => {} }
                             />
                             
-                            <AlertItem
+                            <ThemedAlertItem
                                 imageSrc={ bitcoinImage }
                                 title="Bitcoin Alert"
                                 condition="above"
