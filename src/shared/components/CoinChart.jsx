@@ -8,6 +8,9 @@
     The component accepts two props: data ( an array of series data for the chart ) and isInteractive 
     ( a boolean to enable/disable interactivity ).
 
+    [!]: you need to wrap the imported instance of the component in a wrapper/parent element as it takes up
+        the width and height of it's parent in order to render properly
+
     Example usage: 
         <CoinChart 
             data={[
