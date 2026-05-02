@@ -6,10 +6,11 @@ import colors from "tailwindcss/colors"
 import RouteError from '../../../shared/components/RouteError.jsx'
 import RouteHeading from '../../../shared/components/RouteHeading.jsx'
 import bitcoinImage from '../../../assets/Design/bitcoin.png'
-import { FaCaretDown, FaCaretUp, FaPen, FaTrash } from 'react-icons/fa6'
+import { FaArrowRotateLeft, FaCaretDown, FaCaretUp, FaPen, FaTrash } from 'react-icons/fa6'
 import PercentChangeIndicator from '../../../shared/components/PercentChangeIndicator.jsx'
 import Button from '../../../shared/components/Button.jsx'
 import CoinChart from '../../../shared/components/CoinChart.jsx'
+import PortfolioCard from '../components/PortfolioCard.jsx'
 
 
 export default function Portfolio() {
@@ -19,6 +20,7 @@ export default function Portfolio() {
         <div
             className='
                 mt-5
+                pb-8
             '
         >
             {/* portfolio loading state */}
@@ -79,145 +81,92 @@ export default function Portfolio() {
                     '
                 >
                     {/* portfolio item/coins */}
-                    <div
-                        className='
-                            bg-gray-100 dark:bg-gray-700 
-                            p-6
-                            rounded-lg
-                        '
-                    >
-                        {/* coin image and name */}
-                        <div
-                            className='
-                                flex
-                                gap-2
-                            '
-                        >
-                            <img 
-                                src={ bitcoinImage } 
-                                alt="Bitcoin" 
-                                className='
-                                    w-6
-                                    h-6
-                                    object-cover
-                                '
-                            />
-
-                            <span
-                                className='
-                                    capitalize
-                                    dark:text-white
-                                '
-                            >
-                                bitcoin
-                            </span>
-                        </div>
-
-                        {/* coin portfolio balance, % balance change, current price */}
-                        {/* and portfolio controls */}
-                        <div
-                            className='
-                                flex
-                                mt-2
-                            '
-                        >
-                            <div
-                                className='
-                                    flex
-                                    flex-col
-                                    gap-1
-                                '
-                            >
-                                {/* coin portfolio balance */}
-                                <span
-                                    className='
-                                        text-4xl
-                                        font-medium
-                                        text-gray-800
-                                        dark:text-white
-                                    '
-                                >
-                                    $400,000
-                                </span>
-
-                                <div
-                                    className='
-                                        flex
-                                        gap-2
-                                        items-center
-                                        text-lg
-                                    '
-                                >
-                                    {/* coin current price */}
-                                    <span className='dark:text-white'>
-                                        ~ $95,000
-                                    </span>
-
-                                    {/* coin % balance change in portfolio */}
-                                    <PercentChangeIndicator
-                                        percentChange={-4.7}
-                                        className='
-                                            text-lg
-                                        '
-                                    />
-                                </div>
-                            </div>
-
-                            <div
-                                className='
-                                    ml-auto
-                                    flex
-                                    items-center
-                                    gap-2
-                                '
-                            >
-                                {/* delete coin from portfolio button */}
-                                <Button
-                                    className="
-                                        w-min
-                                        p-3
-                                        rounded-full
-                                        text-xl
-                                    "
-                                >
-                                    <FaTrash />
-                                </Button>
-                                
-                                {/* edit portfolio coin details button */}
-                                <Button
-                                    className="
-                                        w-min
-                                        p-3
-                                        rounded-full
-                                        text-xl
-                                    "
-                                >
-                                    <FaPen />
-                                </Button>
-                            </div>
-                        </div>
-
-                        {/* coin sparkline chart */}
-                        <div
-                            className='
-                                h-40
-                                w-[104%]
-                                relative
-                                -left-4
-                            '
-                        >
-                            <CoinChart 
-                                data={[
-                                    {
-                                        name: "bitcoin",
-                                        data: [ 30, 45, 70, 55, 80, 45, 70, 55, 80, 45, 70, 55 ]
-                                    }
-                                ]}
-                            />
-                        </div>
-                    </div>
+                    <PortfolioCard
+                        name="Bitcoin"
+                        imageSrc={ bitcoinImage }
+                        balance="120,000,069.00"
+                        price="23,456.78"
+                        percentChange={ 5.67 }
+                        sparklineData={[
+                            {
+                                name: "bitcoin",
+                                data: [ 30, 45, 70, 55, 80, 45, 70, 55, 80, 45, 70, 55 ]
+                            }
+                        ]}
+                    />
+                    
+                    <PortfolioCard
+                        name="Ethereum"
+                        imageSrc={ bitcoinImage }
+                        balance="100,069.00"
+                        price="2,456.78"
+                        percentChange={ -1.07 }
+                        sparklineData={[
+                            {
+                                name: "bitcoin",
+                                data: [ 30, 45, 70, 55, 80, 45, 70, 55, 80, 45, 70, 55 ]
+                            }
+                        ]}
+                    />
+                    
+                    <PortfolioCard
+                        name="Ripple"
+                        imageSrc={ bitcoinImage }
+                        balance="30,069.00"
+                        price="56.78"
+                        percentChange={ 2.70 }
+                        sparklineData={[
+                            {
+                                name: "bitcoin",
+                                data: [ 30, 45, 70, 55, 80, 45, 70, 55, 80, 45, 70, 55 ]
+                            }
+                        ]}
+                    />
+                    
+                    <PortfolioCard
+                        name="Ripple"
+                        imageSrc={ bitcoinImage }
+                        balance="30,069.00"
+                        price="56.78"
+                        percentChange={ 2.70 }
+                        sparklineData={[
+                            {
+                                name: "bitcoin",
+                                data: [ 30, 45, 70, 55, 80, 45, 70, 55, 80, 45, 70, 55 ]
+                            }
+                        ]}
+                    />
                 </div>
             </div>
+
+            {/* load more button for pagination */}
+            { false && <Button
+                className="
+                    flex
+                    gap-2
+                    items-center
+                    w-min
+                    mt-8
+                    mx-auto
+                    px-5
+                    rounded-2xl
+                "
+            >
+                <FaArrowRotateLeft
+                    className='shrink-0'
+                />
+
+                <span
+                    className='
+                        whitespace-nowrap
+                        capitalize
+                    '
+                >
+                    load more
+                </span>
+            </Button>}
+
+            {/* outlet for the asset details route */}
             <Outlet />
         </div>
     )
