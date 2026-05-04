@@ -1,13 +1,13 @@
 import { Form } from 'radix-ui'
-import EmailField from '../components/EmailField.jsx'
+import EmailField from '../../../shared/components/EmailField.jsx'
 import { useState } from 'react'
-import PasswordField from '../components/PasswordField'
+import PasswordField from '../../../shared/components/PasswordField.jsx'
 import Button from '../../../shared/components/Button'
 import AltButton from '../../../shared/components/AltButton'
 import { FaGoogle } from 'react-icons/fa6'
 import { Link } from 'react-router-dom'
 import AuthHeading from '../components/AuthHeading.jsx'
-import TextField from '../components/TextField.jsx'
+import TextField from '../../../shared/components/TextField.jsx'
 import AuthForm from '../components/AuthForm.jsx'
 
 export default function Signup() {
@@ -153,7 +153,7 @@ export default function Signup() {
                     placeholder={"Enter your password"}
                     onChange={ (e) => setPassword( e.target.value ) }
                     emptyValidationMessage={"Please enter a password. Minimum 6 characters."}
-                    invalidValidationMessage={"Your password should be longer than 6 characters."}
+                    invalidValidationMessage={"Your password should be at least 6 characters long."}
                 />
 
                 <Form.Field
