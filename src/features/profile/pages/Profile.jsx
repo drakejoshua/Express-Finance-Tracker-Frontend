@@ -11,6 +11,8 @@ import PasswordField from '../../../shared/components/PasswordField'
 import Button from '../../../shared/components/Button'
 
 export default function Profile() {
+    const isMobileOrTablet = window.innerWidth < 1024;
+
     return (
         <div>
             {/* profile heading */}
@@ -35,7 +37,7 @@ export default function Profile() {
 
                 <DropdownMenu.Portal>
                     <DropdownMenu.Content 
-                        side="right" 
+                        side={ isMobileOrTablet ? "bottom" : "right" }
                         sideOffset={16}
                         className='
                             bg-gray-200

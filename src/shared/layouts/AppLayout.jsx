@@ -8,15 +8,18 @@ import bitcoinImage from "../../assets/Design/bitcoin.png"
 import SearchResultItem from '../components/SearchResultItem';
 import useDebounce from '../hooks/useDebounce';
 import AppSearchView from '../components/AppSearchView';
+import UserAvatar from '../components/UserAvatar';
 
 export default function AppLayout() {
     const isMobileOrTablet = window.innerWidth < 1024;
     const [isNavOpen, setIsNavOpen] = useState(false);
-    const [ isDesktopPopoverOpen, setIsDesktopPopoverOpen ] = useState(false);
-    const [ searchTerm, setSearchTerm ] = useState("")
-    const debouncedSearchTerm = useDebounce( searchTerm, 500 )
     const [ isMobileSearchOpen, setIsMobileSearchOpen ] = useState( false )
     
+    function handleNavLinkClick() {
+        if ( isMobileOrTablet ) {
+            setIsNavOpen( false );
+        }
+    }
     
     
     return (
@@ -50,7 +53,8 @@ export default function AppLayout() {
                     '
                     onClick={ () => setIsNavOpen( !isNavOpen )}
                 >
-                    <FaBars />
+                    { isNavOpen && <FaX />}
+                    { !isNavOpen && <FaBars />}
                 </button>
 
                 {/* logo */}
@@ -98,19 +102,15 @@ export default function AppLayout() {
 
                 <DropdownMenu.Root>
                     <DropdownMenu.Trigger asChild>
-                        <Avatar.Root>
-                            <Avatar.Image 
-                                src={bitcoinImage} 
-                                alt='User profile photo'
-                                className='
-                                    w-8
-                                    shrink-0
-                                '
-                            />
-                            <Avatar.Fallback>
-                                BTC
-                            </Avatar.Fallback>
-                        </Avatar.Root>
+                        <UserAvatar 
+                            src={ bitcoinImage }
+                            alt="User profile info"
+                            fallback="JM"
+                            className="
+                                w-8
+                                shrink-0
+                            "
+                        />
                     </DropdownMenu.Trigger>
 
                     <DropdownMenu.Content
@@ -120,6 +120,7 @@ export default function AppLayout() {
                             py-5 px-4
                             rounded-lg
                             bg-gray-100
+                            z-1
                         '
                     >
                         {/* dropdown details card */}
@@ -251,6 +252,7 @@ export default function AppLayout() {
                     >
                         <NavLink
                             to="dashboard"
+                            onMouseDown={ handleNavLinkClick }
                         >
                             <FaListCheck className='text-lg shrink-0'/>
                             <span
@@ -271,6 +273,7 @@ export default function AppLayout() {
                         
                         <NavLink
                             to="portfolio"
+                            onMouseDown={ handleNavLinkClick }
                         >
                             <FaWallet 
                                 className='text-lg shrink-0'
@@ -293,6 +296,7 @@ export default function AppLayout() {
                         
                         <NavLink
                             to="watchlist"
+                            onMouseDown={ handleNavLinkClick }
                         >
                             <FaStar className='text-lg shrink-0'/>
                             <span
@@ -313,6 +317,7 @@ export default function AppLayout() {
                         
                         <NavLink
                             to="profile"
+                            onMouseDown={ handleNavLinkClick }
                         >
                             <FaUser className='text-lg shrink-0'/>
                             <span
