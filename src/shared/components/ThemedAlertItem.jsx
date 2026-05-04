@@ -26,9 +26,18 @@ export default function ThemedAlertItem({ imageSrc, title, condition, targetPric
             <div
                 className='
                     dark:text-white
+                    min-w-0
                 '
             >
-                <span>
+                <span
+                    className='
+                        text-ellipsis
+                        overflow-hidden
+                        whitespace-nowrap
+                        block
+                    '
+                    title={title}
+                >
                     { title }
                 </span>
 
@@ -52,7 +61,15 @@ export default function ThemedAlertItem({ imageSrc, title, condition, targetPric
                         "
                     />}
 
-                    <span>
+                    <span
+                        className='
+                            text-ellipsis
+                            overflow-hidden
+                            whitespace-nowrap
+                            block
+                        '
+                        title={targetPrice}
+                    >
                         { targetPrice }
                     </span>
                 </span>

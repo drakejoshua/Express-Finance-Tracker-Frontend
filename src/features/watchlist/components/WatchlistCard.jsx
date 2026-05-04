@@ -62,7 +62,7 @@ export default function WatchlistCard({
                         flex
                         flex-col
                         gap-1
-                        w-3/5
+                        min-w-0
                     '
                 >
                     {/* coin current price */}

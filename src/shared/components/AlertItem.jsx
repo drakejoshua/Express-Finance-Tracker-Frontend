@@ -25,7 +25,15 @@ export default function AlertItem({ imageSrc, title, condition, targetPrice, han
             />
 
             <div>
-                <span>
+                <span
+                    className='
+                        text-ellipsis
+                        overflow-hidden
+                        whitespace-nowrap
+                        block
+                    '
+                    title={title}
+                >
                     { title }
                 </span>
 
@@ -49,7 +57,15 @@ export default function AlertItem({ imageSrc, title, condition, targetPrice, han
                         "
                     />}
 
-                    <span>
+                    <span
+                        className='
+                            text-ellipsis
+                            overflow-hidden
+                            whitespace-nowrap
+                            block
+                        '
+                        title={targetPrice}
+                    >
                         { targetPrice }
                     </span>
                 </span>

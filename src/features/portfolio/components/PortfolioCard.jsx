@@ -100,7 +100,7 @@ export default function PortfolioCard({
                         flex
                         flex-col
                         gap-1
-                        w-3/5
+                        min-w-0
                     '
                 >
                     {/* coin portfolio balance */}

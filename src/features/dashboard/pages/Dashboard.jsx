@@ -620,7 +620,7 @@ export default function Dashboard() {
                             {/* alert */}
                             <ThemedAlertItem
                                 imageSrc={ bitcoinImage }
-                                title="Bitcoin Alert"
+                                title="Bitcoin Alert: Over $70k"
                                 condition="below"
                                 targetPrice="$79,000"
                                 handleEdit={ () => {} }
