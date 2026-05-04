@@ -17,6 +17,7 @@ import { useNavigate } from "react-router-dom"
 import AltButton from "../components/AltButton"
 import AlertItem from "../components/AlertItem"
 import RouteError from "../components/RouteError"
+import CoinChart from "../components/CoinChart"
 
 export default function AssetDetails() {
     const navigateTo = useNavigate()
@@ -33,7 +34,7 @@ export default function AssetDetails() {
             }}
         >
             <Dialog.Portal>
-                <Dialog.Overlay className="fixed inset-0 bg-black/75" />
+                <Dialog.Overlay className="fixed inset-0 bg-black/75 z-1" />
 
                 <Dialog.Content
                     className="
@@ -47,6 +48,7 @@ export default function AssetDetails() {
                         bg-white
                         rounded-xl
                         overflow-auto
+                        z-1
                     "
                 >
                     {/* dialog loaded state */}
@@ -176,7 +178,7 @@ export default function AssetDetails() {
                             {/* asset details and chart */}
                             <div
                                 className="
-                                    lg:pr-8    
+                                    lg:pr-8
                                 "
                             >
                                 {/* asset chart container */}
@@ -184,7 +186,6 @@ export default function AssetDetails() {
                                     className="
                                         flex
                                         flex-col
-                                        gap-4
                                         items-center
                                     "
                                 >
@@ -192,12 +193,19 @@ export default function AssetDetails() {
                                     <div
                                         className="
                                             h-80 lg:h-50
-                                            bg-green-100
                                             rounded-xl
                                             w-full
                                         "
                                     >
-                                        chart
+                                        <CoinChart 
+                                            data={[
+                                                {
+                                                    name: "bitcoin",
+                                                    data: [30, 45, 70, 55, 80, 45, 70, 55, 80, 45, 70, 55],
+                                                }
+                                            ]}
+                                            isInteractive={true}
+                                        />
                                     </div>
 
                                     {/* chart toggle */}

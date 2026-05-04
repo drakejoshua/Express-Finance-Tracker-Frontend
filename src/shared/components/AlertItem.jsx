@@ -24,7 +24,11 @@ export default function AlertItem({ imageSrc, title, condition, targetPrice, han
                 "
             />
 
-            <div>
+            <div
+                className='
+                    min-w-0
+                '
+            >
                 <span
                     className='
                         text-ellipsis

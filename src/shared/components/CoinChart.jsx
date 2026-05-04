@@ -74,18 +74,11 @@ export default function CoinChart({ data = [], isInteractive = false }) {
                 // set the fill color and opacity based on the current theme ( light or dark )
                 fill: {
                     type: "solid",
-                    colors: [( theme == "light" ? "#b9f8cf" : colors.white )],
+                    colors: ["#b9f8cf"],
                     opacity: 0.2,
                 },
                 // set the stroke color based on the current theme ( light or dark )
-                colors: [
-                    ( theme == "light" ? colors.green[400] : colors.white ),
-                    ( theme == "light" ? colors.green[500] : colors.white ),
-                    ( theme == "light" ? colors.green[600] : colors.white ),
-                    ( theme == "light" ? colors.green[700] : colors.white ),
-                    ( theme == "light" ? colors.green[800] : colors.white ),
-                    ( theme == "light" ? colors.green[900] : colors.white ),
-                ]
+                colors: [ colors.green[400] ]
             }}
             width="100%"
             height="100%"
