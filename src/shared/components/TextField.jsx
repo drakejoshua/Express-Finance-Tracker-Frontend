@@ -23,6 +23,7 @@ export default function TextField({
             <Form.Label
                 className='
                     font-medium
+                    dark:text-white
                 '
             >
                 { label }

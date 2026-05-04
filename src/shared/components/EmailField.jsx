@@ -25,6 +25,7 @@ export default function EmailField({
             <Form.Label
                 className='
                     font-medium
+                    dark:text-white
                 '
             >
                 { label }

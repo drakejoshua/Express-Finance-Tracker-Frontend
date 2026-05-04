@@ -26,6 +26,7 @@ export default function PasswordField({
             <Form.Label
                 className='
                     font-medium
+                    dark:text-white
                 '
             >
                 { label }

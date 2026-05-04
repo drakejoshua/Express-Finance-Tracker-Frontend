@@ -26,9 +26,9 @@ export default function Profile() {
                         alt="user avatar"
                         fallback="JD"
                         className="
-                            mt-10
-                            w-60
-                            h-60
+                            mt-12
+                            w-48
+                            h-48
                         "
                     />
                 </DropdownMenu.Trigger>
@@ -79,6 +79,7 @@ export default function Profile() {
                     label="Name"
                     minLength={3}
                     required
+                    placeholder='Enter your name'
                     emptyValidationMessage='Your name is required for your account'
                     tooShortValidationMessage='Please enter a valid name'
                 />
@@ -86,6 +87,7 @@ export default function Profile() {
                 <EmailField 
                     name={"email"}
                     label={"Email"}
+                    required
                     placeholder={"Enter your email"}
                     emptyValidationMessage={"Please enter an email address."}
                     invalidValidationMessage={"Please enter a valid email address."}
@@ -94,13 +96,19 @@ export default function Profile() {
                 <PasswordField
                     name={"password"}
                     label={"Password"}
+                    required
                     placeholder={"Enter your password"}
                     emptyValidationMessage={"Please enter a password. Minimum 6 characters."}
                     invalidValidationMessage={"Your password should be at least 6 characters long."}
                 />
 
-                {/* <Form.Field>
-                    <Form.Label>
+                <Form.Field>
+                    <Form.Label
+                        className='
+                            font-medium
+                            dark:text-white
+                        '
+                    >
                         Preferred Currency
                     </Form.Label>
 
@@ -108,8 +116,9 @@ export default function Profile() {
                         <ToggleGroup.Root 
                             type='single'
                             className='
+                                mt-2
                                 border-2
-                                border-gray-600
+                                border-gray-600 dark:border-gray-200
                                 rounded-sm
                                 grid
                                 grid-cols-6
@@ -117,8 +126,12 @@ export default function Profile() {
                                 *:flex-col
                                 *:gap-1
                                 *:items-center
-                                *:p-2 *:py-2.5
+                                *:p-2 *:py-3.5
+                                dark:*:text-white
+                                *:data-[state=on]:bg-gray-600 dark:*:data-[state=on]:bg-gray-200
+                                *:data-[state=on]:text-white dark:*:data-[state=on]:text-gray-900
                             '
+                            defaultValue='usd'
                         >
                             <ToggleGroup.Item value='usd'>
                                 <FaDollarSign />
@@ -144,11 +157,11 @@ export default function Profile() {
                                 </span>
                             </ToggleGroup.Item>
                             
-                            <ToggleGroup.Item value='eur'>
+                            <ToggleGroup.Item value='jpy'>
                                 <FaYenSign />
 
                                 <span>
-                                    EUR
+                                    JPY
                                 </span>
                             </ToggleGroup.Item>
                             
@@ -185,9 +198,15 @@ export default function Profile() {
                             </ToggleGroup.Item>
                         </ToggleGroup.Root>
                     </Form.Control>
-                </Form.Field> */}
+                </Form.Field>
 
-                <Button>
+                <Button
+                    className="
+                        mt-6
+                        w-fit
+                        px-5
+                    "
+                >
                     Update Profile
                 </Button>
             </Form.Root>
