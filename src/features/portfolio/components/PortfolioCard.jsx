@@ -36,77 +36,75 @@
 import { FaPen, FaTrash } from "react-icons/fa6";
 import Button from "../../../shared/components/Button";
 import PercentChangeIndicator from "../../../shared/components/PercentChangeIndicator";
-import CoinChart from "../../../shared/components/CoinChart";
-
-
+import ThemedCoinChart from "../../../shared/components/ThemedCoinChart";
 
 export default function PortfolioCard({
-    imageSrc,
-    name,
-    balance,
-    price,
-    percentChange,
-    handleEdit,
-    handleDelete,
-    sparklineData
+  imageSrc,
+  name,
+  balance,
+  price,
+  percentChange,
+  handleEdit,
+  handleDelete,
+  sparklineData,
 }) {
-    return (
-        <div
-            className='
+  return (
+    <div
+      className="
                 bg-gray-100 dark:bg-gray-700 
                 p-6
                 rounded-lg
-            '
-        >
-            {/* coin image and name */}
-            <div
-                className='
+            "
+    >
+      {/* coin image and name */}
+      <div
+        className="
                     flex
                     gap-2
-                '
-            >
-                {/* coin image */}
-                <img 
-                    src={ imageSrc } 
-                    alt={ name } 
-                    className='
+                "
+      >
+        {/* coin image */}
+        <img
+          src={imageSrc}
+          alt={name}
+          className="
                         w-6
                         h-6
                         object-cover
-                    '
-                />
+                    "
+        />
 
-                {/* coin name */}
-                <span
-                    className='
+        {/* coin name */}
+        <span
+          className="
                         capitalize
                         dark:text-white
-                    '
-                >
-                    { name }
-                </span>
-            </div>
+                    "
+        >
+          {name}
+        </span>
+      </div>
 
-            {/* coin portfolio balance, % balance change, current price */}
-            {/* and portfolio controls */}
-            <div
-                className='
+      {/* coin portfolio balance, % balance change, current price */}
+      {/* and portfolio controls */}
+      <div
+        className="
                     flex
                     mt-2
                     gap-2
-                '
-            >
-                <div
-                    className='
+                "
+      >
+        <div
+          className="
                         flex
                         flex-col
                         gap-1
                         min-w-0
-                    '
-                >
-                    {/* coin portfolio balance */}
-                    <span
-                        className='
+                    "
+        >
+          {/* coin portfolio balance */}
+          <span
+            className="
                             text-4xl
                             font-medium
                             text-gray-800
@@ -114,93 +112,91 @@ export default function PortfolioCard({
                             overflow-hidden
                             text-ellipsis
                             whitespace-nowrap
-                        '
-                        title={ balance }
-                    >
-                        ${ balance }
-                    </span>
+                        "
+            title={balance}
+          >
+            ${balance}
+          </span>
 
-                    <div
-                        className='
+          <div
+            className="
                             flex
                             gap-2
                             items-center
                             text-lg
-                        '
-                    >
-                        {/* coin current price */}
-                        <span 
-                            className='
+                        "
+          >
+            {/* coin current price */}
+            <span
+              className="
                                 dark:text-white
                                 max-w-4/5
                                 overflow-hidden
                                 text-ellipsis
                                 whitespace-nowrap
-                            '
-                            title={ price }
-                        >
-                            ~ ${ price }
-                        </span>
+                            "
+              title={price}
+            >
+              ~ ${price}
+            </span>
 
-                        {/* coin % balance change in portfolio */}
-                        <PercentChangeIndicator
-                            percentChange={ percentChange }
-                            className='
+            {/* coin % balance change in portfolio */}
+            <PercentChangeIndicator
+              percentChange={percentChange}
+              className="
                                 text-lg
-                            '
-                        />
-                    </div>
-                </div>
+                            "
+            />
+          </div>
+        </div>
 
-                <div
-                    className='
+        <div
+          className="
                         ml-auto
                         flex
                         items-center
                         gap-2
-                    '
-                >
-                    {/* delete button */}
-                    <Button
-                        className="
+                    "
+        >
+          {/* delete button */}
+          <Button
+            className="
                             w-min
                             p-3
                             rounded-full
                             text-xl
                         "
-                        onClick={ handleDelete }
-                    >
-                        <FaTrash />
-                    </Button>
-                    
-                    {/* edit button */}
-                    <Button
-                        className="
-                            w-min
-                            p-3
-                            rounded-full
-                            text-xl
-                        "
-                        onClick={ handleEdit }
-                    >
-                        <FaPen />
-                    </Button>
-                </div>
-            </div>
+            onClick={handleDelete}
+          >
+            <FaTrash />
+          </Button>
 
-            {/* coin sparkline chart */}
-            <div
-                className='
+          {/* edit button */}
+          <Button
+            className="
+                            w-min
+                            p-3
+                            rounded-full
+                            text-xl
+                        "
+            onClick={handleEdit}
+          >
+            <FaPen />
+          </Button>
+        </div>
+      </div>
+
+      {/* coin sparkline chart */}
+      <div
+        className="
                     h-40
                     w-[104%]
                     relative
                     -left-4
-                '
-            >
-                <CoinChart 
-                    data={ sparklineData }
-                />
-            </div>
-        </div>
-    )
+                "
+      >
+        <ThemedCoinChart data={sparklineData} />
+      </div>
+    </div>
+  );
 }
