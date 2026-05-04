@@ -72,9 +72,12 @@ export default function Profile() {
                     flex
                     flex-col
                     gap-4
-                    w-2/4
+                    lg:w-2/4
+                    md:w-3/4
+                    w-full
                 '
             >
+                {/* name input */}
                 <TextField
                     label="Name"
                     minLength={3}
@@ -84,6 +87,7 @@ export default function Profile() {
                     tooShortValidationMessage='Please enter a valid name'
                 />
 
+                {/* email input */}
                 <EmailField 
                     name={"email"}
                     label={"Email"}
@@ -93,6 +97,7 @@ export default function Profile() {
                     invalidValidationMessage={"Please enter a valid email address."}
                 />
 
+                {/* password input */}
                 <PasswordField
                     name={"password"}
                     label={"Password"}
@@ -102,6 +107,7 @@ export default function Profile() {
                     invalidValidationMessage={"Your password should be at least 6 characters long."}
                 />
 
+                {/* preferred currency options */}
                 <Form.Field>
                     <Form.Label
                         className='
@@ -121,7 +127,9 @@ export default function Profile() {
                                 border-gray-600 dark:border-gray-200
                                 rounded-sm
                                 grid
-                                grid-cols-6
+                                lg:grid-cols-6
+                                md:grid-cols-4
+                                grid-cols-3
                                 *:flex
                                 *:flex-col
                                 *:gap-1

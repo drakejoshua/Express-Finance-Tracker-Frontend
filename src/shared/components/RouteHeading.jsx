@@ -4,7 +4,7 @@ export default function RouteHeading({ className, children }) {
             className={`
                 text-3xl
                 font-medium
-                dark:text-white
+                text-gray-900 dark:text-white
                 capitalize
                 ${ className }
             `}
