@@ -93,6 +93,7 @@ export default function PortfolioCard({
                 className='
                     flex
                     mt-2
+                    gap-2
                 '
             >
                 <div

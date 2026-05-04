@@ -71,7 +71,7 @@ export default function Portfolio() {
                         grid
                         grid-cols-1
                         md:grid-cols-2
-                        lg:grid-cols-3
+                        lg:grid-cols-[repeat(3,minmax(0,33%))]
                         gap-8
                         mt-8
                     '
