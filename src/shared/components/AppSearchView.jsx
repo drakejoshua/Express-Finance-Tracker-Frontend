@@ -8,7 +8,7 @@ import { ScaleLoader } from 'react-spinners'
 
 
 
-export default function AppSearchView({ className, ...props }) {
+export default function AppSearchView({ className, handleMobileClose, ...props }) {
     const [ isPopoverOpen, setIsPopoverOpen ] = useState(false);
     const [ searchTerm, setSearchTerm ] = useState("")
     const debouncedSearchTerm = useDebounce( searchTerm )
@@ -25,6 +25,7 @@ export default function AppSearchView({ className, ...props }) {
     function handleSearchInputBlur() {
         if ( !isSearchItemClicked ) {
             setIsPopoverOpen( false )
+            handleMobileClose()
         } else {
             alert("search item clicked, can't close input")
         }

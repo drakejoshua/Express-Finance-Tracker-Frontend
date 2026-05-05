@@ -36,7 +36,7 @@ export default function PasswordField({
                 <PasswordInput
                     className={`
                         border-2    
-                        border-gray-600 dark:border-gray-50
+                        border-gray-600 dark:border-gray-200
                         dark:bg-gray-200
                         dark:[&>input::placeholder]:text-gray-500
                         dark:[&>input]:text-gray-800

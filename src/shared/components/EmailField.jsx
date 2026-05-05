@@ -41,7 +41,7 @@ export default function EmailField({
                         rounded
                         border-2
                         focus:outline-none
-                        border-gray-600 dark:border-gray-50
+                        border-gray-600 dark:border-gray-200
                         dark:bg-gray-200
                         dark:placeholder:text-gray-500
                         dark:text-gray-900

@@ -60,7 +60,7 @@ export default function AppLayout() {
                 {/* logo */}
                 <Logo 
                     className="
-                        h-4.5 lg:h-6
+                        h-5 lg:h-6
                     "
                 />
 
@@ -91,6 +91,7 @@ export default function AppLayout() {
                         left-1/2 -translate-x-1/2 lg:left-0 lg:translate-x-0
                         z-1
                     `}
+                    handleMobileClose={ () => { if ( isMobileOrTablet ) setIsMobileSearchOpen( false ) } }
                 />
 
                 <ThemeButton 
@@ -183,19 +184,19 @@ export default function AppLayout() {
                                 [&_a]:items-center
                             '
                         >
-                            <DropdownMenu.Item>
+                            <DropdownMenu.Item asChild>
                                 <Link to="profile">
                                     <FaUser />
                                     Profile
                                 </Link>
                             </DropdownMenu.Item>
-                            <DropdownMenu.Item>
+                            <DropdownMenu.Item asChild>
                                 <Link to="portfolio">
                                     <FaWallet />
                                     Portfolio
                                 </Link>
                             </DropdownMenu.Item>
-                            <DropdownMenu.Item>
+                            <DropdownMenu.Item asChild>
                                 <Link to="logout">
                                     <FaDoorOpen />
                                     Logout
