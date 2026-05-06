@@ -12,6 +12,8 @@ import AuthForm from '../components/AuthForm.jsx'
 import { useAuthProvider } from '../../../shared/providers/AuthProvider.jsx'
 import { useDialogProvider } from '../../../shared/providers/DialogProvider.jsx'
 import { useToastProvider } from '../../../shared/providers/ToastProvider.jsx'
+import handleOpenDialog from '../../../shared/utils/handleOpenDialog.jsx'
+import { ERROR_CODES } from '../../../shared/utils/errors.js'
 
 export default function Signup() {
     const [ email, setEmail ] = useState("")
@@ -44,7 +46,11 @@ export default function Signup() {
             if ( status === "error" ) {
                 // if request was unsuccessful, alert user with a dialog
                 // stating the error encountered
-                handleOpenDialog( error.message )
+                if ( error.code == ERROR_CODES.EMAIL_EXISTS ) {
+                    handleOpenDialog( "Email Already Exists", error.message, openDialog, closeDialog )
+                } else {
+                    handleOpenDialog( "Signup Error", error.message, openDialog, closeDialog )
+                }
             } else {
                 // if request is successful, alert user with a toast stating
                 // account creation success and they will be redirected soon
@@ -57,7 +63,7 @@ export default function Signup() {
         } catch( error ) {
             // if any errors were encounted during the entire process
             // of signup, alert user with a dialog stating the error encountered
-            handleOpenDialog( error.message )
+            handleOpenDialog( "Signup Error", error.message, openDialog, closeDialog )
         } finally {
             // reset form loading state
             setLoading( false )
@@ -69,23 +75,6 @@ export default function Signup() {
             setLastName("")
             setSelectedFile( null )
         }
-    }
-
-    function handleOpenDialog( description ) {
-        const dialogId = openDialog( { 
-            title: "Signup Error",
-            description: description,
-            content: (
-                <Button 
-                    onClick={ () => closeDialog( dialogId ) }
-                    className="
-                        w-full
-                    "
-                >
-                    Close
-                </Button>
-            )
-        } )
     }
 
     return (

@@ -82,6 +82,7 @@ export function ToastProvider({ children }) {
                                         flex 
                                         justify-between 
                                         items-center
+                                        gap-2
                                     "
                                 >
                                     {/* toast message */}
