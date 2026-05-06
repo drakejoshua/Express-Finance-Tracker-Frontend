@@ -33,7 +33,12 @@ export function DialogProvider({ children }) {
     // openDialog() - add a new dialog to the state with a unique id 
     // and provided content, title, and description
     function openDialog({ title, description, content }) {
-        setActiveDialogs( ( prevDialogs ) => [ ...prevDialogs, { id: Date.now(), title, description, content } ] )
+        // generate a unique id for the new dialog (e.g. using current timestamp) and add it to the activeDialogs state
+        const dialogId = Date.now()
+
+        setActiveDialogs( ( prevDialogs ) => [ ...prevDialogs, { id: dialogId, title, description, content } ] )
+
+        return dialogId
     }
 
     // closeDialog() - remove a dialog from the state by its id, 

@@ -34,7 +34,14 @@ export function ToastProvider({ children }) {
     // showToast() - add a new toast to the state with a unique id
     // and provided type and message
     function showToast({ type, message }) {
-        setActiveToasts( ( prevToasts ) => [ ...prevToasts, { id: Date.now(), type, message } ] )
+        // create unique identifier for the new post using current timestamp
+        const toastId = Date.now()
+
+        // add new toast object to the list of toasts
+        setActiveToasts( ( prevToasts ) => [ ...prevToasts, { id: toastId, type, message } ] )
+
+        // return toastId to the function invoker
+        return toastId
     }
 
     // hideToast() - remove a toast from the state by its id,
@@ -88,9 +95,9 @@ export function ToastProvider({ children }) {
                                         {/* toast icon */}
                                         {
                                             {
-                                                success: <FaCircleCheck className="text-green-600 text-2xl"/>,
-                                                error: <FaTriangleExclamation className="text-green-600 text-2xl"/>,
-                                                info: <FaCircleExclamation className="text-green-600 text-2xl"/>
+                                                success: <FaCircleCheck className="text-green-600 text-2xl shrink-0"/>,
+                                                error: <FaTriangleExclamation className="text-green-600 text-2xl shrink-0"/>,
+                                                info: <FaCircleExclamation className="text-green-600 text-2xl shrink-0"/>
                                             }[ toast.type ]
                                         }
 

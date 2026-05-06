@@ -9,11 +9,84 @@ import { Link } from 'react-router-dom'
 import AuthHeading from '../components/AuthHeading.jsx'
 import TextField from '../../../shared/components/TextField.jsx'
 import AuthForm from '../components/AuthForm.jsx'
+import { useAuthProvider } from '../../../shared/providers/AuthProvider.jsx'
+import { useDialogProvider } from '../../../shared/providers/DialogProvider.jsx'
+import { useToastProvider } from '../../../shared/providers/ToastProvider.jsx'
 
 export default function Signup() {
     const [ email, setEmail ] = useState("")
     const [ password, setPassword ] = useState("")
+    const [ firstName, setFirstName ] = useState("")
+    const [ lastName, setLastName ] = useState("")
     const [ selectedFile, setSelectedFile ] = useState( null )
+
+    const { signUp } = useAuthProvider()
+    const { openDialog, closeDialog } = useDialogProvider()
+    const { showToast } = useToastProvider()
+
+    const [ loading, setLoading ] = useState( false )
+
+    async function handleSignup( e ) {
+        // prevent form submission default behaviour i.e.
+        // browser refreshing the page on form submit
+        e.preventDefault()
+
+        // set form loading state to show signup submission
+        // in progress to user
+        setLoading( true )
+        
+        try {
+            // send signup request to backend for new user using their
+            // submitted details 
+            const { status, error } = await signUp( email, password, firstName, lastName, selectedFile )
+
+            // check request status for errors
+            if ( status === "error" ) {
+                // if request was unsuccessful, alert user with a dialog
+                // stating the error encountered
+                handleOpenDialog( error.message )
+            } else {
+                // if request is successful, alert user with a toast stating
+                // account creation success and they will be redirected soon
+                showToast({
+                    type: "success",
+                    message: `Signup successful, Your account has been created. 
+                    You will be redirected shortly`
+                })
+            }
+        } catch( error ) {
+            // if any errors were encounted during the entire process
+            // of signup, alert user with a dialog stating the error encountered
+            handleOpenDialog( error.message )
+        } finally {
+            // reset form loading state
+            setLoading( false )
+
+            // clear form state
+            setEmail("")
+            setPassword("")
+            setFirstName("")
+            setLastName("")
+            setSelectedFile( null )
+        }
+    }
+
+    function handleOpenDialog( description ) {
+        const dialogId = openDialog( { 
+            title: "Signup Error",
+            description: description,
+            content: (
+                <Button 
+                    onClick={ () => closeDialog( dialogId ) }
+                    className="
+                        w-full
+                    "
+                >
+                    Close
+                </Button>
+            )
+        } )
+    }
 
     return (
         <>
@@ -38,6 +111,7 @@ export default function Signup() {
                 className="
                     mt-6
                 "
+                onSubmit={ handleSignup }
             >
                 <div
                     className='
@@ -47,92 +121,21 @@ export default function Signup() {
                     '
                 >
                     {/* firstname input */}
-                    {/* <Form.Field
-                        className='
-                            flex
-                            flex-col
-                            gap-1.5
-                        '
-                    >
-                        <Form.Label
-                            className='
-                                font-medium
-                            '
-                        >
-                            Firstname
-                        </Form.Label>
-
-                        <Form.Control asChild>
-                            <input 
-                                type='text'
-                                className='
-                                    w-full
-                                    p-2
-                                    px-3
-                                    rounded
-                                    border-2
-                                    focus:outline-none
-                                    border-gray-600 dark:border-gray-50
-                                    dark:bg-gray-200
-                                    dark:placeholder:text-gray-500
-                                    dark:text-gray-900
-                                '
-                                
-                            />
-                        </Form.Control>
-
-                        <Form.Message match="valueMissing">
-                            Your firstname is required for signup
-                        </Form.Message>
-                        
-                        <Form.Message match="tooShort">
-                            Please enter a valid firstname
-                        </Form.Message>
-                    </Form.Field> */}
                     <TextField
                         label="Firstname"
                         minLength="3"
                         required
+                        value={ firstName }
+                        onChange={ ( e ) => setFirstName( e.target.value ) }
                         emptyValidationMessage='Your firstname is required for signup'
                         tooShortValidationMessage='Please enter a valid firstname'
                     />
                     
                     {/* lastname input */}
-                    {/* <Form.Field
-                        className='
-                            flex
-                            flex-col
-                            gap-1.5
-                        '
-                    >
-                        <Form.Label
-                            className='
-                                font-medium
-                            '
-                        >
-                            Lastname
-                        </Form.Label>
-
-                        <Form.Control asChild>
-                            <input 
-                                type='text'
-                                className='
-                                    w-full
-                                    p-2
-                                    px-3
-                                    rounded
-                                    border-2
-                                    focus:outline-none
-                                    border-gray-600 dark:border-gray-50
-                                    dark:bg-gray-200
-                                    dark:placeholder:text-gray-500
-                                    dark:text-gray-900
-                                '
-                            />
-                        </Form.Control>
-                    </Form.Field> */}
                     <TextField
                         label="Lastname"
+                        value={ lastName }
+                        onChange={ ( e ) => setLastName( e.target.value ) }
                     />
                 </div>
 
@@ -202,11 +205,13 @@ export default function Signup() {
 
                 <Form.Submit asChild>
                     <Button
-                        className="
+                        className={`
                             mt-4
-                        "
+                            ${ loading ? "cursor-not-allowed opacity-70" : "" }
+                        `}
+                        disabled={ loading }
                     >
-                        Create new account
+                        { loading ? "Creating account..." : "Create new account" }
                     </Button>
                 </Form.Submit>
             </AuthForm>
