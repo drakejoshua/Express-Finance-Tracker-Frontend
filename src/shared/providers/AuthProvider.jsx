@@ -1,4 +1,4 @@
-import { useContext, useState, createContext, useEffect } from 'react'
+import { useContext, useState, createContext, useEffect, useRef } from 'react'
 import { ERROR_CODES } from '../utils/errors'
 
 const AuthContext = createContext()
@@ -14,6 +14,7 @@ export function AuthProvider({ children }) {
     // initially set to loading status until the app determines if user is logged in or not
     // possible status values: loading, loaded, error, unavailable
     const [currentlyLoggedInUser, setCurrentlyLoggedInUser] = useState( { status: "loading" } ) 
+    const silentRefreshRef = useRef( null )
 
     async function signUp( email, password, firstName, lastName, photo ) {
         try {
@@ -236,21 +237,52 @@ export function AuthProvider({ children }) {
                 // if an unexpected error occurs during the process
                 // (e.g. network error, frontend bug), set currently logged in 
                 // user state to unavailable to indicate that the app has finished 
-                // checking for login status but user is not logged in
+                // checking for login status but a non-authentication issue occured
                 setCurrentlyLoggedInUser( { status: "unavailable" } )
             }
         } else {
             // if there is no access token in local storage, 
             // set currently logged in user state to loaded with 
-            // unavailable status to indicate that user is not logged in 
-            // but the app has finished checking for login status
+            // unavailable status to indicate there's no access token 
+            // present in localStorage
             setCurrentlyLoggedInUser( { status: "unavailable" } )
         }
     }
 
-    
+    // function to handle silent refresh of access token in the 
+    // background before it expires to keep user logged in without 
+    // interruptions, which can be called from components that need 
+    // to ensure the user has a valid access token for making
+    //  authenticated requests.
     async function handleSilentRefresh() {
+        const accessTokenExpiryInMilliseconds = currentlyLoggedInUser.data.expires_in * 1000
 
+        silentRefreshRef.current = setTimeout( async () => {
+            try {
+                const { status, data } = await refreshAccessToken()
+
+                if ( status === "error" ) {
+                    // if refreshing access token fails, set currently 
+                    // logged in user state to error 
+                    setCurrentlyLoggedInUser( { status: "error" } )
+                } else {
+                    // if refreshing access token succeeds, update 
+                    // currently logged in user state with new access token
+                    // and user data
+                    setCurrentlyLoggedInUser( { status: "loaded", data: data.user } )
+
+                    // set up next silent refresh based on new access 
+                    // token's expiry time
+                    handleSilentRefresh() 
+                }
+            } catch {
+                // if an unexpected error occurs during the process
+                // (e.g. network error, frontend bug), set currently logged in 
+                // user state to unavailable to indicate that the app has finished 
+                // checking for login status but a non-authentication issue occured
+                setCurrentlyLoggedInUser( { status: "unavailable" } )
+            }
+        }, accessTokenExpiryInMilliseconds - 30000 ) // refresh 30 secs before expiry
     }
 
     useEffect( function() {
@@ -267,6 +299,10 @@ export function AuthProvider({ children }) {
         // if user is logged out or there is an error
         if ( currentlyLoggedInUser.status === "loaded" ) {
             localStorage.setItem( 'greenfinance-token', currentlyLoggedInUser.data.access_token )
+
+            // set up silent refresh of access token in the background
+            // before it expires to keep user logged in without interruptions
+            handleSilentRefresh()
         } else {
             if ( currentlyLoggedInUser.status === "error" ) {
                 localStorage.removeItem( 'greenfinance-token' )
