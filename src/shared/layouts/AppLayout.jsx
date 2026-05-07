@@ -1,360 +1,384 @@
-import React, { useState } from 'react'
-import { Link, NavLink, Outlet } from 'react-router-dom'
+import React, { useEffect, useState } from 'react'
+import { Link, NavLink, Outlet, useNavigate } from 'react-router-dom'
 import Logo from "../../shared/components/Logo";
 import { FaBars, FaDoorOpen, FaGear, FaListCheck, FaMagnifyingGlass, FaStar, FaUser, FaWallet, FaX } from 'react-icons/fa6';
 import ThemeButton from '../components/ThemeButton';
 import { Avatar, DropdownMenu } from 'radix-ui';
 import bitcoinImage from "../../assets/Design/bitcoin.png"
 import SearchResultItem from '../components/SearchResultItem';
-import useDebounce from '../hooks/useDebounce';
 import AppSearchView from '../components/AppSearchView';
 import UserAvatar from '../components/UserAvatar';
+import { useAuthProvider } from '../providers/AuthProvider';
+
 
 export default function AppLayout() {
     const isMobileOrTablet = window.innerWidth < 1024;
     const [isNavOpen, setIsNavOpen] = useState(false);
     const [ isMobileSearchOpen, setIsMobileSearchOpen ] = useState( false )
+    const navigateTo = useNavigate()
+
+    const { currentlyLoggedInUser } = useAuthProvider()
     
     function handleNavLinkClick() {
         if ( isMobileOrTablet ) {
             setIsNavOpen( false );
         }
     }
-    
-    
-    return (
-        <div
-            className='
-                h-full
-                flex
-                flex-col
-            '
-        >
-            {/* top bar */}
+
+    useEffect( function() {
+        if ( 
+            currentlyLoggedInUser.status === "error" ||
+            currentlyLoggedInUser.status === "unavailable" 
+        ) {
+            navigateTo( "/auth/login" )
+        }
+    }, [ currentlyLoggedInUser ] )
+
+    if ( currentlyLoggedInUser.status === "loading" ) {
+        return (
+            <div>
+                loading authentication status...
+            </div>
+        )
+    } else if (
+        currentlyLoggedInUser.status !== "error" &&
+        currentlyLoggedInUser.status !== "unavailable" &&
+        currentlyLoggedInUser.data
+    ) {
+        return (
             <div
                 className='
+                    h-full
                     flex
-                    items-center
-                    py-4
-                    px-4 lg:px-6
-                    gap-3 lg:gap-5.5
-                    border-b-2
-                    border-gray-100 dark:border-gray-700
-                    relative
-                    top-0
+                    flex-col
                 '
             >
-                {/* nav toggle */}
-                <button
+                {/* top bar */}
+                <div
                     className='
-                        block lg:hidden
-                        text-xl
-                        dark:text-white
+                        flex
+                        items-center
+                        py-4
+                        px-4 lg:px-6
+                        gap-3 lg:gap-5.5
+                        border-b-2
+                        border-gray-100 dark:border-gray-700
+                        relative
+                        top-0
                     '
-                    onClick={ () => setIsNavOpen( !isNavOpen )}
                 >
-                    { isNavOpen && <FaX />}
-                    { !isNavOpen && <FaBars />}
-                </button>
-
-                {/* logo */}
-                <Logo 
-                    className="
-                        h-5 lg:h-6
-                    "
-                />
-
-                {/* mobile search */}
-                { isMobileOrTablet && 
-                        <button
-                            className='
-                                text-gray-800 dark:text-white
-                                text-xl
-                                ml-auto
-                            '
-                            onClick={ () => setIsMobileSearchOpen( !isMobileSearchOpen ) }
-                        >
-                            { !isMobileSearchOpen && <FaMagnifyingGlass /> }
-                            { isMobileSearchOpen && <FaX />}
-                        </button>
-
-                }
-
-                {/* search  */}
-                <AppSearchView 
-                    className={`
-                        w-9/10 lg:w-1/2 
-                        lg:ml-auto
-                        absolute lg:relative 
-                        ${ isMobileSearchOpen ? "block" : "hidden lg:block" }
-                        -bottom-8/10 lg:top-0
-                        left-1/2 -translate-x-1/2 lg:left-0 lg:translate-x-0
-                        z-1
-                    `}
-                    handleMobileClose={ () => { if ( isMobileOrTablet ) setIsMobileSearchOpen( false ) } }
-                />
-
-                <ThemeButton 
-                    className="
-                        lg:ml-auto
-                        dark:text-white
-                    "
-                />
-
-                <DropdownMenu.Root>
-                    <DropdownMenu.Trigger asChild>
-                        <UserAvatar 
-                            src={ bitcoinImage }
-                            alt="User profile info"
-                            fallback="JM"
-                            className="
-                                w-8
-                                shrink-0
-                            "
-                        />
-                    </DropdownMenu.Trigger>
-
-                    <DropdownMenu.Content
-                        sideOffset={10}
-                        align='end'
+                    {/* nav toggle */}
+                    <button
                         className='
-                            py-5 px-4
-                            rounded-lg
-                            bg-gray-100
-                            z-1
+                            block lg:hidden
+                            text-xl
+                            dark:text-white
                         '
+                        onClick={ () => setIsNavOpen( !isNavOpen )}
                     >
-                        {/* dropdown details card */}
-                        <div
+                        { isNavOpen && <FaX />}
+                        { !isNavOpen && <FaBars />}
+                    </button>
+    
+                    {/* logo */}
+                    <Logo 
+                        className="
+                            h-5 lg:h-6
+                        "
+                    />
+    
+                    {/* mobile search */}
+                    { isMobileOrTablet && 
+                            <button
+                                className='
+                                    text-gray-800 dark:text-white
+                                    text-xl
+                                    ml-auto
+                                '
+                                onClick={ () => setIsMobileSearchOpen( !isMobileSearchOpen ) }
+                            >
+                                { !isMobileSearchOpen && <FaMagnifyingGlass /> }
+                                { isMobileSearchOpen && <FaX />}
+                            </button>
+    
+                    }
+    
+                    {/* search  */}
+                    <AppSearchView 
+                        className={`
+                            w-9/10 lg:w-1/2 
+                            lg:ml-auto
+                            absolute lg:relative 
+                            ${ isMobileSearchOpen ? "block" : "hidden lg:block" }
+                            -bottom-8/10 lg:top-0
+                            left-1/2 -translate-x-1/2 lg:left-0 lg:translate-x-0
+                            z-1
+                        `}
+                        handleMobileClose={ () => { if ( isMobileOrTablet ) setIsMobileSearchOpen( false ) } }
+                    />
+    
+                    <ThemeButton 
+                        className="
+                            lg:ml-auto
+                            dark:text-white
+                        "
+                    />
+    
+                    <DropdownMenu.Root>
+                        <DropdownMenu.Trigger asChild>
+                            <UserAvatar 
+                                src={ bitcoinImage }
+                                alt="User profile info"
+                                fallback="JM"
+                                className="
+                                    w-8
+                                    shrink-0
+                                "
+                            />
+                        </DropdownMenu.Trigger>
+    
+                        <DropdownMenu.Content
+                            sideOffset={10}
+                            align='end'
                             className='
-                                flex
-                                gap-3
-                                items-center
+                                py-5 px-4
+                                rounded-lg
+                                bg-gray-100
+                                z-1
                             '
                         >
-                            <Avatar.Root>
-                                <Avatar.Image 
-                                    src={bitcoinImage} 
-                                    alt='User profile photo'
-                                    className='
-                                        w-10
-                                    '
-                                />
-                                <Avatar.Fallback>
-                                    BTC
-                                </Avatar.Fallback>
-                            </Avatar.Root>
-
+                            {/* dropdown details card */}
                             <div
                                 className='
                                     flex
-                                    flex-col
+                                    gap-3
+                                    items-center
                                 '
                             >
-                                <span
+                                <Avatar.Root>
+                                    <Avatar.Image 
+                                        src={bitcoinImage} 
+                                        alt='User profile photo'
+                                        className='
+                                            w-10
+                                        '
+                                    />
+                                    <Avatar.Fallback>
+                                        BTC
+                                    </Avatar.Fallback>
+                                </Avatar.Root>
+    
+                                <div
                                     className='
-                                        font-medium
+                                        flex
+                                        flex-col
                                     '
                                 >
-                                    Satoshi Nakamoto
-                                </span>
-
-                                <span
-                                    className='
-                                        text-gray-600
-                                    '
-                                >
-                                    satoshi@bitcoin.com
-                                </span>
+                                    <span
+                                        className='
+                                            font-medium
+                                        '
+                                    >
+                                        Satoshi Nakamoto
+                                    </span>
+    
+                                    <span
+                                        className='
+                                            text-gray-600
+                                        '
+                                    >
+                                        satoshi@bitcoin.com
+                                    </span>
+                                </div>
                             </div>
-                        </div>
-
-                        {/* dropdown links */}
-                        <div
-                            className='
-                                mt-2
-                                flex
-                                flex-col
-                                *:py-2
-                                *:px-3
-                                *:rounded-md
-                                *:hover:bg-gray-300
-                                [&_a]:flex
-                                [&_a]:gap-2
-                                [&_a]:items-center
-                            '
-                        >
-                            <DropdownMenu.Item asChild>
-                                <Link to="profile">
-                                    <FaUser />
-                                    Profile
-                                </Link>
-                            </DropdownMenu.Item>
-                            <DropdownMenu.Item asChild>
-                                <Link to="portfolio">
-                                    <FaWallet />
-                                    Portfolio
-                                </Link>
-                            </DropdownMenu.Item>
-                            <DropdownMenu.Item asChild>
-                                <Link to="logout">
-                                    <FaDoorOpen />
-                                    Logout
-                                </Link>
-                            </DropdownMenu.Item>
-                        </div>
-                    </DropdownMenu.Content>
-                </DropdownMenu.Root>
-            </div>
-
-            {/* main content */}
-            <div
-                className='
-                    block lg:flex
-                    grow
-                    relative lg:static
-                '
-            >
-                {/* nav bar */}
-                <nav
-                    className={`
-                        lg:px-6
-                        lg:py-4
-                        ${ !isNavOpen && isMobileOrTablet ? "w-0 p-0" : "w-5/6 md:w-2/5 px-6 py-4"}
-                        overflow-hidden
-                        lg:w-27
-                        lg:hover:w-1/5
-                        group
-                        transition-all lg:transition-[width]
-                        duration-500
-                        border-r-2
-                        border-gray-100 dark:border-gray-700
-                        absolute lg:static
-                        bg-white dark:bg-gray-800
-                        h-full
-                        z-1
-                    `}
-                >
-                    <div
-                        className='
-                            flex
-                            flex-col
-                            gap-1
-                            *:flex
-                            *:gap-3
-                            *:items-center
-                            *:capitalize
-                            *:dark:text-white
-                            *:hover:bg-gray-200 *:hover:dark:text-gray-800
-                            [&_>_.active]:bg-green-700
-                            [&_>_.active]:text-white
-                            *:px-5 *:py-3
-                            *:rounded-full
-                        '
-                    >
-                        <NavLink
-                            to="dashboard"
-                            onMouseDown={ handleNavLinkClick }
-                        >
-                            <FaListCheck className='text-lg shrink-0'/>
-                            <span
+    
+                            {/* dropdown links */}
+                            <div
                                 className='
-                                    lg:opacity-0
-                                    lg:w-0
-                                    lg:overflow-hidden
-                                    lg:whitespace-nowrap
-                                    lg:transition-[width]
-                                    lg:duration-300
-                                    lg:group-hover:opacity-100
-                                    lg:group-hover:w-auto
+                                    mt-2
+                                    flex
+                                    flex-col
+                                    *:py-2
+                                    *:px-3
+                                    *:rounded-md
+                                    *:hover:bg-gray-300
+                                    [&_a]:flex
+                                    [&_a]:gap-2
+                                    [&_a]:items-center
                                 '
                             >
-                                dashboard
-                            </span>
-                        </NavLink>
-                        
-                        <NavLink
-                            to="portfolio"
-                            onMouseDown={ handleNavLinkClick }
-                        >
-                            <FaWallet 
-                                className='text-lg shrink-0'
-                            />
-                            <span
-                                className='
-                                    lg:opacity-0
-                                    lg:w-0
-                                    lg:overflow-hidden
-                                    lg:whitespace-nowrap
-                                    lg:transition-[width]
-                                    lg:duration-300
-                                    lg:group-hover:opacity-100
-                                    lg:group-hover:w-full
-                                '
-                            >
-                                portfolio
-                            </span>
-                        </NavLink>
-                        
-                        <NavLink
-                            to="watchlist"
-                            onMouseDown={ handleNavLinkClick }
-                        >
-                            <FaStar className='text-lg shrink-0'/>
-                            <span
-                                className='
-                                    lg:opacity-0
-                                    lg:w-0
-                                    lg:overflow-hidden
-                                    lg:whitespace-nowrap
-                                    lg:transition-[width]
-                                    lg:duration-300
-                                    lg:group-hover:opacity-100
-                                    lg:group-hover:w-auto
-                                '
-                            >
-                                watchlist
-                            </span>
-                        </NavLink>
-                        
-                        <NavLink
-                            to="profile"
-                            onMouseDown={ handleNavLinkClick }
-                        >
-                            <FaUser className='text-lg shrink-0'/>
-                            <span
-                                className='
-                                    lg:opacity-0
-                                    lg:w-0
-                                    lg:overflow-hidden
-                                    lg:whitespace-nowrap
-                                    lg:transition-[width]
-                                    lg:duration-300
-                                    lg:group-hover:opacity-100
-                                    lg:group-hover:w-auto
-                                '
-                            >
-                                profile
-                            </span>
-                        </NavLink>
-                    </div>
-
-                </nav>
-
-                {/* content */}
-                <main
+                                <DropdownMenu.Item asChild>
+                                    <Link to="profile">
+                                        <FaUser />
+                                        Profile
+                                    </Link>
+                                </DropdownMenu.Item>
+                                <DropdownMenu.Item asChild>
+                                    <Link to="portfolio">
+                                        <FaWallet />
+                                        Portfolio
+                                    </Link>
+                                </DropdownMenu.Item>
+                                <DropdownMenu.Item asChild>
+                                    <Link to="logout">
+                                        <FaDoorOpen />
+                                        Logout
+                                    </Link>
+                                </DropdownMenu.Item>
+                            </div>
+                        </DropdownMenu.Content>
+                    </DropdownMenu.Root>
+                </div>
+    
+                {/* main content */}
+                <div
                     className='
+                        block lg:flex
                         grow
-                        py-4 pb-8
-                        px-4 lg:px-10 
-                        h-full
-                        overflow-y-auto
-                        mt-5
+                        relative lg:static
                     '
                 >
-                    <Outlet />
-                </main>
+                    {/* nav bar */}
+                    <nav
+                        className={`
+                            lg:px-6
+                            lg:py-4
+                            ${ !isNavOpen && isMobileOrTablet ? "w-0 p-0" : "w-5/6 md:w-2/5 px-6 py-4"}
+                            overflow-hidden
+                            lg:w-27
+                            lg:hover:w-1/5
+                            group
+                            transition-all lg:transition-[width]
+                            duration-500
+                            border-r-2
+                            border-gray-100 dark:border-gray-700
+                            absolute lg:static
+                            bg-white dark:bg-gray-800
+                            h-full
+                            z-1
+                        `}
+                    >
+                        <div
+                            className='
+                                flex
+                                flex-col
+                                gap-1
+                                *:flex
+                                *:gap-3
+                                *:items-center
+                                *:capitalize
+                                *:dark:text-white
+                                *:hover:bg-gray-200 *:hover:dark:text-gray-800
+                                [&_>_.active]:bg-green-700
+                                [&_>_.active]:text-white
+                                *:px-5 *:py-3
+                                *:rounded-full
+                            '
+                        >
+                            <NavLink
+                                to="dashboard"
+                                onMouseDown={ handleNavLinkClick }
+                            >
+                                <FaListCheck className='text-lg shrink-0'/>
+                                <span
+                                    className='
+                                        lg:opacity-0
+                                        lg:w-0
+                                        lg:overflow-hidden
+                                        lg:whitespace-nowrap
+                                        lg:transition-[width]
+                                        lg:duration-300
+                                        lg:group-hover:opacity-100
+                                        lg:group-hover:w-auto
+                                    '
+                                >
+                                    dashboard
+                                </span>
+                            </NavLink>
+                            
+                            <NavLink
+                                to="portfolio"
+                                onMouseDown={ handleNavLinkClick }
+                            >
+                                <FaWallet 
+                                    className='text-lg shrink-0'
+                                />
+                                <span
+                                    className='
+                                        lg:opacity-0
+                                        lg:w-0
+                                        lg:overflow-hidden
+                                        lg:whitespace-nowrap
+                                        lg:transition-[width]
+                                        lg:duration-300
+                                        lg:group-hover:opacity-100
+                                        lg:group-hover:w-full
+                                    '
+                                >
+                                    portfolio
+                                </span>
+                            </NavLink>
+                            
+                            <NavLink
+                                to="watchlist"
+                                onMouseDown={ handleNavLinkClick }
+                            >
+                                <FaStar className='text-lg shrink-0'/>
+                                <span
+                                    className='
+                                        lg:opacity-0
+                                        lg:w-0
+                                        lg:overflow-hidden
+                                        lg:whitespace-nowrap
+                                        lg:transition-[width]
+                                        lg:duration-300
+                                        lg:group-hover:opacity-100
+                                        lg:group-hover:w-auto
+                                    '
+                                >
+                                    watchlist
+                                </span>
+                            </NavLink>
+                            
+                            <NavLink
+                                to="profile"
+                                onMouseDown={ handleNavLinkClick }
+                            >
+                                <FaUser className='text-lg shrink-0'/>
+                                <span
+                                    className='
+                                        lg:opacity-0
+                                        lg:w-0
+                                        lg:overflow-hidden
+                                        lg:whitespace-nowrap
+                                        lg:transition-[width]
+                                        lg:duration-300
+                                        lg:group-hover:opacity-100
+                                        lg:group-hover:w-auto
+                                    '
+                                >
+                                    profile
+                                </span>
+                            </NavLink>
+                        </div>
+    
+                    </nav>
+    
+                    {/* content */}
+                    <main
+                        className='
+                            grow
+                            py-4 pb-8
+                            px-4 lg:px-10 
+                            h-full
+                            overflow-y-auto
+                            mt-5
+                        '
+                    >
+                        <Outlet />
+                    </main>
+                </div>
             </div>
-        </div>
-    )
+        )
+    }
 }
