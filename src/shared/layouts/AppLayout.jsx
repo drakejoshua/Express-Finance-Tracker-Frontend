@@ -17,7 +17,7 @@ export default function AppLayout() {
     const [ isMobileSearchOpen, setIsMobileSearchOpen ] = useState( false )
     const navigateTo = useNavigate()
 
-    const { currentlyLoggedInUser } = useAuthProvider()
+    const { currentlyLoggedInUser, logOut } = useAuthProvider()
     
     function handleNavLinkClick() {
         if ( isMobileOrTablet ) {
@@ -28,8 +28,10 @@ export default function AppLayout() {
     useEffect( function() {
         if ( 
             currentlyLoggedInUser.status === "error" ||
+            currentlyLoggedInUser.status === "logout" ||
             currentlyLoggedInUser.status === "unavailable" 
         ) {
+            console.log( "User is not authenticated, redirecting to login page..." )
             navigateTo( "/auth/login" )
         }
     }, [ currentlyLoggedInUser ] )
@@ -145,6 +147,7 @@ export default function AppLayout() {
                                 rounded-lg
                                 bg-gray-100
                                 z-1
+                                shadow-md
                             '
                         >
                             {/* dropdown details card */}
@@ -219,11 +222,17 @@ export default function AppLayout() {
                                         Portfolio
                                     </Link>
                                 </DropdownMenu.Item>
-                                <DropdownMenu.Item asChild>
-                                    <Link to="logout">
-                                        <FaDoorOpen />
-                                        Logout
-                                    </Link>
+                                <DropdownMenu.Item
+                                    onSelect={ () => logOut() }
+                                    className='
+                                        flex
+                                        gap-2
+                                        items-center
+                                        text-red-700 hover:text-black
+                                    '
+                                >
+                                    <FaDoorOpen />
+                                    Logout
                                 </DropdownMenu.Item>
                             </div>
                         </DropdownMenu.Content>
