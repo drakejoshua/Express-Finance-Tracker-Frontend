@@ -1,14 +1,48 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import AuthHeading from '../components/AuthHeading.jsx'
 import { ScaleLoader } from 'react-spinners'
 import { FaCircleCheck, FaTriangleExclamation } from 'react-icons/fa6'
 import Button from '../../../shared/components/Button'
 import colors from 'tailwindcss/colors';
 import { useTheme } from '../../../shared/providers/ThemeProvider'
+import { useAuthProvider } from '../../../shared/providers/AuthProvider.jsx'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 
 export default function Google() {
     const [ loading, setLoading ] = useState( true )
     const { theme } = useTheme()
+    const [ errorText, setErrorText ] = useState( "" )
+
+    const [ searchParams, setSearchParams ] = useSearchParams()
+    const navigateTo = useNavigate()
+
+    const { getCurrentUser } = useAuthProvider()
+
+    async function verifyGoogleAccount() {
+        const accessToken = searchParams.get( "hash" )
+
+        if ( !accessToken ) {
+            setErrorText( "Invalid account identifier encountered." )
+        }
+
+        try {
+            const { status, error } = await getCurrentUser( accessToken )
+
+            if ( status === "error" ) {
+                setLoading( false )
+                setErrorText( error.message )
+            }
+        } catch ( error ) {
+            setLoading( false )
+            setErrorText( error.message )
+        } finally {
+            setLoading( false )
+        }
+    }
+
+    useEffect( () => {
+        verifyGoogleAccount()
+    }, [] )
 
     return (
         <>
@@ -35,7 +69,7 @@ export default function Google() {
                 '
             >
                 {/* loading state */}
-                <div
+                { ( loading && !errorText ) && <div
                     className='
                         flex
                         gap-6
@@ -56,10 +90,10 @@ export default function Google() {
                     >
                         Verifying your account, this may take a moment...
                     </span>
-                </div>
+                </div>}
 
                 {/* error state */}
-                {/* <div>
+                { ( !loading && errorText ) &&<div>
                     <div
                         className='
                             flex
@@ -81,19 +115,20 @@ export default function Google() {
                                 text-red-700 dark:text-red-300
                             '
                         >
-                            Oops! Something went wrong during verification. Please try again.
+                            There was an error verifying your google account. Error: { errorText }
                         </span>
                     </div>
 
                     <Button
-                        className="mt-6"
+                        className="mt-6 px-4"
+                        onClick={ () => navigateTo( "/auth/login" ) }
                     >
-                        Retry Verification
+                        Back to Login
                     </Button>
-                </div> */}
+                </div>}
 
                 {/* loaded state */}
-                {/* <div>
+                { ( !loading && !errorText ) && <div>
                     <div
                         className='
                             flex
@@ -125,7 +160,7 @@ export default function Google() {
                     >
                         Go to Dashboard
                     </Button>
-                </div> */}
+                </div>}
             </div>
         </>
     )

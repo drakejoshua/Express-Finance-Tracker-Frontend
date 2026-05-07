@@ -13,6 +13,7 @@ import { useDialogProvider } from '../../../shared/providers/DialogProvider.jsx'
 import { useToastProvider } from '../../../shared/providers/ToastProvider.jsx'
 import handleOpenDialog from '../../../shared/utils/handleOpenDialog.jsx'
 import { ERROR_CODES } from '../../../shared/utils/errors.js'
+import GoogleButton from '../components/GoogleButton.jsx'
 
 export default function Login() {
     const [ email, setEmail ] = useState("")
@@ -139,14 +140,9 @@ export default function Login() {
             </AuthForm>
 
             {/* sign in with google button */}
-            <AltButton
-                className="
-                    mt-4
-                "
-            >
-                <FaGoogle/>
-                Sign in with Google
-            </AltButton>
+            <GoogleButton 
+                text="Sign in with Google"
+            />
 
             {/* redirect to signup link */}
             <Link
