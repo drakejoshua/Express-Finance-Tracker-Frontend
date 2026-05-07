@@ -5,7 +5,7 @@ import PasswordField from '../../../shared/components/PasswordField.jsx'
 import Button from '../../../shared/components/Button'
 import AltButton from '../../../shared/components/AltButton'
 import { FaGoogle } from 'react-icons/fa6'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import AuthHeading from '../components/AuthHeading.jsx'
 import TextField from '../../../shared/components/TextField.jsx'
 import AuthForm from '../components/AuthForm.jsx'
@@ -26,6 +26,7 @@ export default function Signup() {
     const { signUp } = useAuthProvider()
     const { openDialog, closeDialog } = useDialogProvider()
     const { showToast } = useToastProvider()
+    const navigateTo = useNavigate()
 
     const [ loading, setLoading ] = useState( false )
 
@@ -60,6 +61,12 @@ export default function Signup() {
                     message: `Signup successful, Your account has been created. 
                     You will be redirected shortly`
                 })
+
+                // redirect user to dashboard after a short delay to 
+                // allow them to see the toast message
+                setTimeout( function() {
+                    navigateTo( "/app/dashboard" )
+                }, 1500 ) // 1.5s second delay before redirecting
             }
         } catch( error ) {
             // if any errors were encounted during the entire process

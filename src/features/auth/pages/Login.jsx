@@ -5,7 +5,7 @@ import EmailField from '../../../shared/components/EmailField.jsx'
 import PasswordField from '../../../shared/components/PasswordField.jsx'
 import Button from '../../../shared/components/Button'
 import AltButton from '../../../shared/components/AltButton'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import AuthHeading from '../components/AuthHeading'
 import AuthForm from '../components/AuthForm'
 import { useAuthProvider } from '../../../shared/providers/AuthProvider.jsx'
@@ -22,6 +22,7 @@ export default function Login() {
     const { logIn } = useAuthProvider()
     const { openDialog, closeDialog } = useDialogProvider()
     const { showToast } = useToastProvider()
+    const navigateTo = useNavigate()
 
     const [ loading, setLoading ] = useState( false )
 
@@ -65,6 +66,12 @@ export default function Login() {
                     type: "success",
                     message: `Login successful, You will be redirected shortly`
                 })
+
+                // redirect user to dashboard after a short delay to 
+                // allow them to see the toast message
+                setTimeout( function() {
+                    navigateTo( "/app/dashboard" )
+                }, 1500 ) // 1.5s second delay before redirecting
             }
         } catch( error ) {
             // if any errors were encounted during the entire process

@@ -31,6 +31,12 @@ export default function Google() {
             if ( status === "error" ) {
                 setLoading( false )
                 setErrorText( error.message )
+            } else {
+                // redirect user to dashboard after a short delay to 
+                // allow them to see the toast message
+                setTimeout( function() {
+                    navigateTo( "/app/dashboard" )
+                }, 1500 ) // 1.5s second delay before redirecting
             }
         } catch ( error ) {
             setLoading( false )
@@ -157,6 +163,7 @@ export default function Google() {
 
                     <Button
                         className="mt-6"
+                        onClick={ () => navigateTo( "/" ) }
                     >
                         Go to Dashboard
                     </Button>
