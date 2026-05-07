@@ -9,6 +9,41 @@ export function useAuthProvider() {
     return useContext( AuthContext )
 }
 
+export async function refreshOn401( count = 2 ) {
+    try {
+        const resp = await fetch( `${ backendUrl }/auth/refresh`, {
+            method: 'POST',
+            credentials: 'include' // include cookies for refresh token
+        } )
+
+        if ( !resp.ok ) {
+            if (
+                resp.status === 401 ||  
+                count > 0 
+            ) {
+                // if the error indicates an invalid refresh token, it may be due to an expired refresh token, so we can attempt to refresh the access token one more time before giving up and returning the error
+                return await refreshOn401( count - 1 )
+            } else {
+                const { status, error } = await resp.json()
+
+                return { status, error }
+            }
+        } else {
+            const { status, data } = await resp.json()
+
+            return { status, data }
+        }
+    } catch ( error ) {
+        return { 
+            status: "error", 
+            error: {
+                code: ERROR_CODES.FRONTEND_ERROR,
+                message: error.message
+            }
+        }
+    }
+}
+
 export function AuthProvider({ children }) {
     // state to hold currently logged in user data with auth status
     // initially set to loading status until the app determines if user is logged in or not
@@ -123,8 +158,8 @@ export function AuthProvider({ children }) {
                 // details from response body and return them
                 if ( resp.status === 401 ) {
                     // since response status of 401 indicates an 
-                    // authentication error, it can't be parsed as json
-                    // and will throw an error, so we return a standardized error response with a specific error code for authentication errors in this case
+                    // authentication error, it can't be parsed as json,
+                    // so we return a standardized error response with a specific error code for authentication errors in this case
                     return { 
                         status: "error", 
                         error: {
@@ -171,10 +206,6 @@ export function AuthProvider({ children }) {
 
             // check if response is successful and handle accordingly
             if ( !resp.ok ) {
-                // if response is not ok, attempt to parse error 
-                // details from response body and return them
-                const { status, error } = await resp.json()
-
                 // recursively attempt to refresh access token one 
                 // more time if the error indicates an invalid 
                 // refresh token, which may be due to an expired refresh 
@@ -184,14 +215,17 @@ export function AuthProvider({ children }) {
                 // refreshing again with the new refresh token before concluding
                 // that the user needs to log in again.
                 if ( 
-                    ( resp.status === 401 || 
-                    error.code === ERROR_CODES.INVALID_REFRESH_TOKEN ) && 
+                    resp.status === 401 &&
                     count > 0 
                 ) {
                     // if the error indicates an invalid refresh token, it may be due to an expired refresh token, so we can attempt to refresh the access token one more time before giving up and returning the error
                     return await refreshAccessToken( count - 1 )
                 }
-    
+
+                // if response is not ok and it's not because of a 
+                // attempt to parse error details from response body and return them
+                const { status, error } = await resp.json()
+
                 return { status, error }
             } else {
                 // if response is ok, parse new access token from response body and return it
