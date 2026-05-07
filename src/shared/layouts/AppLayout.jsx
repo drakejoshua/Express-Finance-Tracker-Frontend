@@ -26,6 +26,7 @@ export default function AppLayout() {
     }
 
     useEffect( function() {
+        console.log("currently logged in user: ", currentlyLoggedInUser)
         if ( 
             currentlyLoggedInUser.status === "error" ||
             currentlyLoggedInUser.status === "logout" ||
@@ -129,11 +130,15 @@ export default function AppLayout() {
                     <DropdownMenu.Root>
                         <DropdownMenu.Trigger asChild>
                             <UserAvatar 
-                                src={ bitcoinImage }
+                                src={ currentlyLoggedInUser.data.profile_photo }
                                 alt="User profile info"
-                                fallback="JM"
+                                fallback={ 
+                                    currentlyLoggedInUser.data.name.split(" ")
+                                    .map( name => name[0] ).join("") 
+                                }
                                 className="
-                                    w-8
+                                    w-10
+                                    h-10
                                     shrink-0
                                 "
                             />
@@ -148,49 +153,64 @@ export default function AppLayout() {
                                 bg-gray-100
                                 z-1
                                 shadow-md
+                                w-60
                             '
                         >
                             {/* dropdown details card */}
                             <div
                                 className='
                                     flex
-                                    gap-3
+                                    gap-2.5
                                     items-center
+                                    w-full
                                 '
                             >
-                                <Avatar.Root>
-                                    <Avatar.Image 
-                                        src={bitcoinImage} 
-                                        alt='User profile photo'
-                                        className='
-                                            w-10
-                                        '
-                                    />
-                                    <Avatar.Fallback>
-                                        BTC
-                                    </Avatar.Fallback>
-                                </Avatar.Root>
+                                <UserAvatar 
+                                    src={ currentlyLoggedInUser.data.profile_photo }
+                                    alt="User profile info"
+                                    fallback={
+                                        currentlyLoggedInUser.data.name.split(" ")
+                                        .map( name => name[0] ).join("") 
+                                    }
+                                    className="
+                                        w-10
+                                        h-10
+                                        shrink-0
+                                    "
+                                />
     
                                 <div
                                     className='
                                         flex
                                         flex-col
+                                        grow
+                                        min-w-0
                                     '
                                 >
                                     <span
                                         className='
                                             font-medium
+                                            min-w-0
+                                            text-ellipsis
+                                            overflow-hidden
+                                            whitespace-nowrap
                                         '
+                                        title={ currentlyLoggedInUser.data.name }
                                     >
-                                        Satoshi Nakamoto
+                                        { currentlyLoggedInUser.data.name }
                                     </span>
     
                                     <span
                                         className='
                                             text-gray-600
+                                            min-w-0
+                                            text-ellipsis
+                                            overflow-hidden
+                                            whitespace-nowrap
                                         '
+                                        title={ currentlyLoggedInUser.data.email }
                                     >
-                                        satoshi@bitcoin.com
+                                        { currentlyLoggedInUser.data.email }
                                     </span>
                                 </div>
                             </div>
