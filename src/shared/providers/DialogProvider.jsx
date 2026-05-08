@@ -112,11 +112,11 @@ export function DialogProvider({ children }) {
 // DialogComponent - a reusable component to render a dialog with a title,
 // description, and content, which can be used for stateful dialogs 
 // that require more complex interactions and state management within the dialog itself
-export function DialogComponent({ title, description, content, ...props }) {
+export function DialogComponent({ title, description, children, ...props }) {
     return (
         <Dialog.Root {...props}>
             <Dialog.Portal>
-                <Dialog.Overlay className="fixed inset-0 bg-black/75" />
+                <Dialog.Overlay className="fixed inset-0 bg-black/75 z-1" />
                 <Dialog.Content 
                     className="
                         w-[90vw] 
@@ -127,7 +127,8 @@ export function DialogComponent({ title, description, content, ...props }) {
                         top-1/2 
                         max-h-[85vh] 
                         -translate-x-1/2 -translate-y-1/2
-                        rounded-lg p-6 
+                        rounded-lg p-6
+                        z-1
                     "
                 >
                     <Dialog.Title
@@ -151,7 +152,7 @@ export function DialogComponent({ title, description, content, ...props }) {
                         { description } 
                     </Dialog.Description>
 
-                    { content }
+                    { children }
 
                     <Dialog.Close
                         className="

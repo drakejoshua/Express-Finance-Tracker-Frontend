@@ -9,7 +9,7 @@ import EmailField from '../../../shared/components/EmailField'
 import PasswordField from '../../../shared/components/PasswordField'
 import Button from '../../../shared/components/Button'
 import { useAuthProvider } from '../../../shared/providers/AuthProvider'
-import { useDialogProvider } from '../../../shared/providers/DialogProvider.jsx'
+import { DialogComponent } from '../../../shared/providers/DialogProvider.jsx'
 import { useToastProvider } from '../../../shared/providers/ToastProvider.jsx'
 
 export default function Profile() {
@@ -24,11 +24,13 @@ export default function Profile() {
         preferredCurrency, 
         setPreferredCurrency 
     ] = useState(currentlyLoggedInUser.data.preferred_currency)
+    
 
     const [ isUpdating, setIsUpdating ] = useState(false)
+    
 
 
-    async function handleProfileUpdate(e) {
+    async function handleProfileFormUpdate(e) {
         // prevent default form submission behavior
         e.preventDefault()
 
@@ -63,6 +65,28 @@ export default function Profile() {
         // an update attempt for security reasons
         setPassword("")
     }
+
+    async function handleDeleteAvatar() {
+        setIsUpdating(true)
+
+        const { status, error } = await updateProfileInfo({}, true)
+
+        if ( status === "success" ) {
+            showToast({
+                type: "success",
+                message: "Profile photo deleted successfully!"
+            })
+        } else {
+            showToast({
+                type: "error",
+                message: error.message || "An error occurred while deleting your profile photo. Please try again."
+            })
+        }
+
+        setIsUpdating(false)
+    }
+
+    
 
     return (
         <div>
@@ -113,7 +137,7 @@ export default function Profile() {
                             <span> Update Avatar </span>
                         </DropdownMenu.Item>
 
-                        <DropdownMenu.Item>
+                        <DropdownMenu.Item onSelect={ handleDeleteAvatar }>
                             <FaTrash/>
                             <span> Delete Avatar </span>
                         </DropdownMenu.Item>
@@ -132,7 +156,7 @@ export default function Profile() {
                     md:w-3/4
                     w-full
                 '
-                onSubmit={ handleProfileUpdate }
+                onSubmit={ handleProfileFormUpdate }
             >
                 {/* name input */}
                 <TextField
@@ -305,9 +329,8 @@ export default function Profile() {
                     { isUpdating ? "Updating profile..." : "Update Profile" }
                 </Button>
             </Form.Root>
-        
-            {/* outlet for the asset details route */}
-            <Outlet />
+
+            
         </div>
     )
 }

@@ -11,6 +11,8 @@ export default function UserAvatar({ src, alt, fallback, className, ...props }) 
                 items-center
                 justify-center
                 select-none
+                border-2
+                border-green-600 dark:border-green-300
                 ${className || ''}
             `}
             {...props}

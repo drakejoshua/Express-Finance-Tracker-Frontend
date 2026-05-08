@@ -202,7 +202,7 @@ export function AuthProvider({ children }) {
         }
     }
 
-    async function updateProfileInfo( updateData ) {
+    async function updateProfileInfo( updateData, deletePhoto = false ) {
         try {
             // create form data for profile update request
             const updateFormData = new FormData()
@@ -225,7 +225,7 @@ export function AuthProvider({ children }) {
 
             // check if there are any fields to update before making 
             // the request
-            if ( Array.from( updateFormData.keys() ).length === 0 ) {
+            if ( Array.from( updateFormData.keys() ).length === 0 && !deletePhoto ) {
                 return { 
                     status: "error",
                     error: {
@@ -236,7 +236,7 @@ export function AuthProvider({ children }) {
             }
 
             // make profile update request to backend
-            const resp = await fetch( `${ backendUrl }/auth/update`, {
+            const resp = await fetch( `${ backendUrl }/auth/update?delete_photo=${ deletePhoto }`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${ currentlyLoggedInUser.data.access_token }`
