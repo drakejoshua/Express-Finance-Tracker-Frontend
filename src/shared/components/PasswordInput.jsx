@@ -27,8 +27,6 @@ const PasswordInput = React.forwardRef( function( { className, ...props }, ref )
                     grow
                     focus:outline-none
                 '
-                required
-                minLength={6}
                 { ...props }
                 ref={ ref }
             />

@@ -202,6 +202,89 @@ export function AuthProvider({ children }) {
         }
     }
 
+    async function updateProfileInfo( updateData ) {
+        try {
+            // create form data for profile update request
+            const updateFormData = new FormData()
+
+            // append updated fields to form data ( check if they're 
+            // not the same as the current values in currently logged 
+            // in user data to avoid unnecessary updates )
+            for ( const key in updateData ) {
+                if ( key !== "password" ) {
+                    if ( updateData[ key ] !== currentlyLoggedInUser.data[ key ] ) {
+                        updateFormData.append( key, updateData[ key ] )
+                    }
+                } else {
+                    // for password field, we check if it's not an empty string before appending it to the form data, since an empty string indicates that the user doesn't want to update their password
+                    if ( updateData.password.trim() !== "" ) {
+                        updateFormData.append( 'password', updateData.password )
+                    }
+                }
+            }
+
+            // check if there are any fields to update before making 
+            // the request
+            if ( Array.from( updateFormData.keys() ).length === 0 ) {
+                return { 
+                    status: "error",
+                    error: {
+                        code: ERROR_CODES.NO_PROFILE_CHANGES,
+                        message: "No updated fields provided. Please make changes to your profile before submitting an update."
+                    }
+                }
+            }
+
+            // make profile update request to backend
+            const resp = await fetch( `${ backendUrl }/auth/update`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${ currentlyLoggedInUser.data.access_token }`
+                },
+                body: updateFormData,
+                credentials: 'include' // include cookies for refresh token
+            } )
+
+            // check if response is successful and handle accordingly
+            if ( !resp.ok ) {
+                if ( resp.status === 401 ) {
+                    // if response status of 401 indicates an authentication error, it can't be parsed as json, so we return a standardized error response with a specific error code for authentication errors in this case
+                    return { 
+                        status: "error", 
+                        error: {
+                            code: ERROR_CODES.INVALID_AUTHORIZATION_TOKEN,
+                            message: "Invalid or expired authorization data. Please log in again."
+                        }
+                    }
+                } else {
+                    // if response is not ok and it's not because of a 401 status, attempt to parse error details from response body and return them
+                    const { status, error } = await resp.json()
+
+                    return { status, error }
+                }
+            } else {
+                // if response is ok, parse updated user data from response body, update currently logged in user state, and return success status and data
+                const { status, data } = await resp.json()
+
+                setCurrentlyLoggedInUser( { status: "loaded", data: data.user } )
+
+                return { status, data }
+            }
+        } catch ( error ) {
+            // if an unexpected error occurs during the process
+            // (e.g. network error, frontend bug), return a standardized error
+            // response with a generic message and a specific error code for
+            // frontend errors
+            return { 
+                status: "error", 
+                error: {
+                    code: ERROR_CODES.FRONTEND_ERROR,
+                    message: error.message || "An unexpected error occurred while updating user profile. Please try again later."
+                }
+            }
+        }
+    }
+
     async function getCurrentUser( accessToken ) {
         try {
             // make request to backend to get current user data with access token
@@ -382,9 +465,13 @@ export function AuthProvider({ children }) {
 
     // function to handle changes to currently logged in user state
     // from pages using refreshOn401() through their actions or loaders
-    // and can't access the context of the AuthProvider. This function
+    // that can't access the context of the AuthProvider. This function
     // sanitizes the value of the incoming changes before updating state 
-    // in the AuthProvider's context
+    // in the AuthProvider's context. This makes it possible for pages 
+    // that use refreshOn401() to trigger updates to the currently logged 
+    // in user state in the AuthProvider's context (e.g. updating the access
+    // token if refresh is needed) even though they can't directly 
+    // access the context of the AuthProvider.
     function processCurrentUserChange( incomingChanges ) {
         if ( incomingChanges.status ) {
             setCurrentlyLoggedInUser( incomingChanges )
@@ -415,6 +502,15 @@ export function AuthProvider({ children }) {
                 currentlyLoggedInUser.status === "logout" 
             ) {
                 localStorage.removeItem( 'greenfinance-token' )
+
+                // clear any existing silent refresh timers since user 
+                // is logging out or there is an error with their 
+                // authentication data, so we don't want to attempt to 
+                // refresh the access token anymore until they log in 
+                // again
+                if ( silentRefreshRef.current ) {
+                    clearTimeout( silentRefreshRef.current )
+                }
             }
         }
     }, [ currentlyLoggedInUser ] )
@@ -427,7 +523,8 @@ export function AuthProvider({ children }) {
                 logIn,
                 logOut,
                 getCurrentUser,
-                processCurrentUserChange
+                processCurrentUserChange,
+                updateProfileInfo
             }}
         >
             { children }

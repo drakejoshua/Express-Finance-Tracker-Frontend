@@ -1,17 +1,68 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Outlet } from 'react-router-dom'
 import RouteHeading from '../../../shared/components/RouteHeading'
 import { Avatar, DropdownMenu, Form, ToggleGroup } from 'radix-ui'
 import UserAvatar from '../../../shared/components/UserAvatar'
-import bitcoinImage from '../../../assets/Design/bitcoin.png'
 import { FaCediSign, FaDollarSign, FaEuroSign, FaFrancSign, FaNairaSign, FaPen, FaRupeeSign, FaSterlingSign, FaTrash, FaYenSign } from 'react-icons/fa6'
 import TextField from '../../../shared/components/TextField'
 import EmailField from '../../../shared/components/EmailField'
 import PasswordField from '../../../shared/components/PasswordField'
 import Button from '../../../shared/components/Button'
+import { useAuthProvider } from '../../../shared/providers/AuthProvider'
+import { useDialogProvider } from '../../../shared/providers/DialogProvider.jsx'
+import { useToastProvider } from '../../../shared/providers/ToastProvider.jsx'
 
 export default function Profile() {
     const isMobileOrTablet = window.innerWidth < 1024;
+    const { currentlyLoggedInUser, updateProfileInfo } = useAuthProvider()
+    const { showToast } = useToastProvider()
+
+    const [ name, setName ] = useState(currentlyLoggedInUser.data.name)
+    const [ email, setEmail ] = useState(currentlyLoggedInUser.data.email)
+    const [ password, setPassword ] = useState("")
+    const [ 
+        preferredCurrency, 
+        setPreferredCurrency 
+    ] = useState(currentlyLoggedInUser.data.preferred_currency)
+
+    const [ isUpdating, setIsUpdating ] = useState(false)
+
+
+    async function handleProfileUpdate(e) {
+        // prevent default form submission behavior
+        e.preventDefault()
+
+        // set updating state to true to disable the form and 
+        // show a loading indicator if needed
+        setIsUpdating(true)
+
+        const { status, error } = await updateProfileInfo({
+            name,
+            email,
+            password,
+            preferred_currency: preferredCurrency
+        })
+
+        if ( status === "success" ) {
+            showToast({
+                type: "success",
+                message: "Profile updated successfully!"
+            })
+        } else {
+            showToast({
+                type: "error",
+                message: error.message || "An error occurred while updating your profile. Please try again."
+            })
+        }
+
+        // reset updating state to re-enable the form after the 
+        // update process is complete or an error has been handled
+        setIsUpdating(false)
+
+        // optionally, you can also reset the password field after 
+        // an update attempt for security reasons
+        setPassword("")
+    }
 
     return (
         <div>
@@ -24,9 +75,12 @@ export default function Profile() {
             <DropdownMenu.Root>
                 <DropdownMenu.Trigger asChild>
                     <UserAvatar
-                        src={ bitcoinImage }
-                        alt="user avatar"
-                        fallback="JD"
+                        src={ currentlyLoggedInUser.data.profile_photo }
+                        alt="user profile photo"
+                        fallback={ 
+                            currentlyLoggedInUser.data.name.split(" ")
+                            .map( name => name[0] ).join("") 
+                        }
                         className="
                             mt-12
                             w-48
@@ -78,13 +132,16 @@ export default function Profile() {
                     md:w-3/4
                     w-full
                 '
+                onSubmit={ handleProfileUpdate }
             >
                 {/* name input */}
                 <TextField
                     label="Name"
                     minLength={3}
                     required
-                    placeholder='Enter your name'
+                    placeholder='Enter new name'
+                    value={ name }
+                    onChange={ (e) => setName(e.target.value) }
                     emptyValidationMessage='Your name is required for your account'
                     tooShortValidationMessage='Please enter a valid name'
                 />
@@ -94,7 +151,20 @@ export default function Profile() {
                     name={"email"}
                     label={"Email"}
                     required
-                    placeholder={"Enter your email"}
+                    value={ email }
+                    onChange={ (e) => setEmail(e.target.value) }
+                    placeholder={"Enter new email"}
+                    readOnly={ currentlyLoggedInUser.data.provider !== "local" }
+                    onClick={ 
+                        () => {
+                            if ( currentlyLoggedInUser.data.provider !== "local" ) {
+                                showToast({
+                                    type: "info",
+                                    message: "Email updates are currently disabled for users authenticated via Google."
+                                })
+                            }
+                        }
+                    }
                     emptyValidationMessage={"Please enter an email address."}
                     invalidValidationMessage={"Please enter a valid email address."}
                 />
@@ -103,8 +173,20 @@ export default function Profile() {
                 <PasswordField
                     name={"password"}
                     label={"Password"}
-                    required
-                    placeholder={"Enter your password"}
+                    value={ password }
+                    onChange={ (e) => setPassword(e.target.value) }
+                    readOnly={ currentlyLoggedInUser.data.provider !== "local" }
+                    onClick={ 
+                        () => {
+                            if ( currentlyLoggedInUser.data.provider !== "local" ) {
+                                showToast({
+                                    type: "info",
+                                    message: "Password updates are currently disabled for users authenticated via Google."
+                                })
+                            }
+                        }
+                    }
+                    placeholder={"Enter new password"}
                     emptyValidationMessage={"Please enter a password. Minimum 6 characters."}
                     invalidValidationMessage={"Your password should be at least 6 characters long."}
                 />
@@ -141,9 +223,10 @@ export default function Profile() {
                                 *:data-[state=on]:bg-gray-600 dark:*:data-[state=on]:bg-gray-200
                                 *:data-[state=on]:text-white dark:*:data-[state=on]:text-gray-900
                             '
-                            defaultValue='usd'
+                            value={ preferredCurrency }
+                            onValueChange={ (value) => { if (value) setPreferredCurrency(value) } }
                         >
-                            <ToggleGroup.Item value='usd'>
+                            <ToggleGroup.Item value='USD'>
                                 <FaDollarSign />
 
                                 <span>
@@ -151,7 +234,7 @@ export default function Profile() {
                                 </span>
                             </ToggleGroup.Item>
                             
-                            <ToggleGroup.Item value='gbp'>
+                            <ToggleGroup.Item value='GBP'>
                                 <FaSterlingSign />
 
                                 <span>
@@ -159,7 +242,7 @@ export default function Profile() {
                                 </span>
                             </ToggleGroup.Item>
                             
-                            <ToggleGroup.Item value='eur'>
+                            <ToggleGroup.Item value='EUR'>
                                 <FaEuroSign />
 
                                 <span>
@@ -167,7 +250,7 @@ export default function Profile() {
                                 </span>
                             </ToggleGroup.Item>
                             
-                            <ToggleGroup.Item value='jpy'>
+                            <ToggleGroup.Item value='JPY'>
                                 <FaYenSign />
 
                                 <span>
@@ -175,7 +258,7 @@ export default function Profile() {
                                 </span>
                             </ToggleGroup.Item>
                             
-                            <ToggleGroup.Item value='ghs'>
+                            <ToggleGroup.Item value='GHS'>
                                 <FaCediSign />
 
                                 <span>
@@ -183,7 +266,7 @@ export default function Profile() {
                                 </span>
                             </ToggleGroup.Item>
                             
-                            <ToggleGroup.Item value='chf'>
+                            <ToggleGroup.Item value='CHF'>
                                 <FaFrancSign />
 
                                 <span>
@@ -191,7 +274,7 @@ export default function Profile() {
                                 </span>
                             </ToggleGroup.Item>
                             
-                            <ToggleGroup.Item value='ngn'>
+                            <ToggleGroup.Item value='NGN'>
                                 <FaNairaSign />
 
                                 <span>
@@ -199,7 +282,7 @@ export default function Profile() {
                                 </span>
                             </ToggleGroup.Item>
                             
-                            <ToggleGroup.Item value='inr'>
+                            <ToggleGroup.Item value='INR'>
                                 <FaRupeeSign />
 
                                 <span>
@@ -211,13 +294,15 @@ export default function Profile() {
                 </Form.Field>
 
                 <Button
-                    className="
+                    className={`
                         mt-6
                         w-fit
                         px-5
-                    "
+                        ${ isUpdating ? "cursor-not-allowed opacity-70" : "" }
+                    `}
+                    disabled={ isUpdating }
                 >
-                    Update Profile
+                    { isUpdating ? "Updating profile..." : "Update Profile" }
                 </Button>
             </Form.Root>
         
