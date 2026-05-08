@@ -24,10 +24,14 @@ export default function Profile() {
         preferredCurrency, 
         setPreferredCurrency 
     ] = useState(currentlyLoggedInUser.data.preferred_currency)
-    
+    const [ newProfilePhoto, setNewProfilePhoto ] = useState(null)
 
     const [ isUpdating, setIsUpdating ] = useState(false)
-    
+    const [ isUpdatingProfilePhoto, setIsUpdatingProfilePhoto ] = useState(false)
+    const [ 
+        isUpdateProfilePhotoDialogOpen, 
+        setIsUpdateProfilePhotoDialogOpen 
+    ] = useState(false)
 
 
     async function handleProfileFormUpdate(e) {
@@ -86,7 +90,44 @@ export default function Profile() {
         setIsUpdating(false)
     }
 
-    
+    function showProfilePhotoDialog() {
+        setIsUpdateProfilePhotoDialogOpen(true)
+    }
+
+    function closeProfilePhotoDialog() {
+        setIsUpdateProfilePhotoDialogOpen(false)
+        setNewProfilePhoto(null)
+    }
+
+    async function handleProfilePhotoUpdate() {
+        if ( !newProfilePhoto ) {
+            showToast({
+                type: "error",
+                message: "Please select a new profile photo to upload."
+            })
+            closeProfilePhotoDialog()
+            return
+        }
+
+        setIsUpdatingProfilePhoto(true)
+
+        const { status, error } = await updateProfileInfo({ photo: newProfilePhoto })
+
+        if ( status === "success" ) {
+            showToast({
+                type: "success",
+                message: "Profile photo updated successfully!"
+            })
+            closeProfilePhotoDialog()
+        } else {
+            showToast({
+                type: "error",
+                message: error.message || "An error occurred while updating your profile photo. Please try again."
+            })
+        }
+
+        setIsUpdatingProfilePhoto(false)
+    }
 
     return (
         <div>
@@ -132,7 +173,7 @@ export default function Profile() {
                             *:hover:text-white
                         '
                     >
-                        <DropdownMenu.Item>
+                        <DropdownMenu.Item onSelect={ showProfilePhotoDialog }>
                             <FaPen/>
                             <span> Update Avatar </span>
                         </DropdownMenu.Item>
@@ -330,7 +371,54 @@ export default function Profile() {
                 </Button>
             </Form.Root>
 
-            
+            {/* profile photo update dialog */}
+            <DialogComponent
+                title={"Update profile photo"}
+                description={"Select a new profile photo to update your current one."}
+                open={ isUpdateProfilePhotoDialogOpen }
+                onOpenChange={ closeProfilePhotoDialog }
+            >
+                { <input 
+                    type="file" 
+                    accept="image/*" 
+                    className='
+                        w-full
+                        bg-gray-700
+                        p-2 px-4
+                        text-white
+                        rounded-md
+                    '
+                    onChange={ ( e ) => setNewProfilePhoto( e.target.files[0] ) }
+                />}
+
+                { newProfilePhoto && <img 
+                    src={ URL.createObjectURL(newProfilePhoto) } 
+                    alt="preview" 
+                    className='
+                        w-full 
+                        h-auto 
+                        mt-4 
+                        rounded-md
+                        border-2
+                        border-gray-600
+                    '
+                />}
+
+                <Button
+                    className={`
+                        w-full
+                        mt-4
+                    `}
+                    onClick={ handleProfilePhotoUpdate }
+                    disabled={ isUpdatingProfilePhoto }
+                >
+                    { 
+                        isUpdatingProfilePhoto ? 
+                        "Updating Profile Photo..." : 
+                        "Upload New Photo" 
+                    }
+                </Button>
+            </DialogComponent>
         </div>
     )
 }
