@@ -472,10 +472,8 @@ export function AuthProvider({ children }) {
     // in user state in the AuthProvider's context (e.g. updating the access
     // token if refresh is needed) even though they can't directly 
     // access the context of the AuthProvider.
-    function processCurrentUserChange( incomingChanges ) {
-        if ( incomingChanges.status ) {
-            setCurrentlyLoggedInUser( incomingChanges )
-        }
+    function processCurrentUserChange( newUserData ) {
+        setCurrentlyLoggedInUser( { status: "loaded", data: newUserData } )
     }
 
     useEffect( function() {
@@ -486,6 +484,15 @@ export function AuthProvider({ children }) {
     }, [] )
 
     useEffect( function() {
+        // clear any existing silent refresh timers since user 
+        // is logging out or there is an error with their 
+        // authentication data, so we don't want to attempt to 
+        // refresh the access token anymore until they log in 
+        // again
+        if ( silentRefreshRef.current ) {
+            clearTimeout( silentRefreshRef.current )
+        }
+        
         // whenever currently logged in user state changes, 
         // update local storage with new access token if user 
         // is logged in, or remove access token from local storage 
@@ -502,15 +509,6 @@ export function AuthProvider({ children }) {
                 currentlyLoggedInUser.status === "logout" 
             ) {
                 localStorage.removeItem( 'greenfinance-token' )
-
-                // clear any existing silent refresh timers since user 
-                // is logging out or there is an error with their 
-                // authentication data, so we don't want to attempt to 
-                // refresh the access token anymore until they log in 
-                // again
-                if ( silentRefreshRef.current ) {
-                    clearTimeout( silentRefreshRef.current )
-                }
             }
         }
     }, [ currentlyLoggedInUser ] )

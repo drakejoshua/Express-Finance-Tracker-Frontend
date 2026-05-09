@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import { Link, NavLink, Outlet, useNavigate } from 'react-router-dom'
+import { Link, NavLink, Outlet, useActionData, useNavigate, useNavigation } from 'react-router-dom'
 import Logo from "../../shared/components/Logo";
 import { FaBars, FaDoorOpen, FaGear, FaListCheck, FaMagnifyingGlass, FaStar, FaUser, FaWallet, FaX } from 'react-icons/fa6';
 import ThemeButton from '../components/ThemeButton';
 import { Avatar, DropdownMenu } from 'radix-ui';
-import bitcoinImage from "../../assets/Design/bitcoin.png"
 import SearchResultItem from '../components/SearchResultItem';
 import AppSearchView from '../components/AppSearchView';
 import UserAvatar from '../components/UserAvatar';
