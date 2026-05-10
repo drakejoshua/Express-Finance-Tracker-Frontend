@@ -10,7 +10,6 @@ import Signup from "./features/auth/pages/Signup";
 import Google from "./features/auth/pages/Google";
 import Dashboard from "./features/dashboard/pages/Dashboard";
 import Portfolio from "./features/portfolio/pages/Portfolio";
-import Watchlist from "./features/watchlist/pages/Watchlist";
 import Profile from "./features/profile/pages/Profile";
 import AssetDetails from "./shared/pages/AssetDetails";
 
@@ -20,6 +19,8 @@ import AppLayout from "./shared/layouts/AppLayout";
 
 // import the loaders and actions for the routes in the application
 import { searchCoinsAction } from "./shared/actions/searchCoinsAction.jsx"
+import { getPortfolioSummaryLoader } from "./features/dashboard/services/getPortfolioSummaryLoader.jsx";
+import RouteError from "./shared/components/RouteError.jsx";
 
 const router = createBrowserRouter([
     {
@@ -60,21 +61,17 @@ const router = createBrowserRouter([
                         path: "details/:symbol",
                         element: <AssetDetails />
                     }
-                ]
+                ],
+                loader: getPortfolioSummaryLoader,
+                errorElement: <RouteError
+                    title="Error loading dashboard"
+                    message="There was an error loading the dashboard. Please try again later."
+                    handleRetry={() => window.location.reload()}
+                />
             },
             {
                 path: "portfolio",
                 element: <Portfolio />,
-                children: [
-                    {
-                        path: "details/:symbol",
-                        element: <AssetDetails />
-                    }
-                ]
-            },
-            {
-                path: "watchlist",
-                element: <Watchlist />,
                 children: [
                     {
                         path: "details/:symbol",

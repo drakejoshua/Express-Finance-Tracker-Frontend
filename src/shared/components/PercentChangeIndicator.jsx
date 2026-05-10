@@ -20,7 +20,6 @@ export default function PercentChangeIndicator({ percentChange, className = "" }
             className={`
                 flex
                 items-center
-                text-sm
                 font-medium
                 ${
                     percentChange < 0 ? 
@@ -30,10 +29,30 @@ export default function PercentChangeIndicator({ percentChange, className = "" }
                 ${ className }
             `}
         >
-            { percentChange < 0 ? <FaCaretDown /> : <FaCaretUp /> }
+            { 
+                percentChange < 0 ? 
+                <FaCaretDown 
+                    className="
+                        text-inherit
+                    "
+                /> : 
+                <FaCaretUp 
+                    className="
+                        text-inherit
+                    "
+                /> 
+            }
 
-            <span>
-                { percentChange >= 0 ? `+${percentChange}` : percentChange }%
+            <span
+                className="
+                    text-inherit
+                "
+            >
+                { 
+                    percentChange >= 0 ? 
+                    `+${percentChange.toFixed(2)}` : 
+                    percentChange.toFixed(2) 
+                }%
             </span>
         </span>
     )

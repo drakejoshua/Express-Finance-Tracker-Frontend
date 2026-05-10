@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Link, NavLink, Outlet, useActionData, useNavigate, useNavigation } from 'react-router-dom'
 import Logo from "../../shared/components/Logo";
 import { FaBars, FaDoorOpen, FaGear, FaListCheck, FaMagnifyingGlass, FaStar, FaUser, FaWallet, FaX } from 'react-icons/fa6';
@@ -9,12 +9,18 @@ import AppSearchView from '../components/AppSearchView';
 import UserAvatar from '../components/UserAvatar';
 import { useAuthProvider } from '../providers/AuthProvider';
 
+const AppDataContext = React.createContext()
+
+export function useAppData() {
+    return useContext( AppDataContext )
+}
 
 export default function AppLayout() {
     const isMobileOrTablet = window.innerWidth < 1024;
     const [isNavOpen, setIsNavOpen] = useState(false);
     const [ isMobileSearchOpen, setIsMobileSearchOpen ] = useState( false )
     const navigateTo = useNavigate()
+    const [ conversionRate, setConversionRate ] = useState( 1 )
 
     const { currentlyLoggedInUser, logOut } = useAuthProvider()
     
@@ -24,7 +30,32 @@ export default function AppLayout() {
         }
     }
 
+    async function fetchCurrencyPrices() {
+        if ( currentlyLoggedInUser.data ) {
+            const userPreferredCurrency = currentlyLoggedInUser.data.preferred_currency
+
+            if ( userPreferredCurrency !== "USD" ) {
+                try {
+                    const resp = await fetch(
+                        `https://v6.exchangerate-api.com/v6/a0c8708d7df677ba6ff0c0f8/pair/USD/${userPreferredCurrency}`
+                    )
+
+                    if ( resp.ok ) {
+                        const { conversion_rate } = await resp.json()
+                        setConversionRate( conversion_rate )
+                    }
+                } catch {
+                    setConversionRate( 1 )
+                }
+            } else {
+                setConversionRate( 1 )
+            }
+        }
+    }
+
     useEffect( function() {
+        fetchCurrencyPrices()
+
         console.log("currently logged in user: ", currentlyLoggedInUser)
         if ( 
             currentlyLoggedInUser.status === "error" ||
@@ -348,27 +379,6 @@ export default function AppLayout() {
                             </NavLink>
                             
                             <NavLink
-                                to="watchlist"
-                                onMouseDown={ handleNavLinkClick }
-                            >
-                                <FaStar className='text-lg shrink-0'/>
-                                <span
-                                    className='
-                                        lg:opacity-0
-                                        lg:w-0
-                                        lg:overflow-hidden
-                                        lg:whitespace-nowrap
-                                        lg:transition-[width]
-                                        lg:duration-300
-                                        lg:group-hover:opacity-100
-                                        lg:group-hover:w-auto
-                                    '
-                                >
-                                    watchlist
-                                </span>
-                            </NavLink>
-                            
-                            <NavLink
                                 to="profile"
                                 onMouseDown={ handleNavLinkClick }
                             >
@@ -403,7 +413,9 @@ export default function AppLayout() {
                             mt-5
                         '
                     >
-                        <Outlet />
+                        <AppDataContext.Provider value={{ conversionRate }}>
+                            <Outlet />
+                        </AppDataContext.Provider>
                     </main>
                 </div>
             </div>

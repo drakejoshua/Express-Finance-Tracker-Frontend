@@ -87,13 +87,10 @@ export async function searchCoinsAction({ request }) {
                     // results and the new user data with the refreshed 
                     // access token to update the user's session through
                     // invoking route
-                    const retryData = await retryResponse.json()
+                    const { status, data: retryData } = await retryResponse.json()
 
-                    // return the search results and the new user data 
-                    // with the refreshed access token to update the user's
-                    // session through invoking route
                     return {
-                        status: "success",
+                        status,
                         data: retryData,
                         newUserData: data.user
                     }

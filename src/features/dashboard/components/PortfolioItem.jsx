@@ -1,12 +1,20 @@
 import { FaCaretDown, FaCaretUp } from 'react-icons/fa6'
+import PercentChangeIndicator from '../../../shared/components/PercentChangeIndicator'
+import { useAuthProvider } from '../../../shared/providers/AuthProvider'
+import { formatAsCurrency } from '../../../shared/utils/formatAsCurrency'
+import { useAppData } from '../../../shared/layouts/AppLayout'
 
 export default function PortfolioItem({ 
+    id,
     image, 
     name,
     percentChange, 
     balanceChange, 
     price
 }) {
+    const { currentlyLoggedInUser } = useAuthProvider()
+    const { conversionRate } = useAppData()
+
     return (
         <div
             className='
@@ -55,25 +63,9 @@ export default function PortfolioItem({
                         { price }
                     </span>
                     
-                    <span
-                        className={`
-                            flex
-                            items-center
-                            text-sm
-                            font-medium
-                            ${
-                                percentChange < 0 ? 
-                                    'text-red-500 dark:text-red-300' : 
-                                    'text-green-700 dark:text-green-300'
-                            }
-                        `}
-                    >
-                        { percentChange < 0 ? <FaCaretDown /> : <FaCaretUp /> }
-
-                        <span>
-                            { percentChange >= 0 ? `+${percentChange}` : percentChange }%
-                        </span>
-                    </span>
+                    <PercentChangeIndicator
+                        percentChange={ percentChange }
+                    />
                 </span>
             </div>
 
@@ -88,7 +80,12 @@ export default function PortfolioItem({
                     }
                 `}
             >
-                { percentChange < 0 ? '-' : '+' }${ balanceChange }
+                { percentChange < 0 ? '-' : '+' }{ 
+                    formatAsCurrency( 
+                        Math.abs(balanceChange) * conversionRate, 
+                        currentlyLoggedInUser.data.preferred_currency
+                    ) 
+                }
             </span>
         </div>
     )
