@@ -14,7 +14,11 @@
 // import component dependencies
 import { FaCaretDown, FaCaretUp } from "react-icons/fa6";
 
-export default function PercentChangeIndicator({ percentChange, className = "" }) {
+export default function PercentChangeIndicator({ 
+    percentChange, 
+    className = "",
+    isThemed = true
+ }) {
     return (
         <span
             className={`
@@ -23,31 +27,19 @@ export default function PercentChangeIndicator({ percentChange, className = "" }
                 font-medium
                 ${
                     percentChange < 0 ? 
-                        'text-red-600 dark:text-red-300' : 
-                        'text-green-700 dark:text-green-300'
+                        ( isThemed ? 'text-red-600 dark:text-red-300' : 'text-red-600' ) :
+                        ( isThemed ? 'text-green-600 dark:text-green-300' : 'text-green-600' )
                 }
                 ${ className }
             `}
         >
             { 
                 percentChange < 0 ? 
-                <FaCaretDown 
-                    className="
-                        text-inherit
-                    "
-                /> : 
-                <FaCaretUp 
-                    className="
-                        text-inherit
-                    "
-                /> 
+                <FaCaretDown /> : 
+                <FaCaretUp /> 
             }
 
-            <span
-                className="
-                    text-inherit
-                "
-            >
+            <span>
                 { 
                     percentChange >= 0 ? 
                     `+${percentChange.toFixed(2)}` : 

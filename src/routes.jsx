@@ -21,6 +21,7 @@ import AppLayout from "./shared/layouts/AppLayout";
 import { searchCoinsAction } from "./shared/actions/searchCoinsAction.jsx"
 import { getPortfolioSummaryLoader } from "./features/dashboard/services/getPortfolioSummaryLoader.jsx";
 import RouteError from "./shared/components/RouteError.jsx";
+import { getCoinDetailsLoader } from "./shared/loaders/getCoinDetailsLoader.jsx";
 
 const router = createBrowserRouter([
     {
@@ -59,7 +60,8 @@ const router = createBrowserRouter([
                 children: [
                     {
                         path: "details/:symbol",
-                        element: <AssetDetails />
+                        element: <AssetDetails />,
+                        loader: getCoinDetailsLoader
                     }
                 ],
                 loader: getPortfolioSummaryLoader,
@@ -75,19 +77,14 @@ const router = createBrowserRouter([
                 children: [
                     {
                         path: "details/:symbol",
-                        element: <AssetDetails />
+                        element: <AssetDetails />,
+                        loader: getCoinDetailsLoader
                     }
                 ]
             },
             {
                 path: "profile",
-                element: <Profile />,
-                children: [
-                    {
-                        path: "details/:symbol",
-                        element: <AssetDetails />
-                    }
-                ]
+                element: <Profile />
             }
         ],
         action: searchCoinsAction
