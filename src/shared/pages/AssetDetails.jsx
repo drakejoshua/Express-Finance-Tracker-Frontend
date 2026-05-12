@@ -143,6 +143,10 @@ export default function AssetDetails() {
                                 <Dialog.Title>
                                     loading coin details...
                                 </Dialog.Title>
+
+                                <Dialog.Description>
+                                    Please wait while we fetch the latest details for this coin.
+                                </Dialog.Description>
                             </VisuallyHidden.Root>
 
 

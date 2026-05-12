@@ -34,6 +34,7 @@ export default function WatchlistCard({
                         w-6
                         h-6
                         object-cover
+                        rounded-full
                     "
         />
 
@@ -77,7 +78,7 @@ export default function WatchlistCard({
                         "
             title={price}
           >
-            ${price}
+            {price}
           </span>
 
           {/* coin % price change */}

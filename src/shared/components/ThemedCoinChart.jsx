@@ -82,6 +82,9 @@ export default function ThemedCoinChart({ data = [], isInteractive = false }) {
                     colors: [( theme == "light" ? "#b9f8cf" : colors.white )],
                     opacity: 0.2,
                 },
+                stroke: {
+                    width: 2.5
+                },
                 // set the stroke color based on the current theme ( light or dark )
                 colors: [
                     ( theme == "light" ? colors.green[400] : colors.white ),

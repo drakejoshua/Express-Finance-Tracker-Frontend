@@ -23,6 +23,7 @@ import RouteError from "./shared/components/RouteError.jsx";
 import { getCoinDetailsLoader } from "./shared/loaders/getCoinDetailsLoader.jsx";
 import Watchlist from "./features/watchlist/pages/Watchlist.jsx";
 import { watchlistAction } from "./features/watchlist/services/watchlistAction.jsx";
+import { getWatchlistDataLoader } from "./features/watchlist/services/getWatchlistDataLoader.jsx";
 
 const router = createBrowserRouter([
     {
@@ -54,24 +55,21 @@ const router = createBrowserRouter([
             {
                 index: true,
                 element: <Watchlist />,
-                action: watchlistAction
+                action: watchlistAction,
+                loader: getWatchlistDataLoader,
             },
             {
                 path: "dashboard",
                 element: <Watchlist />,
                 action: watchlistAction,
+                loader: getWatchlistDataLoader,
                 children: [
                     {
                         path: "details/:symbol",
                         element: <AssetDetails />,
                         loader: getCoinDetailsLoader
                     }
-                ],
-                errorElement: <RouteError
-                    title="Error loading dashboard"
-                    message="There was an error loading the dashboard. Please try again later."
-                    handleRetry={() => window.location.reload()}
-                />
+                ]
             },
             {
                 path: "profile",

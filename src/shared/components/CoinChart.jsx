@@ -77,6 +77,9 @@ export default function CoinChart({ data = [], isInteractive = false }) {
                     colors: ["#b9f8cf"],
                     opacity: 0.2,
                 },
+                stroke: {
+                    width: 2.5
+                },
                 // set the stroke color based on the current theme ( light or dark )
                 colors: [ colors.green[400] ]
             }}
