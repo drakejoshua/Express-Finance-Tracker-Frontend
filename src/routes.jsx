@@ -19,9 +19,10 @@ import AppLayout from "./shared/layouts/AppLayout";
 
 // import the loaders and actions for the routes in the application
 import { searchCoinsAction } from "./shared/actions/searchCoinsAction.jsx"
-import { getPortfolioSummaryLoader } from "./features/dashboard/services/getPortfolioSummaryLoader.jsx";
 import RouteError from "./shared/components/RouteError.jsx";
 import { getCoinDetailsLoader } from "./shared/loaders/getCoinDetailsLoader.jsx";
+import Watchlist from "./features/watchlist/pages/Watchlist.jsx";
+import { watchlistAction } from "./features/watchlist/services/watchlistAction.jsx";
 
 const router = createBrowserRouter([
     {
@@ -52,11 +53,13 @@ const router = createBrowserRouter([
         children: [
             {
                 index: true,
-                element: <Dashboard />,
+                element: <Watchlist />,
+                action: watchlistAction
             },
             {
                 path: "dashboard",
-                element: <Dashboard />,
+                element: <Watchlist />,
+                action: watchlistAction,
                 children: [
                     {
                         path: "details/:symbol",
@@ -64,23 +67,11 @@ const router = createBrowserRouter([
                         loader: getCoinDetailsLoader
                     }
                 ],
-                loader: getPortfolioSummaryLoader,
                 errorElement: <RouteError
                     title="Error loading dashboard"
                     message="There was an error loading the dashboard. Please try again later."
                     handleRetry={() => window.location.reload()}
                 />
-            },
-            {
-                path: "portfolio",
-                element: <Portfolio />,
-                children: [
-                    {
-                        path: "details/:symbol",
-                        element: <AssetDetails />,
-                        loader: getCoinDetailsLoader
-                    }
-                ]
             },
             {
                 path: "profile",

@@ -57,106 +57,13 @@ export default function Watchlist() {
             <div>
                 {/* watchlist heading */}
                 <RouteHeading>
-                    Your watchlist
+                    Welcome, Joshua
                 </RouteHeading>
-
-                {/* alerts */}
-                <div
-                    className='
-                        w-full
-                        bg-gray-100 dark:bg-gray-700 
-                        mt-8
-                        py-6 px-5 lg:p-8
-                        rounded-lg
-                    '
-                >
-                    {/* heading */}
-                    <h2
-                        className="
-                            dark:text-white
-                            text-xl
-                            font-medium
-                        "
-                    >
-                        Created Coin Alerts
-                    </h2>
-
-                    {/* alert list and items */}
-                    <div
-                        className='
-                            grid
-                            grid-cols-1
-                            md:grid-cols-2
-                            lg:grid-cols-3
-                            gap-x-6 gap-y-1
-                            mt-2 lg:mt-4
-                        '
-                    >
-                        <ThemedAlertItem
-                            imageSrc={ bitcoinImage }
-                            title="Bitcoin Alert"
-                            condition="below"
-                            targetPrice="$79,000"
-                            handleEdit={ () => {} }
-                            handleDelete={ () => {} }
-                        />
-                        
-                        <ThemedAlertItem
-                            imageSrc={ bitcoinImage }
-                            title="Bitcoin Alert"
-                            condition="below"
-                            targetPrice="$79,000"
-                            handleEdit={ () => {} }
-                            handleDelete={ () => {} }
-                        />
-                        
-                        <ThemedAlertItem
-                            imageSrc={ bitcoinImage }
-                            title="Bitcoin Alert"
-                            condition="below"
-                            targetPrice="$79,000"
-                            handleEdit={ () => {} }
-                            handleDelete={ () => {} }
-                        />
-                        
-                        <ThemedAlertItem
-                            imageSrc={ bitcoinImage }
-                            title="Bitcoin Alert"
-                            condition="below"
-                            targetPrice="$79,000"
-                            handleEdit={ () => {} }
-                            handleDelete={ () => {} }
-                        />
-                        
-                        <ThemedAlertItem
-                            imageSrc={ bitcoinImage }
-                            title="Bitcoin Alert"
-                            condition="below"
-                            targetPrice="$79,000"
-                            handleEdit={ () => {} }
-                            handleDelete={ () => {} }
-                        />
-                        
-                        <ThemedAlertItem
-                            imageSrc={ bitcoinImage }
-                            title="Bitcoin Alert"
-                            condition="below"
-                            targetPrice="$79,000"
-                            handleEdit={ () => {} }
-                            handleDelete={ () => {} }
-                        />
-                    </div>
-
-                    {/* load more button for alert item pagination */}
-                    { false && <LoadMoreButton 
-                        className={"mt-4"}
-                    />}
-                </div>
 
                 {/* watchlist items */}
                 <div
                     className='
-                        mt-14
+                        mt-8
                         grid
                         grid-cols-1
                         md:grid-cols-2

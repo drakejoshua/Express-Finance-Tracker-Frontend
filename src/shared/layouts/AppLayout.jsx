@@ -338,7 +338,7 @@ export default function AppLayout() {
                                 to="dashboard"
                                 onMouseDown={ handleNavLinkClick }
                             >
-                                <FaListCheck className='text-lg shrink-0'/>
+                                <FaStar className='text-lg shrink-0'/>
                                 <span
                                     className='
                                         lg:opacity-0
@@ -352,29 +352,6 @@ export default function AppLayout() {
                                     '
                                 >
                                     dashboard
-                                </span>
-                            </NavLink>
-                            
-                            <NavLink
-                                to="portfolio"
-                                onMouseDown={ handleNavLinkClick }
-                            >
-                                <FaWallet 
-                                    className='text-lg shrink-0'
-                                />
-                                <span
-                                    className='
-                                        lg:opacity-0
-                                        lg:w-0
-                                        lg:overflow-hidden
-                                        lg:whitespace-nowrap
-                                        lg:transition-[width]
-                                        lg:duration-300
-                                        lg:group-hover:opacity-100
-                                        lg:group-hover:w-full
-                                    '
-                                >
-                                    portfolio
                                 </span>
                             </NavLink>
                             

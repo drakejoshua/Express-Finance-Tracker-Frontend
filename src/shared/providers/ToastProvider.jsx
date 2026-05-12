@@ -138,6 +138,7 @@ export function ToastProvider({ children }) {
                         right-4 
                         w-4/5 
                         max-w-72.5
+                        z-50
                     "
                 />
             </Toast.Provider>

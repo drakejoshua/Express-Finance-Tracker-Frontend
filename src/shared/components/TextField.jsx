@@ -14,11 +14,12 @@ export default function TextField({
 }) {
     return (
         <Form.Field
-            className='
+            className={`
                 flex
                 flex-col
                 gap-1.5
-            '
+                ${ className }
+            `}
         >
             <Form.Label
                 className='
@@ -43,7 +44,6 @@ export default function TextField({
                         dark:bg-gray-200
                         dark:placeholder:text-gray-500
                         dark:text-gray-900
-                        ${ className }
                     `}
                     { ...props }
                 />

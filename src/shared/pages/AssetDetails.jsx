@@ -1,4 +1,4 @@
-import { Dialog, ToggleGroup, VisuallyHidden } from "radix-ui"
+import { Dialog, ToggleGroup, VisuallyHidden, Form } from "radix-ui"
 import { 
     FaArrowDown, 
     FaArrowRotateLeft, 
@@ -6,6 +6,7 @@ import {
     FaCaretDown, 
     FaPen, 
     FaPlus, 
+    FaSpinner, 
     FaStar, 
     FaTrash, 
     FaTriangleExclamation, 
@@ -13,7 +14,7 @@ import {
 } from "react-icons/fa6"
 import bitcoinImage from "../../assets/Design/bitcoin.png"
 import Button from "../components/Button"
-import { useLoaderData, useNavigate, Await } from "react-router-dom"
+import { useLoaderData, useNavigate, Await, useFetcher, useActionData, useSubmit, useNavigation, useRevalidator } from "react-router-dom"
 import AltButton from "../components/AltButton"
 import AlertItem from "../components/AlertItem"
 import RouteError from "../components/RouteError"
@@ -23,25 +24,100 @@ import { formatAsCurrency } from "../utils/formatAsCurrency"
 import { useAuthProvider } from "../providers/AuthProvider.jsx"
 import { useAppData } from "../layouts/AppLayout"
 import PercentChangeIndicator from "../components/PercentChangeIndicator"
+import { DialogComponent } from "../providers/DialogProvider.jsx"
+import TextField from "../components/TextField.jsx"
+import { useToastProvider } from "../providers/ToastProvider.jsx"
+import { useEffect } from "react"
 
 export default function AssetDetails() {
     const navigateTo = useNavigate()
 
     const { assetDetails } = useLoaderData()
 
+    const fetcher = useFetcher()
+    const state = fetcher.state
+    const { status, error, method } = fetcher.data || {}
+
+    const revalidator = useRevalidator();
+
     const { currentlyLoggedInUser } = useAuthProvider()
     const { conversionRate } = useAppData()
+
+    const { showToast } = useToastProvider()
+
+    function handleAddToWatchlist( coinId ) {
+        fetcher.submit(
+            { coinId }, 
+            { 
+                method: "post", 
+                action: "/app/dashboard" 
+            } 
+        )
+    }
+
+    function handleRemoveFromWatchlist( coinId ) {
+        fetcher.submit(
+            { coinId },
+            {
+                method: "delete",
+                action: "/app/dashboard"
+            }
+        )
+    }
+
+    function revalidateAssetDetails() {
+        revalidator.revalidate()
+    }
+
+    function closeAssetDetails() {
+        const windowPath = window.location.pathname
+        const segments = windowPath.split("/").filter(Boolean)
+
+        // remove /details/:symbol from the end of the path
+        if ( segments.length > 2 && segments[segments.length - 2] === "details" ) {
+            const newPath = "/" + segments.slice(0, -2).join("/")
+            navigateTo( newPath )
+        } else {
+            navigateTo( "/" )
+        }
+    }
+
+    useEffect(() => {
+        if ( status === "success" ) {
+            if ( method === "POST" ) {
+                showToast({
+                    type: "success",
+                    message: "Coin added to watchlist successfully!"
+                })
+            } else if ( method === "DELETE" ) {
+                showToast({
+                    type: "success",
+                    message: "Coin removed from watchlist successfully!"
+                })
+            }
+
+            revalidateAssetDetails()
+        } else if ( status === "error" ) {
+            if ( method === "POST" ) {
+                showToast({
+                    type: "error",
+                    message: error.message || "Failed to add coin to watchlist. Please try again later."
+                })
+            } else if ( method === "DELETE" ) {
+                showToast({
+                    type: "error",
+                    message: error.message || "Failed to remove coin from watchlist. Please try again later."
+                })
+            }
+
+            revalidateAssetDetails()
+        }
+    }, [ status, method ])
 
     return (
         <Dialog.Root 
             defaultOpen={true}
-            onOpenChange={ () => { 
-                if ( window.history.length > 2 ) {
-                    navigateTo( -1 )
-                } else {
-                    navigateTo( "/" )
-                }
-            }}
+            onOpenChange={ closeAssetDetails }
         >
             <Dialog.Portal>
                 <Dialog.Overlay className="fixed inset-0 bg-black/75 z-1" />
@@ -443,386 +519,205 @@ export default function AssetDetails() {
                             }
                         >
                             { ( { data } ) => (
-                                <div
-                                    className="
-                                        pb-16
-                                    "
-                                >
-                                    {/* dialog header */}
-                                    <div 
-                                        className="
-                                            flex
-                                            p-6
-                                            pt-14
-                                            gap-3 gap-y-5 lg:gap-5
-                                            items-center
-                                            border-b-2
-                                            border-gray-300 
-                                            flex-wrap
-                                            justify-start
-                                        "
-                                    >
-                                        {/* asset image */}
-                                        <img 
-                                            src={ data.image } 
-                                            alt="Bitcoin" 
-                                            className="
-                                                w-15 lg:w-20
-                                                h-15 lg:h-20
-                                                object-cover
-                                            "
-                                        />
-
-                                        {/* asset name, price and % change */}
-                                        <div>
-                                            <Dialog.Title
-                                                className="
-                                                    text-2xl
-                                                "
-                                            >
-                                                { data.name }
-                                            </Dialog.Title>
-
-                                            <div
-                                                className="
-                                                    flex
-                                                    items-center
-                                                    gap-2
-                                                "
-                                            >
-                                                <span
-                                                    className="
-                                                        text-xl
-                                                    "
-                                                >
-                                                    {
-                                                        formatAsCurrency(
-                                                            data.price * conversionRate,
-                                                            currentlyLoggedInUser.data.preferred_currency
-                                                        )
-                                                    }
-                                                </span>
-
-                                                <PercentChangeIndicator
-                                                    percentChange={ data.percent_change_24h }
-                                                    isThemed={false}
-                                                />
-                                            </div>
-                                        </div>
-
-                                        {/* dialog actions */}
-                                        <div
-                                            className="
-                                                md:ml-auto
-                                                flex
-                                                items-center
-                                                gap-3
-                                                *:p-3
-                                                *:bg-green-700 *:hover:bg-green-900 
-                                                *:rounded-full
-                                                *:text-white
-                                                *:text-xl
-                                                *:focus:outline-none
-                                            "
-                                        >
-                                            <Button
-                                                className="
-                                                    p-4
-                                                    flex
-                                                    items-center
-                                                    justify-center
-                                                "
-                                            >
-                                                <FaBell/>
-                                            </Button>
-                                            
-                                            <Button
-                                                className="
-                                                    p-4
-                                                    flex
-                                                    items-center
-                                                    justify-center
-                                                "
-                                            >
-                                                <FaPlus/>
-                                            </Button>
-                                        </div>
-                                    </div>
-
-                                    {/* dialog content */}
+                                <>
                                     <div
                                         className="
-                                            p-6
-                                            grid
-                                            grid-cols-1fr lg:grid-cols-[2fr_1fr]
+                                            pb-16
                                         "
                                     >
-                                        {/* asset details and chart */}
-                                        <div
+                                        {/* dialog header */}
+                                        <div 
                                             className="
-                                                lg:pr-8
+                                                flex
+                                                p-6
+                                                pt-14
+                                                gap-3 gap-y-5 lg:gap-5
+                                                items-center
+                                                border-b-2
+                                                border-gray-300 
+                                                flex-wrap
+                                                justify-start
                                             "
                                         >
-                                            {/* asset chart container */}
-                                            <div
+                                            {/* asset image */}
+                                            <img 
+                                                src={ data.image } 
+                                                alt="Bitcoin" 
                                                 className="
-                                                    flex
-                                                    flex-col
-                                                    items-center
+                                                    w-15 lg:w-20
+                                                    h-15 lg:h-20
+                                                    object-cover
+                                                    rounded-full
                                                 "
-                                            >
-                                                {/* chart */}
-                                                <div
+                                            />
+
+                                            {/* asset name, price and % change */}
+                                            <div>
+                                                <Dialog.Title
                                                     className="
-                                                        h-80 lg:h-50
-                                                        rounded-xl
-                                                        w-full
+                                                        text-2xl
                                                     "
                                                 >
-                                                    <CoinChart 
-                                                        data={[
-                                                            {
-                                                                name: data.name,
-                                                                data: data.sparkline.map(
-                                                                    ( price ) => price.toFixed(2)
-                                                                ),
-                                                            }
-                                                        ]}
-                                                        isInteractive={true}
-                                                    />
-                                                </div>
+                                                    { data.name }
+                                                </Dialog.Title>
 
-                                                {/* chart toggle */}
-                                                <ToggleGroup.Root 
-                                                    type="single" 
-                                                    defaultValue={"7D"}
+                                                <div
                                                     className="
                                                         flex
                                                         items-center
-                                                        gap-4
-                                                        flex-wrap
-                                                        justify-center
+                                                        gap-2
                                                     "
                                                 >
-                                                    {["1D","7D","1M","3M","6M","1Y"].map((value) => (
-                                                        <ToggleGroup.Item
-                                                            key={value}
-                                                            value={value}
-                                                            className="
-                                                                py-1 
-                                                                px-3 
-                                                                rounded-xl 
-                                                                text-sm
-                                                                bg-green-100
-                                                                data-[state=on]:bg-green-700
-                                                                data-[state=on]:text-white
-                                                            "
-                                                        >
-                                                            {value}
-                                                        </ToggleGroup.Item>
-                                                    ))}
-                                                </ToggleGroup.Root>
+                                                    <span
+                                                        className="
+                                                            text-xl
+                                                        "
+                                                    >
+                                                        {
+                                                            formatAsCurrency(
+                                                                data.price * conversionRate,
+                                                                currentlyLoggedInUser.data.preferred_currency
+                                                            )
+                                                        }
+                                                    </span>
+
+                                                    <PercentChangeIndicator
+                                                        percentChange={ data.percent_change_24h }
+                                                        isThemed={false}
+                                                    />
+                                                </div>
                                             </div>
 
-                                            {/* asset details */}
-                                            <p
-                                                className="
-                                                    mt-6
-                                                "
-                                            >
-                                                { data.description }
-                                            </p>
-                                        </div>
-
-                                        {/* portfolio details and alerts */}
-                                        <div
-                                            className="
-                                                mt-8 lg:mt-0
-                                            "
-                                        >
-                                            {/* portfolio details */}
-                                            <div>
-                                                <h2
-                                                    className="
-                                                        text-xl
-                                                        capitalize
-                                                    "
-                                                > 
-                                                    your portfolio 
-                                                </h2>
-
-                                                { data.is_portfolio && <>
-                                                    <div
-                                                        className="
-                                                            mt-4
-                                                            flex
-                                                            flex-col
-                                                            capitalize
-                                                        "
-                                                    >
-                                                        <span>
-                                                            number of { data.name }(s):&nbsp;
-                                                            { data.portfolio.units }
-                                                        </span>
-                                                        <span>
-                                                            amount in portfolio:&nbsp;
-                                                            {
-                                                                formatAsCurrency(
-                                                                    data.portfolio.amount * conversionRate,
-                                                                    currentlyLoggedInUser.data.preferred_currency
-                                                                )
-                                                            }
-                                                        </span>
-                                                        <span>
-                                                            total gain/loss:&nbsp;
-                                                            {
-                                                                formatAsCurrency(
-                                                                    data.portfolio.balance_change * conversionRate,
-                                                                    currentlyLoggedInUser.data.preferred_currency
-                                                                )
-                                                            }
-                                                        </span>
-                                                    </div>
-
-                                                    <div
-                                                        className="
-                                                            mt-4
-                                                            flex
-                                                            gap-2
-                                                            flex-wrap
-                                                            items-center
-                                                            *:flex
-                                                            *:gap-2
-                                                            *:items-center
-                                                            *:text-sm
-                                                            *:capitalize
-                                                            *:px-4 *:py-2
-                                                            *:rounded-full
-                                                        "
-                                                    >
-                                                        <Button
-                                                            className="
-                                                                w-min
-                                                                flex
-
-                                                            "
-                                                        >
-                                                            <FaPen />
-                                                            <span
-                                                                className="
-                                                                    w-min
-                                                                    whitespace-nowrap
-                                                                "
-                                                            >
-                                                                edit portfolio
-                                                            </span>
-                                                        </Button>
-                                                        
-                                                        <AltButton
-                                                            className="
-                                                                w-min
-                                                                flex
-                                                                gap-2
-                                                                items-center
-                                                            "
-                                                        >
-                                                            <FaTrash />
-                                                            <span
-                                                                className="
-                                                                    w-min
-                                                                    whitespace-nowrap
-                                                                "
-                                                            >
-                                                                remove asset
-                                                            </span>
-                                                        </AltButton>
-                                                    </div>
-                                                </>}
-
-                                                { 
-                                                    !data.is_portfolio &&
-                                                    <div
-                                                        className="
-                                                            mt-4
-                                                        "
-                                                    >
-                                                        <p
-                                                            className="
-                                                                text-sm
-                                                                text-gray-600
-                                                            "
-                                                        >
-                                                            This asset is not in your portfolio.
-                                                        </p>
-                                                    </div>
-                                                }
-                                            </div>
-                                            
-                                            {/* alerts for assets */}
+                                            {/* dialog actions */}
                                             <div
                                                 className="
-                                                    mt-8
-                                                    max-h-100
+                                                    md:ml-auto
+                                                    flex
+                                                    items-center
+                                                    gap-3
+                                                    *:p-3
+                                                    *:bg-green-700 *:hover:bg-green-900 
+                                                    *:rounded-full
+                                                    *:text-white
+                                                    *:text-xl
+                                                    *:focus:outline-none
                                                 "
                                             >
-                                                <h2
+                                                <Button
                                                     className="
-                                                        capitalize
-                                                        text-xl
+                                                        p-4
+                                                        flex
+                                                        items-center
+                                                        justify-center
                                                     "
-                                                > 
-                                                    alerts 
-                                                </h2>
+                                                    onClick={ 
+                                                        data.is_watchlist ?
+                                                        () => handleRemoveFromWatchlist( data.id ) :
+                                                        () => handleAddToWatchlist( data.id ) 
+                                                    }
+                                                >
+                                                    { 
+                                                        data.is_watchlist ? 
+                                                        (
+                                                            ( state === "loading" || state === "submitting" ) ? 
+                                                            <FaSpinner className="animate-spin" /> : 
+                                                            <FaTrash/> 
+                                                        ) :
+                                                        (
+                                                            ( state === "loading" || state === "submitting" ) ? 
+                                                            <FaSpinner className="animate-spin" /> : 
+                                                            <FaStar/> 
+                                                        )
+                                                    }
+                                                </Button>
+                                            </div>
+                                        </div>
 
-                                                {/* alerts list */}
-                                                {
-                                                    data.has_alerts &&
+                                        {/* dialog content */}
+                                        <div
+                                            className="
+                                                p-6
+                                            "
+                                        >
+                                            {/* asset details and chart */}
+                                            <div
+                                                className="
+                                                    lg:pr-8
+                                                "
+                                            >
+                                                {/* asset chart container */}
+                                                <div
+                                                    className="
+                                                        flex
+                                                        flex-col
+                                                        items-center
+                                                    "
+                                                >
+                                                    {/* chart */}
                                                     <div
                                                         className="
-                                                            mt-2
+                                                            h-80 lg:h-50
+                                                            rounded-xl
+                                                            w-full
                                                         "
                                                     >
-                                                        {/* alert */}
-                                                        {
-                                                            data.alerts.map( alert => {
-                                                                return (
-                                                                    <AlertItem
-                                                                        key={ alert.id } 
-                                                                        id={ alert.id }
-                                                                        imageSrc={ data.image }
-                                                                        title={ alert.title }
-                                                                        condition={ alert.condition }
-                                                                        targetPrice={ alert.target_price }
-                                                                        handleEdit={ () => {} }
-                                                                        handleDelete={ () => {} }
-                                                                    />
-                                                                )
-                                                            })
-                                                        }
+                                                        <CoinChart 
+                                                            data={[
+                                                                {
+                                                                    name: data.name,
+                                                                    data: data.sparkline.map(
+                                                                        ( price ) => price.toFixed(2)
+                                                                    ),
+                                                                }
+                                                            ]}
+                                                            isInteractive={true}
+                                                        />
                                                     </div>
-                                                }
 
-                                                {/* no alerts display message */}
-                                                {
-                                                    !data.has_alerts &&
-                                                    <div
+                                                    {/* chart toggle */}
+                                                    <ToggleGroup.Root 
+                                                        type="single" 
+                                                        defaultValue={"7D"}
                                                         className="
-                                                            mt-4
+                                                            flex
+                                                            items-center
+                                                            gap-4
+                                                            flex-wrap
+                                                            justify-center
                                                         "
                                                     >
-                                                        <p
-                                                            className="
-                                                                text-gray-600
-                                                            "
-                                                        >
-                                                            You don't have any alerts set for this asset.
-                                                        </p>
-                                                    </div>
-                                                }
+                                                        {["1D","7D","1M","3M","6M","1Y"].map((value) => (
+                                                            <ToggleGroup.Item
+                                                                key={value}
+                                                                value={value}
+                                                                className="
+                                                                    py-1 
+                                                                    px-3 
+                                                                    rounded-xl 
+                                                                    text-sm
+                                                                    bg-green-100
+                                                                    data-[state=on]:bg-green-700
+                                                                    data-[state=on]:text-white
+                                                                "
+                                                            >
+                                                                {value}
+                                                            </ToggleGroup.Item>
+                                                        ))}
+                                                    </ToggleGroup.Root>
+                                                </div>
+
+                                                {/* asset details */}
+                                                <p
+                                                    className="
+                                                        mt-6
+                                                    "
+                                                >
+                                                    { data.description }
+                                                </p>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                </>
                             )}
                         </Await>
                     </Suspense>
