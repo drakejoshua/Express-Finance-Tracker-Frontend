@@ -19,7 +19,7 @@ import AltButton from "../components/AltButton"
 import AlertItem from "../components/AlertItem"
 import RouteError from "../components/RouteError"
 import CoinChart from "../components/CoinChart"
-import { Suspense } from "react"
+import { Suspense, useState } from "react"
 import { formatAsCurrency } from "../utils/formatAsCurrency"
 import { useAuthProvider } from "../providers/AuthProvider.jsx"
 import { useAppData } from "../layouts/AppLayout"
@@ -44,6 +44,16 @@ export default function AssetDetails() {
     const { conversionRate } = useAppData()
 
     const { showToast } = useToastProvider()
+
+    const supportedChartRanges = ["1D","7D","1M","3M"]
+    const chartRangeMap = {
+        "1D": 1,
+        "7D": 7,
+        "1M": 30,
+        "3M": 90
+    }
+    let [ loadedChartData, setLoadedChartData ] = useState( null )
+    let [ selectedChartRange, setSelectedChartRange ] = useState( "7D" )
 
     function handleAddToWatchlist( coinId ) {
         fetcher.submit(
@@ -79,6 +89,46 @@ export default function AssetDetails() {
             navigateTo( newPath )
         } else {
             navigateTo( "/" )
+        }
+    }
+
+    async function handleChartRangeUpdate( range, symbol ) {
+        if ( supportedChartRanges.includes( range ) ) {
+            const accessToken = localStorage.getItem("greenfinance-token")
+            const backendUrl = import.meta.env.VITE_BACKEND_URL
+
+            const resp = await fetch(
+                `${ backendUrl }/app/assets/${ symbol }/chart?days=${ chartRangeMap[ range ] }`,
+                {
+                    headers: {
+                        "Authorization": `Bearer ${accessToken}`
+                    }
+                }
+            )
+
+            if ( !resp.ok ) {
+                let errorText = ""
+
+                if ( resp.status === 401 ) {
+                    errorText = "Session expired. Invalid authorization encountered"
+                } else {
+                    const { error } = await resp.json()
+
+                    errorText = error.message
+                }
+
+                return showToast({
+                    type: "error",
+                    message: `There was an error fetching coin chart data. Error: ${ errorText }`
+                })
+            }
+
+            const { data } = await resp.json()
+
+            setLoadedChartData(data.prices.map( ( price ) => price.toFixed(2)))
+            setSelectedChartRange( range )
+        } else if ( range === "7D" ) {
+            setLoadedChartData([])
         }
     }
 
@@ -669,7 +719,7 @@ export default function AssetDetails() {
                                                             data={[
                                                                 {
                                                                     name: data.name,
-                                                                    data: data.sparkline.map(
+                                                                    data: loadedChartData || data.sparkline.map(
                                                                         ( price ) => price.toFixed(2)
                                                                     ),
                                                                 }
@@ -681,7 +731,10 @@ export default function AssetDetails() {
                                                     {/* chart toggle */}
                                                     <ToggleGroup.Root 
                                                         type="single" 
-                                                        defaultValue={"7D"}
+                                                        value={ selectedChartRange }
+                                                        onValueChange={
+                                                            ( value ) => handleChartRangeUpdate( value, data.id )
+                                                        }
                                                         className="
                                                             flex
                                                             items-center
@@ -690,7 +743,7 @@ export default function AssetDetails() {
                                                             justify-center
                                                         "
                                                     >
-                                                        {["1D","7D","1M","3M","6M","1Y"].map((value) => (
+                                                        { supportedChartRanges.map((value) => (
                                                             <ToggleGroup.Item
                                                                 key={value}
                                                                 value={value}
