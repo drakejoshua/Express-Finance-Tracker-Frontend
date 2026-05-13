@@ -2,14 +2,16 @@ import { FaPen, FaTrash } from "react-icons/fa6";
 import Button from "../../../shared/components/Button";
 import PercentChangeIndicator from "../../../shared/components/PercentChangeIndicator";
 import ThemedCoinChart from "../../../shared/components/ThemedCoinChart";
+import { Link } from "react-router-dom";
 
 export default function WatchlistCard({
-  imageSrc,
-  name,
-  price,
-  percentChange,
-  handleDelete,
-  sparklineData,
+    id,
+    imageSrc,
+    name,
+    price,
+    percentChange,
+    handleDelete,
+    sparklineData,
 }) {
   return (
     <div
@@ -39,14 +41,15 @@ export default function WatchlistCard({
         />
 
         {/* coin name */}
-        <span
+        <Link
           className="
                         capitalize
                         dark:text-white
                     "
+            to={`details/${id}`}
         >
           {name}
-        </span>
+        </Link>
       </div>
 
       {/* coin portfolio balance, % balance change, current price */}
@@ -66,7 +69,7 @@ export default function WatchlistCard({
                     "
         >
           {/* coin current price */}
-          <span
+          <Link
             className="
                             text-4xl
                             font-medium
@@ -77,9 +80,10 @@ export default function WatchlistCard({
                             whitespace-nowrap
                         "
             title={price}
+            to={`details/${id}`}
           >
             {price}
-          </span>
+          </Link>
 
           {/* coin % price change */}
           <PercentChangeIndicator
