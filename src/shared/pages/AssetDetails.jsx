@@ -145,8 +145,6 @@ export default function AssetDetails() {
                     message: "Coin removed from watchlist successfully!"
                 })
             }
-
-            revalidateAssetDetails()
         } else if ( status === "error" ) {
             if ( method === "POST" ) {
                 showToast({
@@ -159,9 +157,9 @@ export default function AssetDetails() {
                     message: error.message || "Failed to remove coin from watchlist. Please try again later."
                 })
             }
-
-            revalidateAssetDetails()
         }
+
+        revalidateAssetDetails()
     }, [ status, method ])
 
     return (

@@ -37,9 +37,11 @@ async function getWatchlistData({ request }) {
                         newUserData: data
                     }
                 } else {
+                    console.log("Failed to fetch watchlist data after token refresh: ", response.status, response.statusText)
                     throw new Error("Failed to fetch watchlist data after token refresh.")
                 }
             } else {
+                console.log("Failed to refresh token while fetching watchlist data: ", error.message)
                 throw new Error(
                     error.message ||
                     "Failed to refresh token while fetching watchlist data."
@@ -48,6 +50,7 @@ async function getWatchlistData({ request }) {
         } else {
             const { error } = await response.json()
 
+            console.log("Failed to fetch watchlist data: ", error.message)
             throw new Error( error.message || "Failed to fetch watchlist data.")
         }
     }
