@@ -62,7 +62,9 @@ export default function AppSearchView({ className, handleMobileClose, ...props }
     }
 
     useEffect( function() {
-        handleUserSearch( debouncedSearchTerm )
+        if ( debouncedSearchTerm ) {
+            handleUserSearch( debouncedSearchTerm )
+        }
     }, [ debouncedSearchTerm ])
 
     useEffect( function() {
@@ -201,6 +203,14 @@ export default function AppSearchView({ className, handleMobileClose, ...props }
                                 name={item.name}
                                 id={item.id}
                                 onMouseDown={ () => setIsSearchItemClicked( true ) }
+                                onClick={ function() {
+                                    setTimeout( function() {
+                                        setIsSearchItemClicked( false )
+                                        setIsPopoverOpen( false )
+                                        setSearchTerm("")
+                                        handleMobileClose()
+                                    }, 200 )
+                                }}
                             />
                         )) }
                     </div>
