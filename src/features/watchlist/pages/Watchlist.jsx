@@ -145,7 +145,6 @@ export default function Watchlist() {
                                 ) && 
                                 <LoadMoreButton 
                                     handleLoadMore={function() {
-                                        console.log("current limit: ", data.assets.length, "total assets: ", data.total_assets)
                                         let currentLimit = data.assets.length
                                         let newLimit = 
                                             ( ( ( currentLimit + 10 ) - data.total_assets ) > 10) ? 
