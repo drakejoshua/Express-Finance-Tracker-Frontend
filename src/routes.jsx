@@ -25,63 +25,75 @@ import Watchlist from "./features/watchlist/pages/Watchlist.jsx";
 import { watchlistAction } from "./features/watchlist/services/watchlistAction.jsx";
 import { getWatchlistDataLoader } from "./features/watchlist/services/getWatchlistDataLoader.jsx";
 import NotFound from "./shared/pages/NotFound.jsx";
+import App from "./App.jsx";
+import AppError from "./shared/components/AppError.jsx";
 
 const router = createBrowserRouter([
     {
         path: "/",
-        element: <Landing />,
-    },
-    {
-        path: "auth",
-        element: <AuthLayout />,
-        children: [
-            {
-                path: "login",
-                element: <Login />,
-            },
-            {
-                path: "signup",
-                element: <Signup />,
-            },
-            {
-                path: "google",
-                element: <Google />,
-            }
-        ]
-    },
-    {
-        path: "app",
-        element: <AppLayout />,
+        element: <App />,
         children: [
             {
                 index: true,
-                element: <Watchlist />,
-                action: watchlistAction,
-                loader: getWatchlistDataLoader,
+                element: <Landing />,
+                errorElement: <AppError />
             },
             {
-                path: "dashboard",
-                element: <Watchlist />,
-                action: watchlistAction,
-                loader: getWatchlistDataLoader,
+                path: "auth",
+                element: <AuthLayout />,
+                errorElement: <AppError />,
                 children: [
                     {
-                        path: "details/:symbol",
-                        element: <AssetDetails />,
-                        loader: getCoinDetailsLoader
+                        path: "login",
+                        element: <Login />,
+                    },
+                    {
+                        path: "signup",
+                        element: <Signup />,
+                    },
+                    {
+                        path: "google",
+                        element: <Google />,
                     }
                 ]
             },
             {
-                path: "profile",
-                element: <Profile />
+                path: "app",
+                element: <AppLayout />,
+                errorElement: <AppError />,
+                children: [
+                    {
+                        index: true,
+                        element: <Watchlist />,
+                        action: watchlistAction,
+                        loader: getWatchlistDataLoader,
+                    },
+                    {
+                        path: "dashboard",
+                        element: <Watchlist />,
+                        action: watchlistAction,
+                        loader: getWatchlistDataLoader,
+                        children: [
+                            {
+                                path: "details/:symbol",
+                                element: <AssetDetails />,
+                                loader: getCoinDetailsLoader
+                            }
+                        ]
+                    },
+                    {
+                        path: "profile",
+                        element: <Profile />
+                    }
+                ],
+                action: searchCoinsAction
+            },
+            {
+                path: "*",
+                element: <NotFound />,
+                errorElement: <AppError />
             }
-        ],
-        action: searchCoinsAction
-    },
-    {
-        path: "*",
-        element: <NotFound />
+        ]
     }
 ]);
 

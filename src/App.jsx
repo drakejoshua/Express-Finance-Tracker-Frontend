@@ -1,5 +1,4 @@
-import { RouterProvider } from "react-router-dom";
-import router from "./routes.jsx";
+import { Outlet } from "react-router-dom";
 
 function App() {
     return (
@@ -11,7 +10,7 @@ function App() {
                 bg-white
             "
         >
-            <RouterProvider router={router} />
+            <Outlet />
         </div>
     )
 }

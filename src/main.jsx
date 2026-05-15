@@ -6,6 +6,8 @@ import { ThemeProvider } from './shared/providers/ThemeProvider.jsx'
 import { DialogProvider } from './shared/providers/DialogProvider.jsx'
 import { ToastProvider } from './shared/providers/ToastProvider.jsx'
 import { AuthProvider } from './shared/providers/AuthProvider.jsx'
+import router from './routes.jsx'
+import { RouterProvider } from 'react-router-dom'
 
 createRoot(document.getElementById('root')).render(
     <StrictMode>
@@ -13,7 +15,7 @@ createRoot(document.getElementById('root')).render(
             <ThemeProvider>
                 <ToastProvider>
                     <DialogProvider>
-                        <App />
+                        <RouterProvider router={router} />
                     </DialogProvider>
                 </ToastProvider>
             </ThemeProvider>

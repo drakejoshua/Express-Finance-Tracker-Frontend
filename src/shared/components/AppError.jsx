@@ -1,12 +1,10 @@
 import React from 'react'
-import Logo from '../components/Logo'
-import Button from '../components/Button'
-import ThemeButton from '../components/ThemeButton'
-import { FaArrowLeft } from 'react-icons/fa6'
-import { useNavigate } from 'react-router-dom'
+import { useRouteError } from 'react-router-dom'
+import Logo from './Logo'
+import ThemeButton from './ThemeButton'
 
-export default function NotFound() {
-    const navigateTo = useNavigate()
+export default function AppError() {
+    const error = useRouteError()
 
     return (
         <div
@@ -28,7 +26,7 @@ export default function NotFound() {
             >
                 <Logo 
                     className="
-                        h-8
+                        h-6 lg:h-8
                         w-auto
                     "
                 />
@@ -42,43 +40,43 @@ export default function NotFound() {
 
             <h1 
                 className="
-                    text-[12rem]
+                    text-[6rem] lg:text-[10rem]
                     text-center
                     font-medium
                     text-gray-800 dark:text-white
-                    opacity-80 dark:opacity-90
+                    opacity-80 dark:opacity-100
                     
                 "
             >
-                404
+                Oops!
             </h1>
 
             <p 
                 className="
                     text-center
                     dark:text-white
-                    -mt-6
-                    text-lg
+                    lg:text-lg
+                    mt-4
                 "
             >
-                The page you are looking for does not exist. 
-                Please check the URL or return to the homepage.
+                An error occurred while loading the page.
+                You can view the error details below, Try refreshing the page 
+                or return to the homepage to try that action again.
             </p>
 
-            <Button
+            {/* error message */}
+            <div 
                 className="
+                    font-mono
+                    p-4
+                    dark:bg-black bg-gray-700
+                    text-white
+                    rounded-lg
                     mt-8
-                    px-4
-                    mx-auto
-                    flex
-                    items-center
-                    gap-2
                 "
-                onClick={() => navigateTo('/')}
             >
-                <FaArrowLeft />
-                Go Back Home
-            </Button>
+                { error.message}
+            </div>
         </div>
     )
 }
