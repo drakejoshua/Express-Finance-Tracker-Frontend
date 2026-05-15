@@ -8,17 +8,20 @@ import { ToastProvider } from './shared/providers/ToastProvider.jsx'
 import { AuthProvider } from './shared/providers/AuthProvider.jsx'
 import router from './routes.jsx'
 import { RouterProvider } from 'react-router-dom'
+import ErrorBoundary from './shared/components/ErrorBoundary.jsx'
 
 createRoot(document.getElementById('root')).render(
     <StrictMode>
-        <AuthProvider>
-            <ThemeProvider>
-                <ToastProvider>
-                    <DialogProvider>
-                        <RouterProvider router={router} />
-                    </DialogProvider>
-                </ToastProvider>
-            </ThemeProvider>
-        </AuthProvider>
+        <ErrorBoundary>
+            <AuthProvider>
+                <ThemeProvider>
+                    <ToastProvider>
+                        <DialogProvider>
+                            <RouterProvider router={router} />
+                        </DialogProvider>
+                    </ToastProvider>
+                </ThemeProvider>
+            </AuthProvider>
+        </ErrorBoundary>
     </StrictMode>,
 )
