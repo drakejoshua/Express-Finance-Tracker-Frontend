@@ -14,6 +14,7 @@ export default function GoogleButton({ text }) {
         <AltButton
             className="
                 mt-4
+                w-full
             "
             onClick={ handleGoogleAuth }
         >
