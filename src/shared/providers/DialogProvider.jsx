@@ -60,7 +60,7 @@ export function DialogProvider({ children }) {
                         onOpenChange={ () => closeDialog( dialog.id ) } key={ dialog.id }
                     >
                         <Dialog.Portal>
-                            <Dialog.Overlay className="fixed inset-0 bg-black/75" />
+                            <Dialog.Overlay className="fixed inset-0 bg-black/75 z-48" />
                             <Dialog.Content 
                                 className="
                                     w-[90vw] 
@@ -72,6 +72,7 @@ export function DialogProvider({ children }) {
                                     max-h-[85vh] 
                                     -translate-x-1/2 -translate-y-1/2
                                     rounded-lg p-6 
+                                    z-49
                                 "
                             >
                                 <Dialog.Title

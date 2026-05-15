@@ -23,7 +23,7 @@ import { formatAsCurrency } from "../utils/formatAsCurrency"
 import { useAuthProvider } from "../providers/AuthProvider.jsx"
 import { useAppData } from "../layouts/AppLayout"
 import PercentChangeIndicator from "../components/PercentChangeIndicator"
-import { DialogComponent } from "../providers/DialogProvider.jsx"
+import { DialogComponent, useDialogProvider } from "../providers/DialogProvider.jsx"
 import TextField from "../components/TextField.jsx"
 import { useToastProvider } from "../providers/ToastProvider.jsx"
 import { useEffect } from "react"
@@ -46,6 +46,7 @@ export default function AssetDetails() {
     const { conversionRate } = useAppData()
 
     const { showToast } = useToastProvider()
+    const { openDialog, closeDialog } = useDialogProvider()
 
     const supportedChartRanges = ["1D","7D","1M","3M"]
     const chartRangeMap = {
@@ -136,6 +137,41 @@ export default function AssetDetails() {
         } else if ( range === "7D" ) {
             setLoadedChartData([])
         }
+    }
+
+    function confirmRemoveFromWatchlist( coinId ) {
+        const dialogId = openDialog({
+            title: "Remove from Watchlist",
+            description: "Are you sure you want to remove this coin from your watchlist?",
+            content: (
+                <div 
+                    className="
+                        mt-6
+                        flex
+                        gap-3
+                        items-center
+                        *:grow
+                    "
+                >
+                    <AltButton
+                        onClick={ () => {
+                            closeDialog( dialogId )
+                        } }
+                    >
+                        Cancel
+                    </AltButton>
+
+                    <Button
+                        onClick={ () => {
+                            closeDialog( dialogId )
+                            handleRemoveFromWatchlist( coinId )
+                        } }
+                    >
+                        Yes, Remove
+                    </Button>
+                </div>
+            )
+        })
     }
 
     useEffect(() => {
@@ -469,7 +505,7 @@ export default function AssetDetails() {
                                                     "
                                                     onClick={ 
                                                         data.is_watchlist ?
-                                                        () => handleRemoveFromWatchlist( data.id ) :
+                                                        () => confirmRemoveFromWatchlist( data.id ) :
                                                         () => handleAddToWatchlist( data.id ) 
                                                     }
                                                 >

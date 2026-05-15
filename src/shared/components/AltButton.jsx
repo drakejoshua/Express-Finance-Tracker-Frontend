@@ -8,7 +8,6 @@ const AltButton = React.forwardRef( function( { className, children, ...props },
     return (
         <button
             className={`
-                w-full
                 p-2
                 border
                 rounded
