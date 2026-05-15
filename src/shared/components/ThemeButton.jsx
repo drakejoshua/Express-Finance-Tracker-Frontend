@@ -13,7 +13,7 @@ const ThemeButton = React.forwardRef( function({ className, ...props }, ref ) {
     return (
         <button
             className={`
-                text-gray-600
+                text-gray-600 dark:text-white
                 text-2xl
                 ${ className }
             `}

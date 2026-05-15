@@ -24,6 +24,7 @@ import { getCoinDetailsLoader } from "./shared/loaders/getCoinDetailsLoader.jsx"
 import Watchlist from "./features/watchlist/pages/Watchlist.jsx";
 import { watchlistAction } from "./features/watchlist/services/watchlistAction.jsx";
 import { getWatchlistDataLoader } from "./features/watchlist/services/getWatchlistDataLoader.jsx";
+import NotFound from "./shared/pages/NotFound.jsx";
 
 const router = createBrowserRouter([
     {
@@ -80,7 +81,7 @@ const router = createBrowserRouter([
     },
     {
         path: "*",
-        element: <div>404 Not Found</div>
+        element: <NotFound />
     }
 ]);
 
