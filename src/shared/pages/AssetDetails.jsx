@@ -40,7 +40,10 @@ export default function AssetDetails() {
 
     const revalidator = useRevalidator();
 
-    const { currentlyLoggedInUser } = useAuthProvider()
+    const { 
+        currentlyLoggedInUser, 
+        processCurrentUserChange
+    } = useAuthProvider()
     const { conversionRate } = useAppData()
 
     const { showToast } = useToastProvider()
@@ -365,8 +368,12 @@ export default function AssetDetails() {
                                 />
                             }
                         >
-                            { ( { data } ) => (
-                                <>
+                            { function({ data, newUserData }) {
+                                if ( newUserData ) {
+                                    processCurrentUserChange( newUserData )
+                                }
+
+                                return (
                                     <div
                                         className="
                                             pb-16
@@ -567,8 +574,8 @@ export default function AssetDetails() {
                                             </div>
                                         </div>
                                     </div>
-                                </>
-                            )}
+                                )
+                            }}
                         </Await>
                     </Suspense>
 

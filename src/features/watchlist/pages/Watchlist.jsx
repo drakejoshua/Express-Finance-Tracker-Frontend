@@ -18,7 +18,10 @@ export default function Watchlist() {
     const { theme } = useTheme()
     
     const { watchlistData } = useLoaderData()
-    const { currentlyLoggedInUser } = useAuthProvider()
+    const { 
+        currentlyLoggedInUser, 
+        processCurrentUserChange 
+    } = useAuthProvider()
 
     const { conversionRate } = useAppData()
 
@@ -64,8 +67,12 @@ export default function Watchlist() {
                         />
                     }
                 >
-                    { ({ data }) => (
-                        <div>
+                    { function({ data, newUserData }) {
+                        if ( newUserData ) {
+                            processCurrentUserChange( newUserData )
+                        }
+
+                        return (<div>
                             {/* watchlist heading */}
                             <RouteHeading>
                                 Welcome, { 
@@ -156,8 +163,8 @@ export default function Watchlist() {
                                     className={"mt-4"}
                                 />
                             }
-                        </div>
-                    )}
+                        </div>)
+                    }}
                 </Await>
             </Suspense>
             {/* {
