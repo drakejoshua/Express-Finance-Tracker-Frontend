@@ -57,6 +57,7 @@ export default function AssetDetails() {
     }
     let [ loadedChartData, setLoadedChartData ] = useState( null )
     let [ selectedChartRange, setSelectedChartRange ] = useState( "7D" )
+    let [ isUpdatingChart, setIsUpdatingChart ] = useState( false )
 
     function handleAddToWatchlist( coinId ) {
         fetcher.submit(
@@ -100,6 +101,8 @@ export default function AssetDetails() {
             const accessToken = localStorage.getItem("greenfinance-token")
             const backendUrl = import.meta.env.VITE_BACKEND_URL
 
+            setIsUpdatingChart( true )
+
             const resp = await fetch(
                 `${ backendUrl }/app/assets/${ symbol }/chart?days=${ chartRangeMap[ range ] }`,
                 {
@@ -130,6 +133,7 @@ export default function AssetDetails() {
 
             setLoadedChartData(data.prices.map( ( price ) => price.toFixed(2)))
             setSelectedChartRange( range )
+            setIsUpdatingChart( false )
         } else if ( range === "7D" ) {
             setLoadedChartData([])
         }
@@ -528,8 +532,15 @@ export default function AssetDetails() {
                                                         />
                                                     </div>
 
+                                                    {/* chart update indicator */}
+                                                    { isUpdatingChart && (
+                                                        <div className="text-center">
+                                                            <p>Updating chart...</p>
+                                                        </div>
+                                                    ) }
+
                                                     {/* chart toggle */}
-                                                    <ToggleGroup.Root 
+                                                    { !isUpdatingChart && <ToggleGroup.Root 
                                                         type="single" 
                                                         value={ selectedChartRange }
                                                         onValueChange={
@@ -560,7 +571,7 @@ export default function AssetDetails() {
                                                                 {value}
                                                             </ToggleGroup.Item>
                                                         ))}
-                                                    </ToggleGroup.Root>
+                                                    </ToggleGroup.Root>}
                                                 </div>
 
                                                 {/* asset details */}
