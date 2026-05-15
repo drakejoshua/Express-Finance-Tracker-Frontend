@@ -12,9 +12,8 @@ import {
     FaTriangleExclamation, 
     FaXmark
 } from "react-icons/fa6"
-import bitcoinImage from "../../assets/Design/bitcoin.png"
 import Button from "../components/Button"
-import { useLoaderData, useNavigate, Await, useFetcher, useActionData, useSubmit, useNavigation, useRevalidator } from "react-router-dom"
+import { useLoaderData, useNavigate, Await, useFetcher, useRevalidator } from "react-router-dom"
 import AltButton from "../components/AltButton"
 import AlertItem from "../components/AlertItem"
 import RouteError from "../components/RouteError"
@@ -368,7 +367,7 @@ export default function AssetDetails() {
                                 <RouteError 
                                     title={"Error loading asset details"}
                                     message="There was an error loading the details for this cryptocurrency. Please try again later."
-                                    handleRetry={() => {}}
+                                    handleRetry={ closeAssetDetails }
                                 />
                             }
                         >

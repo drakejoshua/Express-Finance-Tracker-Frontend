@@ -1,4 +1,4 @@
-import { Outlet, Await, useLoaderData, useNavigate } from 'react-router-dom'
+import { Outlet, Await, useLoaderData, useNavigate, useRevalidator } from 'react-router-dom'
 import { ScaleLoader } from 'react-spinners'
 import { useTheme } from '../../../shared/providers/ThemeProvider.jsx'
 import colors from "tailwindcss/colors"
@@ -26,6 +26,8 @@ export default function Watchlist() {
     const { conversionRate } = useAppData()
 
     const navigateTo = useNavigate()
+
+    const revalidator = useRevalidator();
 
     return (    
         <div>
@@ -63,7 +65,7 @@ export default function Watchlist() {
                         <RouteError
                             title="Failed to load watchlist"
                             message="An error occured loading your watchlist, Please try again later."
-                            handleRetry={() => function(){} }
+                            handleRetry={() => revalidator.revalidate() }
                         />
                     }
                 >

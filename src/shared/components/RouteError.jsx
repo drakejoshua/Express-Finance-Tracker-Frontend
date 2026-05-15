@@ -1,7 +1,12 @@
 import { FaArrowRotateLeft, FaTriangleExclamation } from 'react-icons/fa6'
 import Button from './Button'
+import { useAsyncError } from 'react-router-dom'
+import { useState } from 'react'
 
 export default function RouteError({ title, message, handleRetry }) {
+    const error = useAsyncError()
+    const [ isRetrying, setIsRetrying ] = useState( false )
+
     return (
         <div
             className="
@@ -33,9 +38,10 @@ export default function RouteError({ title, message, handleRetry }) {
                 className="
                     mt-2
                     dark:text-white
+                    lg:w-1/2 md:w-3/4 w-full
                 "
             >
-                { message }
+                { message } Error: { error.message }
             </p>
 
             <Button
@@ -49,17 +55,27 @@ export default function RouteError({ title, message, handleRetry }) {
                     items-center
                     group
                     w-min
+                    disabled:cursor-not-allowed
+                    disabled:pointer-events-none
+                    disabled:opacity-50
+                    group
                 "
-                onClick={ handleRetry }
+                onClick={ () => {
+                    setIsRetrying( true )
+                    handleRetry()
+                } }
+                disabled={ isRetrying }
             >
                 <FaArrowRotateLeft 
                     className="
                         group-hover:-rotate-360
                         transition-transform
                         duration-600
+                        group-disabled:animate-spin
+                        group-disabled:duration-1500
                     "
                 />
-                Retry
+                { isRetrying ? "Retrying..." : "Retry" }
             </Button>
         </div>
     )
