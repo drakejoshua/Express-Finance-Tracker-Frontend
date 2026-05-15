@@ -28,7 +28,7 @@ export default function NotFound() {
             >
                 <Logo 
                     className="
-                        h-8
+                        h-6 lg:h-8
                         w-auto
                     "
                 />
@@ -42,11 +42,11 @@ export default function NotFound() {
 
             <h1 
                 className="
-                    text-[12rem]
+                    text-[6rem] lg:text-[12rem]
                     text-center
                     font-medium
                     text-gray-800 dark:text-white
-                    opacity-80 dark:opacity-90
+                    opacity-80 dark:opacity-100
                     
                 "
             >
@@ -57,8 +57,8 @@ export default function NotFound() {
                 className="
                     text-center
                     dark:text-white
+                    lg:text-lg
                     -mt-6
-                    text-lg
                 "
             >
                 The page you are looking for does not exist. 
