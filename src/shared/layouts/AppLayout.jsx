@@ -268,8 +268,8 @@ export default function AppLayout() {
                                 </DropdownMenu.Item>
                                 <DropdownMenu.Item asChild>
                                     <Link to="portfolio">
-                                        <FaWallet />
-                                        Portfolio
+                                        <FaStar />
+                                        Watchlist
                                     </Link>
                                 </DropdownMenu.Item>
                                 <DropdownMenu.Item
@@ -351,7 +351,7 @@ export default function AppLayout() {
                                         lg:group-hover:w-auto
                                     '
                                 >
-                                    dashboard
+                                    watchlist
                                 </span>
                             </NavLink>
                             

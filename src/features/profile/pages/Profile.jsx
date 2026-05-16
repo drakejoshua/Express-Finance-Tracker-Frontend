@@ -419,6 +419,8 @@ export default function Profile() {
                     }
                 </Button>
             </DialogComponent>
+
+            <Outlet />
         </div>
     )
 }

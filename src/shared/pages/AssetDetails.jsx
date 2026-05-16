@@ -226,7 +226,9 @@ export default function AssetDetails() {
                         overflow-auto
                         z-1
                     "
-                >                    
+                    onPointerDownOutside={(e) => e.preventDefault()}
+                    onInteractOutside={(e) => e.preventDefault()}
+                >
                     <Suspense fallback={
                         <div>
                             <VisuallyHidden.Root>
@@ -298,7 +300,7 @@ export default function AssetDetails() {
                                 {/* dialog actions */}
                                 <div
                                     className="
-                                        md:ml-auto
+                                        ml-auto
                                         flex
                                         items-center
                                         gap-3
@@ -307,18 +309,6 @@ export default function AssetDetails() {
                                         *:rounded-full
                                     "
                                 >
-                                    <div
-                                        className="
-                                            skeleton
-                                        "
-                                    ></div>
-                                    
-                                    <div
-                                        className="
-                                            skeleton
-                                        "
-                                    ></div>
-                                    
                                     <div
                                         className="
                                             skeleton
@@ -334,11 +324,7 @@ export default function AssetDetails() {
                                 "
                             >
                                 {/* asset details and chart */}
-                                <div
-                                    className="
-                                        lg:pr-8    
-                                    "
-                                >
+                                <div>
                                     {/* asset chart area loading placeholder */}
                                     <div
                                         className="
@@ -484,7 +470,7 @@ export default function AssetDetails() {
                                             {/* dialog actions */}
                                             <div
                                                 className="
-                                                    md:ml-auto
+                                                    ml-auto
                                                     flex
                                                     items-center
                                                     gap-3
@@ -533,11 +519,7 @@ export default function AssetDetails() {
                                             "
                                         >
                                             {/* asset details and chart */}
-                                            <div
-                                                className="
-                                                    lg:pr-8
-                                                "
-                                            >
+                                            <div>
                                                 {/* asset chart container */}
                                                 <div
                                                     className="

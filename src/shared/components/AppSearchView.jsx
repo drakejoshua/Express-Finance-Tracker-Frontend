@@ -169,16 +169,18 @@ export default function AppSearchView({ className, handleMobileClose, ...props }
                     state === "idle" && 
                     status === "error" ) && 
                     <div
-                    className='
-                        flex
-                        gap-3
-                        items-center
-                        justify-center
-                        py-3
-                    '
-                >
-                    An error occurred while searching for "{ debouncedSearchTerm }". 
-                    Error: { error.message }
+                        className='
+                            flex
+                            gap-3
+                            items-center
+                            justify-center
+                            py-3
+                            px-2 md:px-4 lg:px-8
+                            text-center
+                        '
+                    >
+                        An error occurred while searching for "{ debouncedSearchTerm }". 
+                        Error: { error.message }
                     </div>
                 }
 

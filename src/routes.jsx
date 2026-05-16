@@ -83,7 +83,14 @@ const router = createBrowserRouter([
                     },
                     {
                         path: "profile",
-                        element: <Profile />
+                        element: <Profile />,
+                        children: [
+                            {
+                                path: "details/:symbol",
+                                element: <AssetDetails />,
+                                loader: getCoinDetailsLoader
+                            }
+                        ]
                     }
                 ],
                 action: searchCoinsAction

@@ -5,7 +5,6 @@ import colors from "tailwindcss/colors"
 import RouteError from '../../../shared/components/RouteError.jsx'
 import RouteHeading from '../../../shared/components/RouteHeading.jsx'
 import ThemedAlertItem from '../../../shared/components/ThemedAlertItem.jsx'
-import bitcoinImage from '../../../assets/Design/bitcoin.png'
 import LoadMoreButton from '../../../shared/components/LoadMoreButton.jsx'
 import WatchlistCard from '../components/WatchlistCard.jsx'
 import { Suspense } from 'react'
@@ -126,18 +125,26 @@ export default function Watchlist() {
                                     className='
                                         w-9/10
                                         max-w-lg
-                                        mx-auto
+                                        flex
+                                        gap-6
+                                        items-center
+                                        mt-6
                                     '
                                 >
-                                    <FaTriangleExclamation/>
+                                    <FaTriangleExclamation
+                                        className="
+                                            shrink-0
+                                            text-3xl 
+                                            text-green-600 dark:text-green-400
+                                        "
+                                    />
 
                                     <span
                                         className='
-                                            mt-4
-                                            text-center
                                             text-lg
                                             font-medium
                                             dark:text-white
+                                            text-gray-700
                                         '
                                     >
                                         You haven't added any coins to your watchlist yet. 
