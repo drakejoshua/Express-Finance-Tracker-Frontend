@@ -195,7 +195,7 @@ export default function Login() {
             {/* redirect link to signup page */}
             <Link
                 to="/auth/signup"
-                className=input
+                className='
                     block
                     mt-6 mb-8
                     text-center
