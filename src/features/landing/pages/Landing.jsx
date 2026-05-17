@@ -1,10 +1,28 @@
+/* 
+    Landing.jsx
+
+    This is the landing page of our application, which serves as the
+    entry point for users. It welcomes users to our platform and provides
+    a brief introduction to our services. The page includes a brand logo,
+    a welcome message, and buttons for users to sign up or log in to their
+    accounts. It also includes a theme toggle button for users to switch
+    between light and dark modes. The landing page is designed to be simple
+    and user-friendly, guiding users towards creating an account or logging in
+    to access the full features of the application.
+*/
+
+// import required dependencies and components
 import { useNavigate } from "react-router-dom"
 import Logo from "../../../shared/components/Logo.jsx"
 import Button from "../../../shared/components/Button.jsx"
 import AltButton from "../../../shared/components/AltButton.jsx"
 import ThemeButton from "../../../shared/components/ThemeButton.jsx"
 
+
+
 export default function Landing() {
+    // get navigate function from react router to redirect 
+    // user to login or signup page
     const navigateTo = useNavigate()
 
     return (
@@ -17,6 +35,7 @@ export default function Landing() {
                 mx-auto
             "
         >
+            {/* title */}
             <h1 
                 className="
                     text-xl lg:text-3xl
@@ -28,6 +47,7 @@ export default function Landing() {
                 Welcome to 
             </h1>
 
+            {/* logo */}
             <Logo 
                 className="
                     h-auto
@@ -35,6 +55,7 @@ export default function Landing() {
                 "
             />
 
+            {/* description */}
             <p 
                 className="
                     mt-8
@@ -53,6 +74,7 @@ export default function Landing() {
                 meet your needs.
             </p>
 
+            {/* action buttons */}
             <div 
                 className="
                     mt-8 lg:mt-12
@@ -62,6 +84,7 @@ export default function Landing() {
                     mx-auto
                 "
             >
+                {/* sign up button */}
                 <Button
                     className="
                         px-6
@@ -71,6 +94,7 @@ export default function Landing() {
                     Sign up
                 </Button>
 
+                {/* log in button */}
                 <AltButton
                     className="
                         px-6
@@ -80,6 +104,7 @@ export default function Landing() {
                     Log in
                 </AltButton>
 
+                {/* theme toggle button */}
                 <ThemeButton/>
             </div>
         </div>
