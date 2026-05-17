@@ -1,3 +1,20 @@
+/* 
+    Profile.jsx
+
+    This page allows users to view and update their profile information, 
+    including their name, email, password, preferred currency, and 
+    profile photo. The page features a user avatar that serves as a 
+    trigger for a dropdown menu, providing options to update or delete 
+    the profile photo. The profile update form includes fields for the 
+    user's name, email, password, and preferred currency, with appropriate 
+    validation and feedback messages. Users can also upload a new profile 
+    photo through a dialog interface. The page is designed to be responsive 
+    and user-friendly, ensuring a seamless experience for users managing 
+    their profile settings.
+*/
+
+
+// import required dependencies and components
 import React, { useState } from 'react'
 import { Outlet } from 'react-router-dom'
 import RouteHeading from '../../../shared/components/RouteHeading'
@@ -12,11 +29,24 @@ import { useAuthProvider } from '../../../shared/providers/AuthProvider'
 import { DialogComponent } from '../../../shared/providers/DialogProvider.jsx'
 import { useToastProvider } from '../../../shared/providers/ToastProvider.jsx'
 
+
+
 export default function Profile() {
+    // derive a boolean value to determine if the user is 
+    // on a mobile or tablet device
     const isMobileOrTablet = window.innerWidth < 1024;
+
+    // get currently logged in user data and profile update function
+    // from auth provider to display user info and handle profile updates
     const { currentlyLoggedInUser, updateProfileInfo } = useAuthProvider()
+
+    // get showToast function from toast provider to display 
+    // feedback messages to the user after profile update attempts 
+    // or when certain actions are restricted based on authentication provider
     const { showToast } = useToastProvider()
 
+    // form state variables to manage user input for profile updates and
+    // profiles photo changes
     const [ name, setName ] = useState(currentlyLoggedInUser.data.name)
     const [ email, setEmail ] = useState(currentlyLoggedInUser.data.email)
     const [ password, setPassword ] = useState("")
@@ -26,6 +56,9 @@ export default function Profile() {
     ] = useState(currentlyLoggedInUser.data.preferred_currency)
     const [ newProfilePhoto, setNewProfilePhoto ] = useState(null)
 
+    // state variables to manage loading states for profile updates and
+    // profile photo updates, as well as the visibility of the profile 
+    // photo update dialog
     const [ isUpdating, setIsUpdating ] = useState(false)
     const [ isUpdatingProfilePhoto, setIsUpdatingProfilePhoto ] = useState(false)
     const [ 
@@ -34,6 +67,14 @@ export default function Profile() {
     ] = useState(false)
 
 
+    // handleProfileFormUpdate()
+    // This function is responsible for handling the submission of the profile
+    // update form. It prevents the default form submission behavior, sets the
+    // updating state to true to disable the form, show a loading indicator
+    // and then calls the updateProfileInfo function from the auth provider with the
+    // updated profile information. Based on the response, it shows a success or error toast message,
+    // and finally resets the updating state to re-enable the form. Optionally, it also resets
+    // the password field after an update attempt for security reasons.
     async function handleProfileFormUpdate(e) {
         // prevent default form submission behavior
         e.preventDefault()
@@ -42,6 +83,8 @@ export default function Profile() {
         // show a loading indicator if needed
         setIsUpdating(true)
 
+        // call the updateProfileInfo function from the auth 
+        // provider with the updated profile information
         const { status, error } = await updateProfileInfo({
             name,
             email,
@@ -49,12 +92,18 @@ export default function Profile() {
             preferred_currency: preferredCurrency
         })
 
+        // check the response status and show appropriate toast 
+        // messages based on the outcome of the update attempt
         if ( status === "success" ) {
+            // show success toast message if the profile update was 
+            // successful
             showToast({
                 type: "success",
                 message: "Profile updated successfully!"
             })
         } else {
+            // show error toast message if there was an error during the 
+            // profile update
             showToast({
                 type: "error",
                 message: error.message || "An error occurred while updating your profile. Please try again."
@@ -70,36 +119,74 @@ export default function Profile() {
         setPassword("")
     }
 
+    // handleDeleteAvatar()
+    // This function handles the deletion of the user's profile photo. 
+    // It sets the updating state to true to disable interactions during 
+    // the process, then calls the updateProfileInfo function with an empty 
+    // object and a second argument set to true to indicate that the profile 
+    // photo should be deleted. Based on the response, it shows a success or 
+    // error toast message, and finally resets the updating state.
     async function handleDeleteAvatar() {
+        // set updating state to true to disable interactions 
+        // during the profile photo deletion process
         setIsUpdating(true)
 
+        // call the updateProfileInfo function with an empty 
+        // object and a second argument set to true to indicate 
+        // that the profile photo should be deleted
         const { status, error } = await updateProfileInfo({}, true)
 
+        // check the response status and show appropriate toast 
+        // messages based on the outcome of the profile photo 
+        // deletion attempt
         if ( status === "success" ) {
+            // show success toast message if the profile photo deletion was successful
             showToast({
                 type: "success",
                 message: "Profile photo deleted successfully!"
             })
         } else {
+            // show error toast message if the profile photo deletion failed
             showToast({
                 type: "error",
                 message: error.message || "An error occurred while deleting your profile photo. Please try again."
             })
         }
 
+        // reset updating state to re-enable interactions after the profile 
+        // photo deletion process is complete or an error has been handled
         setIsUpdating(false)
     }
 
+    // showProfilePhotoDialog()
+    // This function is responsible for opening the profile photo
+    // update dialog by setting the isUpdateProfilePhotoDialogOpen 
+    // state to true.
     function showProfilePhotoDialog() {
         setIsUpdateProfilePhotoDialogOpen(true)
     }
 
+    // closeProfilePhotoDialog()
+    // This function is responsible for closing the profile photo update dialog.
+    // It sets the isUpdateProfilePhotoDialogOpen state to false and also resets
+    // the newProfilePhoto state to null to clear any selected file when the dialog is closed.
     function closeProfilePhotoDialog() {
         setIsUpdateProfilePhotoDialogOpen(false)
         setNewProfilePhoto(null)
     }
 
+
+    // handleProfilePhotoUpdate()
+    // This function handles the process of updating the user's profile photo.
+    // It first checks if a new profile photo has been selected. If not, 
+    // it shows an error toast message and closes the dialog.
+    // If a new photo is selected, it sets the updating state to true to disable 
+    // interactions during the upload process, then calls the updateProfileInfo 
+    // function with the new photo. Based on the response, it shows a success or 
+    // error toast message, and finally resets the updating state and closes the dialog.
     async function handleProfilePhotoUpdate() {
+        // check if a new profile photo has been selected before 
+        // attempting to upload and show an error message if none is selected
         if ( !newProfilePhoto ) {
             showToast({
                 type: "error",
@@ -109,23 +196,37 @@ export default function Profile() {
             return
         }
 
+        // set updating state to true to disable interactions during the 
+        // profile photo upload process
         setIsUpdatingProfilePhoto(true)
 
+        // call the updateProfileInfo function with the new profile 
+        // photo and handle the response to show appropriate toast messages 
+        // based on the outcome of the upload attempt
         const { status, error } = await updateProfileInfo({ photo: newProfilePhoto })
 
+        // check the response status and show appropriate toast messages 
+        // based on the outcome of the profile photo update attempt
         if ( status === "success" ) {
+            // show success toast message if the profile photo update was successful
             showToast({
                 type: "success",
                 message: "Profile photo updated successfully!"
             })
+
+            // close the profile photo update dialog after a successful update
             closeProfilePhotoDialog()
         } else {
+            // show error toast message if there was an error during the 
+            // profile photo update
             showToast({
                 type: "error",
                 message: error.message || "An error occurred while updating your profile photo. Please try again."
             })
         }
 
+        // reset updating state to re-enable interactions after the profile
+        // photo update process is complete or an error has been handled
         setIsUpdatingProfilePhoto(false)
     }
 
@@ -139,6 +240,7 @@ export default function Profile() {
             {/* avatar dropdown - update and delete image */}
             <DropdownMenu.Root>
                 <DropdownMenu.Trigger asChild>
+                    {/* user avatar - profile photo preview */}
                     <UserAvatar
                         src={ currentlyLoggedInUser.data.profile_photo }
                         alt="user profile photo"
@@ -155,6 +257,7 @@ export default function Profile() {
                 </DropdownMenu.Trigger>
 
                 <DropdownMenu.Portal>
+                    {/* avatar options */}
                     <DropdownMenu.Content 
                         side={ isMobileOrTablet ? "bottom" : "right" }
                         sideOffset={16}
@@ -173,11 +276,13 @@ export default function Profile() {
                             *:hover:text-white
                         '
                     >
+                        {/* update avatar option */}
                         <DropdownMenu.Item onSelect={ showProfilePhotoDialog }>
                             <FaPen/>
                             <span> Update Avatar </span>
                         </DropdownMenu.Item>
 
+                        {/* delete avatar option */}
                         <DropdownMenu.Item onSelect={ handleDeleteAvatar }>
                             <FaTrash/>
                             <span> Delete Avatar </span>
@@ -358,6 +463,7 @@ export default function Profile() {
                     </Form.Control>
                 </Form.Field>
 
+                {/* submit button */}
                 <Button
                     className={`
                         mt-6
@@ -378,7 +484,8 @@ export default function Profile() {
                 open={ isUpdateProfilePhotoDialogOpen }
                 onOpenChange={ closeProfilePhotoDialog }
             >
-                { <input 
+                {/* file input for selecting new profile photo */}
+                <input 
                     type="file" 
                     accept="image/*" 
                     className='
@@ -389,8 +496,9 @@ export default function Profile() {
                         rounded-md
                     '
                     onChange={ ( e ) => setNewProfilePhoto( e.target.files[0] ) }
-                />}
+                />
 
+                {/* new profile photo preview */}
                 { newProfilePhoto && <img 
                     src={ URL.createObjectURL(newProfilePhoto) } 
                     alt="preview" 
@@ -404,6 +512,7 @@ export default function Profile() {
                     '
                 />}
 
+                {/* upload button */}
                 <Button
                     className={`
                         w-full
@@ -420,6 +529,7 @@ export default function Profile() {
                 </Button>
             </DialogComponent>
 
+            {/* outlet for nested routes such as: the asset details page */}
             <Outlet />
         </div>
     )
