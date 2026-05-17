@@ -1,3 +1,15 @@
+/* 
+    Signup.jsx
+
+    This page contains the signup form for new users to create an account
+    using their email, password, and other optional details. It handles form
+    submission, displays loading and error states, and provides feedback to the user
+    through dialogs and toasts. It also includes a button for users to sign up
+    with their Google account, which redirects them to the Google authentication flow.
+*/
+
+
+// import required dependencies and components
 import { Form } from 'radix-ui'
 import EmailField from '../../../shared/components/EmailField.jsx'
 import { useState } from 'react'
@@ -16,20 +28,44 @@ import handleOpenDialog from '../../../shared/utils/handleOpenDialog.jsx'
 import { ERROR_CODES } from '../../../shared/utils/errors.js'
 import GoogleButton from '../components/GoogleButton.jsx'
 
+
+
 export default function Signup() {
+    // form states for email, password, firstname, lastname 
+    // and profile photo fields
     const [ email, setEmail ] = useState("")
     const [ password, setPassword ] = useState("")
     const [ firstName, setFirstName ] = useState("")
     const [ lastName, setLastName ] = useState("")
     const [ selectedFile, setSelectedFile ] = useState( null )
 
+    // get signUp helper function from auth provider
+    // to handle signup logic and state management related 
+    // to user authentication
     const { signUp } = useAuthProvider()
+
+    // get dialog and toast provider functions to show 
+    // dialogs and toasts
     const { openDialog, closeDialog } = useDialogProvider()
     const { showToast } = useToastProvider()
+
+    // get navigate function from react router to
+    // redirect user after successful signup
     const navigateTo = useNavigate()
 
+    // loading state to indicate if the signup submission is in progress
     const [ loading, setLoading ] = useState( false )
 
+
+    // handleSignup()
+    // This function is responsible for handling the signup form 
+    // submission. It prevents the default form submission behavior, 
+    // sets the loading state, and calls the signUp function from the 
+    // auth provider with the user's details. Based on the response, 
+    // it shows appropriate dialogs or toasts to the user and redirects 
+    // them to the dashboard if the signup is successful. It also handles 
+    // any errors that may occur during the process and resets the loading 
+    // state and form fields at the end.
     async function handleSignup( e ) {
         // prevent form submission default behaviour i.e.
         // browser refreshing the page on form submit
@@ -87,6 +123,7 @@ export default function Signup() {
 
     return (
         <>
+            {/* heading */}
             <AuthHeading
                 className="
                     mt-12 lg:mt-14
@@ -95,6 +132,7 @@ export default function Signup() {
                 Create an account
             </AuthHeading>
 
+            {/* sub-text */}
             <p
                 className='
                     mt-4
@@ -104,6 +142,7 @@ export default function Signup() {
                 you manage your finances with precision and tracking
             </p>
 
+            {/* signup form */}
             <AuthForm
                 className="
                     mt-6
@@ -136,6 +175,7 @@ export default function Signup() {
                     />
                 </div>
 
+                {/* email input */}
                 <EmailField
                     name={"email"}
                     label={"Email"}
@@ -146,6 +186,7 @@ export default function Signup() {
                     invalidValidationMessage={"Please enter a valid email address."}
                 />
 
+                {/* password input */}
                 <PasswordField
                     name={"password"}
                     label={"Password"}
@@ -156,6 +197,7 @@ export default function Signup() {
                     invalidValidationMessage={"Your password should be at least 6 characters long."}
                 />
 
+                {/* profile photo field */}
                 <Form.Field
                     className='
                         flex
@@ -163,6 +205,7 @@ export default function Signup() {
                         gap-2
                     '
                 >
+                    {/* profile photo label */}
                     <Form.Label
                         className='
                             font-medium
@@ -171,6 +214,7 @@ export default function Signup() {
                         Profile Photo ( optional ):
                     </Form.Label>
 
+                    {/* profile photo input */}
                     <Form.Control asChild>
                         <input
                             type='file'
@@ -189,6 +233,7 @@ export default function Signup() {
                         />
                     </Form.Control>
 
+                    {/* preview of selected profile photo */}
                     { selectedFile && <img
                         src={ URL.createObjectURL( selectedFile ) }
                         className='
@@ -200,6 +245,7 @@ export default function Signup() {
                     /> }
                 </Form.Field>
 
+                {/* submit button */}
                 <Form.Submit asChild>
                     <Button
                         className={`
@@ -213,7 +259,7 @@ export default function Signup() {
                 </Form.Submit>
             </AuthForm>
 
-            {/* Sign up for google */}
+            {/* Sign up with google button */}
             <GoogleButton 
                 text="Sign up with Google"
             />

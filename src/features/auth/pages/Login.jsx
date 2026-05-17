@@ -1,3 +1,16 @@
+/* 
+    Login.jsx
+
+    This page contains the login form for users to sign in to 
+    their accounts using their email and password. It also includes a 
+    button for users to sign in with their Google account, which 
+    redirects them to the Google authentication flow. The page 
+    handles form submission, displays loading and error states, 
+    and provides feedback to the user through dialogs and toasts.
+*/
+
+
+// import required dependencies and components
 import { Form } from 'radix-ui'
 import { FaGoogle } from 'react-icons/fa6'
 import { useState } from 'react'
@@ -15,17 +28,40 @@ import handleOpenDialog from '../../../shared/utils/handleOpenDialog.jsx'
 import { ERROR_CODES } from '../../../shared/utils/errors.js'
 import GoogleButton from '../components/GoogleButton.jsx'
 
+
+
 export default function Login() {
+    // form states for email and password fields
     const [ email, setEmail ] = useState("")
     const [ password, setPassword ] = useState("")
 
+    // get login helper function from auth provider 
+    // to handle login logic and state management related 
+    // to user authentication
     const { logIn } = useAuthProvider()
+
+    // get dialog and toast provider functions to show dialogs and toasts
+    // for user feedback during the login process
     const { openDialog, closeDialog } = useDialogProvider()
     const { showToast } = useToastProvider()
+
+    // get navigate function from react router to 
+    // redirect user after successful login
     const navigateTo = useNavigate()
 
+    // loading state to indicate if the login submission is in progress
     const [ loading, setLoading ] = useState( false )
 
+
+    // handleLogin()
+    // This function is responsible for handling the login form 
+    // submission. It prevents the default form submission behavior, 
+    // sets the loading state, and calls the logIn function from the 
+    // auth provider with the user's email and password. Based on the 
+    // response, it shows appropriate dialogs or toasts to the user and 
+    // redirects them to the dashboard if the login is successful. It 
+    // also handles any errors that may occur during the process and 
+    // resets the loading state and password field at the end.
     async function handleLogin( e ) {
         // prevent form submission default behaviour i.e.
         // browser refreshing the page on form submit
@@ -90,6 +126,7 @@ export default function Login() {
 
     return (
         <>
+            {/* heading */}
             <AuthHeading
                 className="
                     mt-12 lg:mt-14
@@ -98,6 +135,7 @@ export default function Login() {
                 Sign in to your account
             </AuthHeading>
 
+            {/* sub-text */}
             <p
                 className='
                     mt-4
@@ -114,6 +152,7 @@ export default function Login() {
                 "
                 onSubmit={ handleLogin }
             >
+                {/* email input */}
                 <EmailField
                     name={"email"}
                     label={"Email"}
@@ -124,6 +163,7 @@ export default function Login() {
                     invalidValidationMessage={"Please enter a valid email address."}
                 />
 
+                {/* password input */}
                 <PasswordField
                     name={"password"}
                     label={"Password"}
@@ -134,6 +174,7 @@ export default function Login() {
                     invalidValidationMessage={"Your password should be longer than 6 characters."}
                 />
 
+                {/* submit button */}
                 <Form.Submit asChild>
                     <Button
                         className={`
@@ -151,10 +192,10 @@ export default function Login() {
                 text="Sign in with Google"
             />
 
-            {/* redirect to signup link */}
+            {/* redirect link to signup page */}
             <Link
                 to="/auth/signup"
-                className='
+                className=input
                     block
                     mt-6 mb-8
                     text-center

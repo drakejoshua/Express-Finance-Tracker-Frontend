@@ -1,3 +1,15 @@
+/* 
+    Google.jsx
+
+    This page is the landing page for users who are redirected back to the frontend
+    after authenticating with Google. It is responsible for verifying the Google account
+    using the access token provided in the URL, and then redirecting the user to the dashboard
+    if the verification is successful. It also handles loading and error states during the 
+    verification process.
+*/
+
+
+// import required dependencies and components
 import { useEffect, useState } from 'react'
 import AuthHeading from '../components/AuthHeading.jsx'
 import { ScaleLoader } from 'react-spinners'
@@ -8,28 +20,52 @@ import { useTheme } from '../../../shared/providers/ThemeProvider'
 import { useAuthProvider } from '../../../shared/providers/AuthProvider.jsx'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 
-export default function Google() {
-    const [ loading, setLoading ] = useState( true )
-    const { theme } = useTheme()
-    const [ errorText, setErrorText ] = useState( "" )
 
+
+export default function Google() {
+    // loading and error states to indicate if the 
+    // verification process is ongoing and any errors encountered
+    const [ loading, setLoading ] = useState( true )
+    const [ errorText, setErrorText ] = useState( "" )
+    
+    // get theme from theme provider to set loader color based 
+    // on current theme
+    const { theme } = useTheme()
+
+    // get search params from url to extract access token and 
+    // navigate function to redirect user after verification
     const [ searchParams, setSearchParams ] = useSearchParams()
     const navigateTo = useNavigate()
 
+    // get getCurrentUser function from auth provider to 
+    // verify google account using access token
     const { getCurrentUser } = useAuthProvider()
 
+    // verifyGoogleAccount()
+    // This function is responsible for verifying the user's Google account 
+    // using the access token provided in the URL. It makes an API call to 
+    // the backend to verify the token and retrieve the user's information. 
+    // Based on the response, it updates the loading and error states, and 
+    // redirects the user to the dashboard if the verification is successful.
     async function verifyGoogleAccount() {
+        // extract access token from url search params
         const accessToken = searchParams.get( "hash" )
 
+        // if no access token is found in the url, set an error 
+        // message and stop loading
         if ( !accessToken ) {
+            setLoading( false )
             setErrorText( "Invalid account identifier encountered." )
+            return
         }
 
         try {
+            // make API call to backend to verify google account using access token
             const { status, error } = await getCurrentUser( accessToken )
 
+            // check if there was an error during verification and 
+            // update states accordingly
             if ( status === "error" ) {
-                setLoading( false )
                 setErrorText( error.message )
             } else {
                 // redirect user to dashboard after a short delay to 
@@ -39,19 +75,26 @@ export default function Google() {
                 }, 1500 ) // 1.5s second delay before redirecting
             }
         } catch ( error ) {
-            setLoading( false )
+            // catch any unexpected errors during the verification process and
+            // update states accordingly
             setErrorText( error.message )
         } finally {
+            // stop loading once the verification process is complete, 
+            // regardless of the outcome
             setLoading( false )
         }
     }
 
+
+    // useEffect to run the verifyGoogleAccount function when the 
+    // page mounts
     useEffect( () => {
         verifyGoogleAccount()
     }, [] )
 
     return (
         <>
+            {/* heading */}
             <AuthHeading
                 className="
                     mt-12 lg:mt-14
@@ -60,6 +103,7 @@ export default function Google() {
                 Hold on, We're verifying your Google account
             </AuthHeading>
 
+            {/* sub text */}
             <p
                 className='
                     mt-4
@@ -74,7 +118,7 @@ export default function Google() {
                     mt-12
                 '
             >
-                {/* loading state */}
+                {/* loading UI */}
                 { ( loading && !errorText ) && <div
                     className='
                         flex
@@ -98,7 +142,7 @@ export default function Google() {
                     </span>
                 </div>}
 
-                {/* error state */}
+                {/* error UI */}
                 { ( !loading && errorText ) &&<div>
                     <div
                         className='
@@ -133,7 +177,7 @@ export default function Google() {
                     </Button>
                 </div>}
 
-                {/* loaded state */}
+                {/* loaded UI */}
                 { ( !loading && !errorText ) && <div>
                     <div
                         className='
@@ -163,7 +207,7 @@ export default function Google() {
 
                     <Button
                         className="mt-6"
-                        onClick={ () => navigateTo( "/" ) }
+                        onClick={ () => navigateTo( "/app/dashboard" ) }
                     >
                         Go to Dashboard
                     </Button>

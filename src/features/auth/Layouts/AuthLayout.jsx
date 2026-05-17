@@ -1,5 +1,15 @@
+/* 
+    AuthLayout.jsx
+
+    This is the main layout component for all authentication related pages 
+    (login, register, forgot password, etc.). It uses a grid layout to create two columns:
+    - The first column contains the authentication content 
+      (forms, buttons, etc.) and is left-aligned on the page.
+    - The second column contains a decorative image and is only visible on larger screens (hidden on mobile).
+
+    The layout also includes a brand logo at the top and a theme toggle button in the top-right corner.
+*/
 import { Outlet } from "react-router-dom";
-import 'animate.css';
 import ThemeButton from "../../../shared/components/ThemeButton";
 import Logo from "../../../shared/components/Logo";
 
@@ -43,7 +53,7 @@ export default function AuthLayout() {
                 />
             </div>
 
-            {/* Image content */}
+            {/* decorative image */}
             <div 
                 className="
                     bg-[url('/public/liquid-cheese.svg')] bg-cover relative hidden lg:block
