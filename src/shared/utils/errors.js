@@ -1,3 +1,16 @@
+/* 
+    This file defines a set of standardized error codes that can be used 
+    throughout the frontend application to represent different types of 
+    errors that may occur during user interactions, API requests, and 
+    other operations. By using these standardized error codes, we can 
+    ensure consistent error handling and messaging across the app, 
+    making it easier to manage and debug errors when they arise. 
+    Each error code corresponds to a specific type of error scenario, 
+    such as authentication failures, asset-related issues, alert-related 
+    problems, and general frontend errors.
+*/
+
+
 export const ERROR_CODES = {
     // authentication and user errors
     INVALID_FILE_TYPE: "INVALID_FILE_TYPE",

@@ -1,5 +1,6 @@
 @import "tailwindcss";
 
+/* enable dark mode variant */
 @custom-variant dark (&:where(.dark, .dark *));
 
 
@@ -12,6 +13,8 @@
     }
 }
 
+/* utilities to integrate skeleton loading animation */
+/* for both light and dark mode into tailwind css */
 @layer utilities {
     .skeleton {
         animation: skeleton-loading 1.5s infinite;
@@ -24,6 +27,8 @@
     }
 
 }
+
+/* Skeleton Loading Animation */
 @keyframes skeleton-loading {
     0% {
         background-position: 100% 0;

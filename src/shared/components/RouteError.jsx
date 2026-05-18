@@ -1,9 +1,29 @@
+/* 
+    RouteError.jsx
+
+    This component represents a error message container that can be 
+    displayed when an error occurs while loading a page or route. It 
+    accepts a title, message, and handleRetry function as props. The 
+    component uses the useAsyncError hook from react-router-dom to 
+    access the error object and display its message in the UI. It also 
+    includes a retry button that calls the handleRetry function when clicked, 
+    allowing the user to attempt to reload the page or route after an error 
+    has occurred.
+*/
+
+
+
+// import necessary dependencies and components
 import { FaArrowRotateLeft, FaTriangleExclamation } from 'react-icons/fa6'
 import Button from './Button'
 import { useAsyncError } from 'react-router-dom'
 import { useState } from 'react'
 
+
 export default function RouteError({ title, message, handleRetry }) {
+    // get the error object from the useAsyncError hook to access 
+    // the error message, and initialize state to track if the retry 
+    // button has been clicked
     const error = useAsyncError()
     const [ isRetrying, setIsRetrying ] = useState( false )
 
@@ -17,6 +37,7 @@ export default function RouteError({ title, message, handleRetry }) {
                 p-6 py-20
             "
         >
+            {/* error icon */}
             <FaTriangleExclamation 
                 className="
                     text-red-500 dark:text-red-300
@@ -24,6 +45,7 @@ export default function RouteError({ title, message, handleRetry }) {
                 "
             />
 
+            {/* error title */}
             <h1
                 className="
                     text-2xl
@@ -34,6 +56,7 @@ export default function RouteError({ title, message, handleRetry }) {
                 { title }
             </h1>
 
+            {/* error message */}
             <p
                 className="
                     mt-2
@@ -44,6 +67,7 @@ export default function RouteError({ title, message, handleRetry }) {
                 { message } Error: { error.message }
             </p>
 
+            {/* retry button */}
             <Button
                 className="
                     mt-6

@@ -25,24 +25,42 @@ import { useAuthProvider } from "../providers/AuthProvider.jsx"
 
 
 export default function AppSearchView({ className, handleMobileClose, ...props }) {
-    // state for managing the visibility of the search results popover, 
-    // the current search term input by the user, the debounced search 
-    // term for triggering search requests, and whether a search result 
-    // item has been clicked to prevent the popover from closing when 
-    // the search input loses focus due to a click on a search result item
+    // popover state to control the visibility of the search results popover
     const [ isPopoverOpen, setIsPopoverOpen ] = useState(false);
+
+    // search term state to store the current value of the search input and 
+    // a debounced version of the search term to control when the search request 
+    // is made to the backend
     const [ searchTerm, setSearchTerm ] = useState("")
     const debouncedSearchTerm = useDebounce( searchTerm )
+
+    // state to track if a search result item was clicked to prevent the 
+    // popover from closing when the search input loses focus due to clicking 
+    // on a search result item
     const [ isSearchItemClicked, setIsSearchItemClicked ] = useState( false )
 
+    // useFetcher hook from react-router-dom to make requests to the backend search
+    // endpoint and manage the loading, success, and error states of the search request.
+    // The fetcher will also handle sending any new user data obtained from refreshing the token
+    // to the AuthProvider context to update the user's session if necessary.
     const fetcher = useFetcher()
     const { status, data, error, newUserData } = fetcher.data || {};
     const state = fetcher.state;
 
+    // get the processCurrentUserChange function from the AuthProvider 
+    // context to update the user's session if new user data is obtained 
+    // from refreshing the token during the search request
     const { processCurrentUserChange } = useAuthProvider()
     
+    // handleUserSearch()
+    // This function is called to perform the search when the user types in the search input.
+    // It checks if there is a search term, and if so, it opens the popover and 
+    // submits the search term to the backend using the fetcher. If there is no 
+    // search term, it closes the popover.
     function handleUserSearch( searchTerm ) {
         if ( searchTerm ) { 
+            // if there is a search term, open the popover and submit 
+            // the search term to the backend
             setIsPopoverOpen( true )
 
             fetcher.submit( 
@@ -50,10 +68,16 @@ export default function AppSearchView({ className, handleMobileClose, ...props }
                 { method: "post" }
             )
         } else {
+            // if there is no search term, close the popover
             setIsPopoverOpen( false )
         }
     }
 
+    // handleSearchInputBlur()
+    // This function is called when the search input loses focus. It checks 
+    // if a search result item was clicked, and if not, it closes the popover 
+    // and calls the handleMobileClose function to close the mobile menu if 
+    // it's open.
     function handleSearchInputBlur() {
         if ( !isSearchItemClicked ) {
             setIsPopoverOpen( false )
@@ -61,12 +85,19 @@ export default function AppSearchView({ className, handleMobileClose, ...props }
         }
     }
 
+
+    // useEffect to perform a search whenever the debounced search 
+    // term changes
     useEffect( function() {
         if ( debouncedSearchTerm ) {
             handleUserSearch( debouncedSearchTerm )
         }
     }, [ debouncedSearchTerm ])
 
+
+    // useEffect to process any new user data obtained from refreshing 
+    // the token during the search request by sending it to the 
+    // AuthProvider context
     useEffect( function() {
         if ( newUserData ) {
             processCurrentUserChange( newUserData )
@@ -79,6 +110,7 @@ export default function AppSearchView({ className, handleMobileClose, ...props }
             className={ className }
             {...props}
         >
+            {/* Search Input */}
             <div
                 className='
                     flex
@@ -89,12 +121,14 @@ export default function AppSearchView({ className, handleMobileClose, ...props }
                     rounded-lg
                 '
             >
+                {/* Search Icon */}
                 <FaMagnifyingGlass 
                     className='
                         text-gray-800
                     '
                 />
 
+                {/* Search Input Field */}
                 <input 
                     type="text" 
                     placeholder='Search...' 
@@ -199,6 +233,10 @@ export default function AppSearchView({ className, handleMobileClose, ...props }
                         '
                     >
                         { data.map((item) => (
+                            // map over the search results and render a SearchResultItem 
+                            // for each result, passing the necessary props to handle clicking 
+                            // on a search result item to close the popover and reset the 
+                            // search term
                             <SearchResultItem 
                                 key={item.id}
                                 imgSource={item.image}

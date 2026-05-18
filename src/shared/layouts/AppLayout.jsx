@@ -1,5 +1,21 @@
+/* 
+    AppLayout.jsx
+
+    This is the main layout component for the application, 
+    which defines the overall structure and layout of the app. It
+    includes a top bar with a logo, search functionality, theme toggle,
+    and user profile dropdown, as well as a navigation bar and a main
+    content area where different pages will be rendered based on the
+    current route. The layout is responsive and adapts to different screen
+    sizes, providing a mobile-friendly navigation experience. It also
+    uses the useAuthProvider hook to manage user authentication status and
+    redirects to the login page if the user is not authenticated.
+*/
+
+
+// import necessary dependencies and components
 import React, { useContext, useEffect, useState } from 'react'
-import { Link, NavLink, Outlet, useActionData, useNavigate, useNavigation } from 'react-router-dom'
+import { Link, NavLink, Outlet, useNavigate } from 'react-router-dom'
 import Logo from "../../shared/components/Logo";
 import { FaBars, FaDoorOpen, FaGear, FaListCheck, FaMagnifyingGlass, FaStar, FaUser, FaWallet, FaX } from 'react-icons/fa6';
 import ThemeButton from '../components/ThemeButton';
@@ -9,65 +25,126 @@ import AppSearchView from '../components/AppSearchView';
 import UserAvatar from '../components/UserAvatar';
 import { useAuthProvider } from '../providers/AuthProvider';
 
+
+// create a context to hold app-wide data, such as the 
+// currency conversion rate, which can be accessed by any 
+// component within the app using the useAppData hook
 const AppDataContext = React.createContext()
 
+// custom hook to access the app data context, which provides
+// access to app-wide data such as the currency conversion rate
 export function useAppData() {
     return useContext( AppDataContext )
 }
 
+
+
 export default function AppLayout() {
+    // derive a boolean value to determine if the current device 
+    // is a mobile or tablet based on the window width, this might be
+    // used to conditionally render certain UI elements or apply 
+    // specific styles for mobile and tablet devices
     const isMobileOrTablet = window.innerWidth < 1024;
+
+    // nav menu state to track whether the navigation menu is open or closed
     const [isNavOpen, setIsNavOpen] = useState(false);
+
+    // mobile search menu state to track whether the mobile search menu is open or closed
     const [ isMobileSearchOpen, setIsMobileSearchOpen ] = useState( false )
+
+    // get the navigate function from the useNavigate hook to 
+    // programmatically navigate to different routes in the app
     const navigateTo = useNavigate()
+
+    // currency conversion rate state to hold the current conversion 
+    // rate for the user's preferred currency against United States Dollar 
+    // (USD), which can be used to convert prices and values throughout the app 
+    // to the user's preferred currency
     const [ conversionRate, setConversionRate ] = useState( 1 )
 
+    // get the currently logged in user and the logOut function from the 
+    // useAuthProvider hook to manage user authentication status and 
+    // handle user logout functionality
     const { currentlyLoggedInUser, logOut } = useAuthProvider()
     
+    // handleNavLinkClick()
+    // This function is called when a navigation link is clicked. 
+    // If the current device is a mobile or tablet, it sets the isNavOpen 
+    // state to false, which will close the navigation menu. This is useful 
+    // for providing a better user experience on smaller screens, where the 
+    // navigation menu takes up a significant portion of the screen when open. 
+    // it allows the user to focus on the content of the page they navigated 
+    // to without having to manually close the menu.
     function handleNavLinkClick() {
         if ( isMobileOrTablet ) {
             setIsNavOpen( false );
         }
     }
 
+    // fetchCurrencyPrices() 
+    // This function fetches the current currency conversion rate 
+    // for the user's preferred currency against USD from an 
+    // external API. It checks if there is a currently logged in user
+    //  and retrieves their preferred currency. If the preferred currency is 
+    // not USD, it makes a fetch request to the API to get the conversion rate. 
+    // If the request is successful, it updates the conversionRate state with the 
+    // retrieved conversion rate. If there is an error during the fetch request, 
+    // it sets the conversionRate to 1, which means that no conversion will be 
+    // applied and prices will be displayed in USD. If the user's preferred currency 
+    // is USD, it also sets the conversionRate to 1 since no conversion is needed.
     async function fetchCurrencyPrices() {
         if ( currentlyLoggedInUser.data ) {
+            // get the user's preferred currency from their profile data
             const userPreferredCurrency = currentlyLoggedInUser.data.preferred_currency
 
             if ( userPreferredCurrency !== "USD" ) {
+                // if the preferred currency is not USD, fetch the conversion 
+                // rate from the API
                 try {
                     const resp = await fetch(
                         `https://v6.exchangerate-api.com/v6/a0c8708d7df677ba6ff0c0f8/pair/USD/${userPreferredCurrency}`
                     )
 
+                    // if the request is successful, update the conversionRate 
+                    // state with the retrieved conversion rate
                     if ( resp.ok ) {
                         const { conversion_rate } = await resp.json()
                         setConversionRate( conversion_rate )
                     }
                 } catch {
+                    // if there is an error during the fetch request, set the conversionRate
+                    // to 1, which means that no conversion will be applied and prices will 
+                    // be displayed in USD
                     setConversionRate( 1 )
                 }
             } else {
+                // if the user's preferred currency is USD, set the conversionRate 
+                // to 1 since no conversion is needed
                 setConversionRate( 1 )
             }
         }
     }
 
+    // useEffect hook to fetch the currency conversion rate when the component mounts
+    // and whenever the currently logged in user changes. It also checks the authentication 
+    // status of the user and redirects to the login page if the user is not authenticated.
     useEffect( function() {
         fetchCurrencyPrices()
 
-        console.log("currently logged in user: ", currentlyLoggedInUser)
         if ( 
             currentlyLoggedInUser.status === "error" ||
             currentlyLoggedInUser.status === "logout" ||
             currentlyLoggedInUser.status === "unavailable" 
         ) {
-            console.log( "User is not authenticated, redirecting to login page..." )
             navigateTo( "/auth/login" )
         }
     }, [ currentlyLoggedInUser ] )
 
+    // conditionally render different UI based on the authentication 
+    // status of the user.
     if ( currentlyLoggedInUser.status === "loading" ) {
+        // if the authentication status is still loading, render a 
+        // loading message or spinner
         return (
             <div>
                 loading authentication status...
@@ -78,6 +155,9 @@ export default function AppLayout() {
         currentlyLoggedInUser.status !== "unavailable" &&
         currentlyLoggedInUser.data
     ) {
+        // if the user is authenticated and there is user data available, 
+        // render the main app layout with the top bar, navigation, and main 
+        // content area. 
         return (
             <div
                 className='
@@ -150,6 +230,7 @@ export default function AppLayout() {
                         handleMobileClose={ () => { if ( isMobileOrTablet ) setIsMobileSearchOpen( false ) } }
                     />
     
+                    {/* theme toggle button */}
                     <ThemeButton 
                         className="
                             lg:ml-auto
@@ -157,8 +238,10 @@ export default function AppLayout() {
                         "
                     />
     
+                    {/* user profile dropdown */}
                     <DropdownMenu.Root>
                         <DropdownMenu.Trigger asChild>
+                            {/* user avatar */}
                             <UserAvatar 
                                 src={ currentlyLoggedInUser.data.profile_photo }
                                 alt="User profile info"
@@ -174,6 +257,7 @@ export default function AppLayout() {
                             />
                         </DropdownMenu.Trigger>
     
+                        {/* dropdown options */}
                         <DropdownMenu.Content
                             sideOffset={10}
                             align='end'
@@ -195,6 +279,7 @@ export default function AppLayout() {
                                     w-full
                                 '
                             >
+                                {/* user avatar */}
                                 <UserAvatar 
                                     src={ currentlyLoggedInUser.data.profile_photo }
                                     alt="User profile info"
@@ -217,6 +302,7 @@ export default function AppLayout() {
                                         min-w-0
                                     '
                                 >
+                                    {/* user name */}
                                     <span
                                         className='
                                             font-medium
@@ -230,6 +316,7 @@ export default function AppLayout() {
                                         { currentlyLoggedInUser.data.name }
                                     </span>
     
+                                    {/* user email */}
                                     <span
                                         className='
                                             text-gray-600
@@ -260,18 +347,23 @@ export default function AppLayout() {
                                     [&_a]:items-center
                                 '
                             >
+                                {/* profile link */}
                                 <DropdownMenu.Item asChild>
                                     <Link to="profile">
                                         <FaUser />
                                         Profile
                                     </Link>
                                 </DropdownMenu.Item>
+
+                                {/* watchlist link */}
                                 <DropdownMenu.Item asChild>
                                     <Link to="portfolio">
                                         <FaStar />
                                         Watchlist
                                     </Link>
                                 </DropdownMenu.Item>
+
+                                {/* logout link */}
                                 <DropdownMenu.Item
                                     onSelect={ () => logOut() }
                                     className='
@@ -317,6 +409,7 @@ export default function AppLayout() {
                             z-1
                         `}
                     >
+                        {/* nav links wrapper */}
                         <div
                             className='
                                 flex
@@ -334,6 +427,7 @@ export default function AppLayout() {
                                 *:rounded-full
                             '
                         >
+                            {/* dashboard link */}
                             <NavLink
                                 to="dashboard"
                                 onMouseDown={ handleNavLinkClick }
@@ -355,6 +449,7 @@ export default function AppLayout() {
                                 </span>
                             </NavLink>
                             
+                            {/* profile link */}
                             <NavLink
                                 to="profile"
                                 onMouseDown={ handleNavLinkClick }
@@ -390,7 +485,9 @@ export default function AppLayout() {
                             mt-5
                         '
                     >
+                        {/* app data context provider */}
                         <AppDataContext.Provider value={{ conversionRate }}>
+                            {/* outlet for nested routes */}
                             <Outlet />
                         </AppDataContext.Provider>
                     </main>

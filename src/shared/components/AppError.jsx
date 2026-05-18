@@ -1,9 +1,25 @@
+/* 
+    AppError.jsx
+
+    This component is used to display an error message when an error occurs while 
+    loading a page. It uses the useRouteError hook from react-router-dom to 
+    access the error object and displays the error message in a user-friendly format. 
+    This component is used as the global error element in the router configuration, 
+    so it will be displayed whenever an error occurs in any route. 
+*/
+
+
+
+// import necessary dependencies and components
 import React from 'react'
 import { useRouteError } from 'react-router-dom'
 import Logo from './Logo'
 import ThemeButton from './ThemeButton'
 
+
 export default function AppError() {
+    // get the error object from the useRouteError hook to 
+    // access the error message
     const error = useRouteError()
 
     return (
@@ -24,6 +40,7 @@ export default function AppError() {
                     justify-center
                 "
             >
+                {/* Logo */}
                 <Logo 
                     className="
                         h-6 lg:h-8
@@ -31,6 +48,7 @@ export default function AppError() {
                     "
                 />
 
+                {/* theme toggle button */}
                 <ThemeButton 
                     className="
                         text-xl
@@ -38,6 +56,7 @@ export default function AppError() {
                 />
             </div>
 
+            {/* heading */}
             <h1 
                 className="
                     text-[6rem] lg:text-[10rem]
@@ -51,6 +70,7 @@ export default function AppError() {
                 Oops!
             </h1>
 
+            {/* error description */}
             <p 
                 className="
                     text-center
