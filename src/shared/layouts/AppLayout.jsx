@@ -97,12 +97,15 @@ export default function AppLayout() {
             // get the user's preferred currency from their profile data
             const userPreferredCurrency = currentlyLoggedInUser.data.preferred_currency
 
+            // get exchange rate API key from environment variables
+            const exchangeRateApiKey = import.meta.env.VITE_EXCHANGE_RATE_API_KEY
+
             if ( userPreferredCurrency !== "USD" ) {
                 // if the preferred currency is not USD, fetch the conversion 
                 // rate from the API
                 try {
                     const resp = await fetch(
-                        `https://v6.exchangerate-api.com/v6/a0c8708d7df677ba6ff0c0f8/pair/USD/${userPreferredCurrency}`
+                        `https://v6.exchangerate-api.com/v6/${ exchangeRateApiKey }/pair/USD/${userPreferredCurrency}`
                     )
 
                     // if the request is successful, update the conversionRate 
